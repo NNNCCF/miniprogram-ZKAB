@@ -1,49 +1,68 @@
 <view class="page">
-  <view style="height:{{statusH}}px;background:#fff;"></view>
-  <view class="nav-bar">
-    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
-    <text class="nav-title">绑定设备</text>
+
+  <!-- 导航栏 -->
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">设备绑定</text>
+      <view style="width:60rpx;"></view>
+    </view>
   </view>
 
-  <view class="content">
-    <view class="illus-wrap">
-      <text class="illus-icon">📡</text>
-    </view>
-    <text class="tip-title">绑定健康监测设备</text>
-    <text class="tip-desc">请输入设备底部的设备编号，或扫描设备二维码</text>
+  <!-- 白色内容区 -->
+  <scroll-view class="body-area" scroll-y>
 
-    <!-- Input -->
-    <view class="input-section">
-      <view class="input-label">设备编号</view>
-      <view class="input-wrap">
-        <input
-          class="device-input"
-          placeholder="请输入设备编号（如：ZK-2024-XXXXXX）"
-          value="{{deviceCode}}"
-          bindinput="onDeviceCodeInput"
-          maxlength="30"
-        />
-        <view class="input-clear" wx:if="{{deviceCode}}" bindtap="clearInput">
-          <text>✕</text>
+    <!-- 链接图标 -->
+    <view class="icon-wrap">
+      <view class="icon-outer">
+        <view class="icon-inner">
+          <text class="chain-icon">⛓</text>
         </view>
       </view>
     </view>
 
-    <!-- QR Scan Button -->
-    <view class="scan-btn" bindtap="scanQR">
-      <text class="scan-icon">📷</text>
-      <text class="scan-text">扫描设备二维码</text>
+    <!-- 表单字段 -->
+    <view class="form">
+
+      <view class="field-row">
+        <text class="field-label">设备号 <text class="required">*</text></text>
+        <input class="field-input" placeholder="请填写设备号" placeholder-class="field-ph"
+          value="{{deviceCode}}" bindinput="onDeviceCodeInput" maxlength="40" />
+      </view>
+      <view class="field-divider"></view>
+
+      <view class="field-row" bindtap="getLocation">
+        <text class="field-label">住所位置 <text class="required">*</text></text>
+        <view class="location-val">
+          <text wx:if="{{location}}" class="field-val-text">
+            <text class="pin">📍</text>{{locationText}}
+          </text>
+          <text wx:else class="field-ph">点击获取位置</text>
+        </view>
+      </view>
+      <view class="field-divider"></view>
+
+      <view class="field-row">
+        <text class="field-label">门牌号 <text class="required">*</text></text>
+        <input class="field-input" placeholder="详细地址，例1号楼1单元101室" placeholder-class="field-ph"
+          value="{{address}}" bindinput="onAddressInput" />
+      </view>
+      <view class="field-divider"></view>
+
+      <view class="field-row">
+        <text class="field-label">居家位置 <text class="required">*</text></text>
+        <input class="field-input" placeholder="例客厅、卧室" placeholder-class="field-ph"
+          value="{{roomLocation}}" bindinput="onRoomInput" />
+      </view>
+      <view class="field-divider"></view>
+
     </view>
 
-    <!-- Confirm Button -->
-    <view class="confirm-btn {{deviceCode ? '' : 'btn-disabled'}}" bindtap="onConfirm">
+    <!-- 确认按钮 -->
+    <view class="confirm-btn {{canSubmit ? '' : 'btn-disabled'}}" bindtap="onConfirm">
       <text class="confirm-text">{{loading ? '绑定中...' : '确认绑定'}}</text>
     </view>
 
-    <!-- Help -->
-    <view class="help-card">
-      <text class="help-title">❓ 找不到设备编号？</text>
-      <text class="help-desc">设备编号印在设备背面或包装盒上，格式为 ZK-XXXX-XXXXXX</text>
-    </view>
-  </view>
+  </scroll-view>
 </view>

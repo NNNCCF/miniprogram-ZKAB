@@ -6,6 +6,9 @@ page {
 .page-body {
   background: #fff;
   border-radius: 32rpx 32rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
   min-height: calc(100vh - 180rpx);
   padding: 48rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;

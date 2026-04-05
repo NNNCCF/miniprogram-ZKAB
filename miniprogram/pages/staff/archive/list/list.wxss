@@ -1,15 +1,19 @@
 /* ===== Page Layout ===== */
 page {
-  background: #3B7EFF;
+  background: #ffffff;
   min-height: 100vh;
 }
 
 .page-body {
   background: #fff;
   border-radius: 32rpx 32rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
   min-height: calc(100vh - 180rpx);
   padding: 24rpx 0 calc(140rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
+      transform: translateY(32rpx);
 }
 
 /* ===== Search Bar ===== */

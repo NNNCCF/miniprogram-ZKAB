@@ -1,4 +1,4 @@
-import { get, post } from '../../../../../utils/request'
+import { getMemberList } from '../../../../utils/api'
 
 const app = getApp<any>()
 
@@ -19,40 +19,22 @@ Page({
 
   async loadMembers() {
     try {
-      const [members, current] = await Promise.all([
-        get('/guardian/members'),
-        get('/guardian/member/current')
-      ])
-      this.setData({
-        members: members || [],
-        currentId: current?.id || null
-      })
-    } catch {
-      // Placeholder data
-      this.setData({
-        members: [
-          { id: 1, name: '张奶奶', age: 72, relationship: '祖母', status: 'normal' },
-          { id: 2, name: '李爷爷', age: 75, relationship: '祖父', status: 'warn' }
-        ],
-        currentId: 1
-      })
+      const members: any[] = (await getMemberList()) || []
+      const savedId = wx.getStorageSync('currentMemberId')
+      const currentId = savedId || (members[0]?.id ?? null)
+      if (!savedId && currentId) wx.setStorageSync('currentMemberId', currentId)
+      this.setData({ members, currentId })
+    } catch (e: any) {
+      wx.showToast({ title: e.message || '加载失败', icon: 'none' })
     }
   },
 
-  async switchMember(e: any) {
+  switchMember(e: any) {
     const memberId = e.currentTarget.dataset.id
-    if (memberId === this.data.currentId) return
-    wx.showLoading({ title: '切换中...' })
-    try {
-      await post('/guardian/member/switch', { memberId })
-      this.setData({ currentId: memberId })
-      wx.setStorageSync('currentMemberId', memberId)
-      wx.hideLoading()
-      wx.showToast({ title: '切换成功', icon: 'success' })
-    } catch (e: any) {
-      wx.hideLoading()
-      wx.showToast({ title: e.message || '切换失败', icon: 'none' })
-    }
+    if (String(memberId) === String(this.data.currentId)) return
+    wx.setStorageSync('currentMemberId', memberId)
+    this.setData({ currentId: memberId })
+    wx.showToast({ title: '切换成功', icon: 'success' })
   },
 
   goBack() {
@@ -60,6 +42,6 @@ Page({
   },
 
   goCreate() {
-    wx.navigateTo({ url: '/pages/guardian/member/create/create/create' })
+    wx.navigateTo({ url: '/pages/guardian/member/create/create' })
   }
 })

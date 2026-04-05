@@ -1,12 +1,15 @@
 /* ===== Page Layout ===== */
 page {
-  background: #3B7EFF;
+  background: linear-gradient(165deg, #ffffff 0%, #ffffff 100%);
   min-height: 100vh;
 }
 
 .page-body {
-  background: #fff;
+  background: #F2F5FC;
   border-radius: 32rpx 32rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
   min-height: calc(100vh - 180rpx);
   padding: 0 0 calc(140rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
@@ -15,8 +18,10 @@ page {
 /* ===== Tab Bar ===== */
 .tab-bar {
   display: flex;
-  border-bottom: 1rpx solid #F0F0F0;
+  background: #fff;
+  border-bottom: 1rpx solid #E8EEF8;
   padding: 0 32rpx;
+      transform: translateY(24rpx);
 }
 
 .tab-item {
@@ -25,10 +30,11 @@ page {
   align-items: center;
   justify-content: center;
   gap: 10rpx;
-  padding: 28rpx 0;
+  padding: 32rpx 0;
   font-size: 28rpx;
-  color: #999;
+  color: #9CA3B4;
   border-bottom: 4rpx solid transparent;
+  margin-bottom: -1rpx;
   position: relative;
 }
 
@@ -39,10 +45,10 @@ page {
 }
 
 .tab-dot {
-  background: #FF4D4F;
+  background: #E63A35;
   border-radius: 20rpx;
-  min-width: 32rpx;
-  height: 32rpx;
+  min-width: 34rpx;
+  height: 34rpx;
   padding: 0 8rpx;
   display: flex;
   align-items: center;
@@ -57,31 +63,33 @@ page {
 
 /* ===== Alarm List ===== */
 .alarm-list {
-  padding: 20rpx 32rpx;
+  padding: 24rpx 28rpx;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 16rpx;
 }
 
 .alarm-card {
   display: flex;
   align-items: center;
   gap: 20rpx;
-  background: #F7F9FF;
+  background: #fff;
   border-radius: 20rpx;
-  padding: 24rpx;
+  padding: 24rpx 24rpx 24rpx 28rpx;
   position: relative;
+  box-shadow: 0 2rpx 16rpx rgba(43, 107, 224, 0.07);
+  overflow: hidden;
 }
 
 /* Red dot indicator */
 .red-dot {
   position: absolute;
-  top: 16rpx;
-  right: 16rpx;
-  width: 16rpx;
-  height: 16rpx;
+  top: 14rpx;
+  right: 14rpx;
+  width: 14rpx;
+  height: 14rpx;
   border-radius: 50%;
-  background: #FF4D4F;
+  background: #E63A35;
 }
 
 /* Alarm icon */
@@ -92,28 +100,28 @@ page {
 .alarm-icon-wrap {
   width: 80rpx;
   height: 80rpx;
-  border-radius: 50%;
+  border-radius: 20rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .alarm-unhandled {
-  background: #FFF1F0;
+  background: #FFF0F0;
 }
 
 .alarm-handled {
-  background: #F0F0F0;
+  background: #F2F4F8;
 }
 
 .alarm-icon-text {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: 900;
-  color: #FF4D4F;
+  color: #E63A35;
 }
 
 .alarm-handled .alarm-icon-text {
-  color: #bbb;
+  color: #C0C8D8;
 }
 
 /* Card main content */
@@ -135,7 +143,7 @@ page {
 .member-name {
   font-size: 30rpx;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #0F1C38;
 }
 
 .status-badge {
@@ -145,20 +153,20 @@ page {
   flex-shrink: 0;
 }
 
-.status-badge.status-unhandled { background: #FFF1F0; }
-.status-badge.status-handled   { background: #F0F0F0; }
+.status-badge.status-unhandled { background: #FFF0F0; }
+.status-badge.status-handled   { background: #F2F4F8; }
 
-.status-badge.status-unhandled .status-text { color: #FF4D4F; }
-.status-badge.status-handled   .status-text { color: #999; }
+.status-badge.status-unhandled .status-text { color: #E63A35; }
+.status-badge.status-handled   .status-text { color: #9CA3B4; }
 
 .alarm-type {
   font-size: 26rpx;
-  color: #555;
+  color: #4A587A;
 }
 
 .alarm-time {
   font-size: 24rpx;
-  color: #aaa;
+  color: #9CA3B4;
 }
 
 /* Arrow */
@@ -168,13 +176,13 @@ page {
 
 .arrow-icon {
   font-size: 40rpx;
-  color: #ccc;
+  color: #C8D0E0;
 }
 
 /* ===== Empty & Loading ===== */
 .empty-wrap,
 .loading-wrap {
-  padding: 80rpx 0;
+  padding: 100rpx 0;
   display: flex;
   justify-content: center;
 }
@@ -182,5 +190,5 @@ page {
 .empty-text,
 .loading-text {
   font-size: 28rpx;
-  color: #ccc;
+  color: #C0C8D8;
 }

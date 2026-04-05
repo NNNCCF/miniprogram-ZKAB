@@ -46,6 +46,11 @@
     "navigationBarBackgroundColor": "#3B7EFF",
     "backgroundColor": "#F5F6FA"
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在地图上显示您的当前位置"
+    }
+  },
   "style": "v2",
   "componentFramework": "glass-easel",
   "lazyCodeLoading": "requiredComponents"

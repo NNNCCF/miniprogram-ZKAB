@@ -1,52 +1,61 @@
 <view class="page">
-  <view style="height:{{statusH}}px;background:#fff;"></view>
-
-  <view class="result-wrap">
-    <!-- Success -->
-    <view wx:if="{{isSuccess}}">
-      <view class="icon-circle success-circle">
-        <text class="result-icon">✓</text>
-      </view>
-      <text class="result-title">绑定成功！</text>
-      <text class="result-desc">设备已成功绑定到您的账户</text>
-      <view class="device-info-card" wx:if="{{device}}">
-        <view class="info-row">
-          <text class="info-key">设备编号</text>
-          <text class="info-val">{{device.deviceId || deviceId}}</text>
-        </view>
-        <view class="info-row">
-          <text class="info-key">设备名称</text>
-          <text class="info-val">{{device.name || '健康监测手环'}}</text>
-        </view>
-        <view class="info-row">
-          <text class="info-key">绑定状态</text>
-          <text class="info-val success-text">已激活</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- Fail -->
-    <view wx:else>
-      <view class="icon-circle fail-circle">
-        <text class="result-icon">✕</text>
-      </view>
-      <text class="result-title">绑定失败</text>
-      <text class="result-desc">{{errorMsg || '设备绑定失败，请检查设备ID后重试'}}</text>
-      <view class="fail-tips">
-        <text class="fail-tip">• 确认设备ID输入正确</text>
-        <text class="fail-tip">• 确认设备已开机且在附近</text>
-        <text class="fail-tip">• 检查网络连接是否正常</text>
-      </view>
-    </view>
-
-    <!-- Buttons -->
-    <view class="btn-group">
-      <view class="home-btn" bindtap="goHome">
-        <text>返回首页</text>
-      </view>
-      <view class="retry-btn" wx:if="{{!isSuccess}}" bindtap="goRetry">
-        <text>重新绑定</text>
-      </view>
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goHome"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">绑定结果</text>
+      <view style="width:60rpx;"></view>
     </view>
   </view>
+
+  <scroll-view class="body-area" scroll-y>
+    <view class="result-wrap">
+      <!-- Success -->
+      <view wx:if="{{isSuccess}}">
+        <view class="icon-circle success-circle">
+          <text class="result-icon">✓</text>
+        </view>
+        <text class="result-title">绑定成功！</text>
+        <text class="result-desc">设备已成功绑定到您的账户</text>
+        <view class="device-info-card" wx:if="{{device}}">
+          <view class="info-row">
+            <text class="info-key">设备编号</text>
+            <text class="info-val">{{device.deviceId || deviceId}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-key">设备名称</text>
+            <text class="info-val">{{device.name || '健康监测手环'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-key">绑定状态</text>
+            <text class="info-val success-text">已激活</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Fail -->
+      <view wx:else>
+        <view class="icon-circle fail-circle">
+          <text class="result-icon">✕</text>
+        </view>
+        <text class="result-title">绑定失败</text>
+        <text class="result-desc">{{errorMsg || '设备绑定失败，请检查设备ID后重试'}}</text>
+        <view class="fail-tips">
+          <text class="fail-tip">• 确认设备ID输入正确</text>
+          <text class="fail-tip">• 确认设备已开机且在附近</text>
+          <text class="fail-tip">• 检查网络连接是否正常</text>
+        </view>
+      </view>
+
+      <!-- Buttons -->
+      <view class="btn-group">
+        <view class="home-btn" bindtap="goHome">
+          <text>返回首页</text>
+        </view>
+        <view class="retry-btn" wx:if="{{!isSuccess}}" bindtap="goRetry">
+          <text>重新绑定</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
 </view>

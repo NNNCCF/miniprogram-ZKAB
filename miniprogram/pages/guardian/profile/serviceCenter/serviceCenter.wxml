@@ -1,27 +1,33 @@
-<view class="nav-bar" style="padding-top:{{statusH}}px;">
-  <view class="back-btn" bindtap="goBack"><text class="back-icon">‹</text></view>
-  <text class="nav-title">服务中心</text>
-</view>
-<view class="body">
-  <view class="section-title">常见问题</view>
-  <view class="card">
-    <view wx:for="{{faqs}}" wx:key="id" class="faq-item">
-      <view class="faq-q" bindtap="toggle" data-id="{{item.id}}">
-        <text class="faq-q-text">{{item.q}}</text>
-        <text class="faq-arrow {{item.open?'open':''}}">›</text>
+<view class="page">
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">服务中心</text>
+      <view style="width:60rpx;"></view>
+    </view>
+  </view>
+  <scroll-view class="body-area" scroll-y>
+    <view class="section-title">常见问题</view>
+    <view class="card">
+      <view wx:for="{{faqs}}" wx:key="id" class="faq-item">
+        <view class="faq-q" bindtap="toggle" data-id="{{item.id}}">
+          <text class="faq-q-text">{{item.q}}</text>
+          <text class="faq-arrow {{item.open?'open':''}}">›</text>
+        </view>
+        <view class="faq-a" wx:if="{{item.open}}"><text>{{item.a}}</text></view>
       </view>
-      <view class="faq-a" wx:if="{{item.open}}"><text>{{item.a}}</text></view>
     </view>
-  </view>
-  <view class="section-title">联系我们</view>
-  <view class="card">
-    <view class="contact-row" bindtap="callPhone">
-      <text class="contact-label">客服热线</text>
-      <text class="contact-val phone">400-888-9999</text>
+    <view class="section-title">联系我们</view>
+    <view class="card">
+      <view class="contact-row" bindtap="callPhone">
+        <text class="contact-label">客服热线</text>
+        <text class="contact-val phone">400-888-9999</text>
+      </view>
+      <view class="contact-row">
+        <text class="contact-label">服务邮箱</text>
+        <text class="contact-val">service@zkab.com</text>
+      </view>
     </view>
-    <view class="contact-row">
-      <text class="contact-label">服务邮箱</text>
-      <text class="contact-val">service@zkab.com</text>
-    </view>
-  </view>
+  </scroll-view>
 </view>

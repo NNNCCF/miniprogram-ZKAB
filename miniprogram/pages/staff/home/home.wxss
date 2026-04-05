@@ -1,235 +1,176 @@
-/* ===== Page Layout ===== */
 page {
-  background: #3B7EFF;
-  min-height: 100vh;
+  background: #000;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.page-body {
+.page {
+  position: relative;
+  height: 100vh;
+}
+
+/* ===== 地图全屏 ===== */
+.map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 底部抽屉面板 ===== */
+.bottom-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(88rpx + env(safe-area-inset-bottom));
   background: #fff;
-  border-radius: 32rpx 32rpx 0 0;
-  min-height: calc(100vh - 180rpx);
-  padding: 32rpx 32rpx calc(140rpx + env(safe-area-inset-bottom));
-  box-sizing: border-box;
+  border-radius: 28rpx 28rpx 0 0;
+  box-shadow: 0 -8rpx 40rpx rgba(15, 28, 56, 0.14);
+  padding-bottom: 8rpx;
 }
 
-/* ===== Welcome Card ===== */
-.welcome-card {
+/* ===== 把手 ===== */
+.panel-handle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14rpx 0 10rpx;
+  gap: 8rpx;
+}
+
+.panel-handle {
+  width: 64rpx;
+  height: 8rpx;
+  background: #D8E0F0;
+  border-radius: 4rpx;
+}
+
+.panel-arrow {
+  font-size: 24rpx;
+  color: #C0C8D8;
+  line-height: 1;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.arrow-down {
+  transform: rotate(180deg);
+}
+
+.arrow-up {
+  transform: rotate(0deg);
+}
+
+/* ===== 可折叠内容区 ===== */
+.panel-body {
+  overflow: hidden;
+  max-height: 400rpx;
+  transition: max-height 0.3s ease;
+}
+
+.panel-body-closed {
+  max-height: 0;
+}
+
+/* ===== 筛选栏 ===== */
+.filter-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, #3B7EFF 0%, #5B9BFF 100%);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  margin-bottom: 32rpx;
+  padding: 4rpx 24rpx 16rpx;
+  gap: 16rpx;
 }
 
-.welcome-left {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-}
-
-.avatar {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+.filter-chip {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8rpx;
+  height: 68rpx;
+  border-radius: 34rpx;
+  background: #F2F5FC;
+  transition: background 0.15s;
+}
+
+.filter-chip-active {
+  background: #EBF1FF;
+}
+
+.filter-icon {
+  width: 32rpx;
+  height: 32rpx;
   flex-shrink: 0;
 }
 
-.avatar-text {
-  color: #fff;
-  font-size: 32rpx;
+.filter-label {
+  font-size: 24rpx;
+  color: #8A94A8;
+}
+
+.filter-chip-active .filter-label {
+  color: #3B7EFF;
   font-weight: 600;
 }
 
-.welcome-info {
+/* ===== 分割线 ===== */
+.panel-divider {
+  height: 1rpx;
+  background: #EBF0FA;
+  margin: 0 28rpx 4rpx;
+}
+
+/* ===== 统计数据 ===== */
+.stats-grid {
   display: flex;
-  flex-direction: column;
-  gap: 8rpx;
+  flex-wrap: wrap;
 }
 
-.welcome-name {
-  color: #fff;
-  font-size: 36rpx;
-  font-weight: 700;
-}
-
-.welcome-org {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 24rpx;
-}
-
-.welcome-date {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4rpx;
-}
-
-.date-text {
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: 600;
-}
-
-.week-text {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 24rpx;
-}
-
-/* ===== Stats Row ===== */
-.stats-row {
-  display: flex;
-  align-items: center;
-  background: #F7F9FF;
-  border-radius: 20rpx;
-  padding: 32rpx 0;
-  margin-bottom: 40rpx;
-}
-
-.stat-card {
-  flex: 1;
+.stat-item {
+  width: 33.333%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8rpx;
-  cursor: pointer;
+  padding: 20rpx 0 24rpx;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.stat-divider {
-  width: 2rpx;
-  height: 60rpx;
-  background: #E0E6F5;
+/* 纵向分割线 */
+.stat-item:not(:nth-child(3n))::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20rpx;
+  bottom: 20rpx;
+  width: 1rpx;
+  background: #E8EEF8;
+}
+
+/* 第二行横向分割线 */
+.stat-item:nth-child(4),
+.stat-item:nth-child(5),
+.stat-item:nth-child(6) {
+  border-top: 1rpx solid #E8EEF8;
 }
 
 .stat-num {
-  font-size: 52rpx;
+  font-size: 48rpx;
   font-weight: 700;
   color: #3B7EFF;
-  line-height: 1.1;
+  line-height: 1.15;
+  letter-spacing: -0.5rpx;
 }
 
 .stat-num.stat-alarm {
-  color: #FF4D4F;
+  color: #E63A35;
 }
 
 .stat-label {
-  font-size: 24rpx;
-  color: #888;
-}
-
-/* ===== Section Title ===== */
-.section-title {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 24rpx;
-  padding-left: 12rpx;
-  border-left: 6rpx solid #3B7EFF;
-}
-
-/* ===== Quick Actions ===== */
-.quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24rpx;
-  margin-bottom: 40rpx;
-}
-
-.action-item {
-  width: calc((100% - 48rpx) / 3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12rpx;
-}
-
-.action-icon-wrap {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-blue  { background: #EDF3FF; }
-.action-red   { background: #FFF1F0; }
-.action-green { background: #F0FFF4; }
-.action-orange{ background: #FFF7E6; }
-.action-purple{ background: #F5F0FF; }
-.action-teal  { background: #E6FFFB; }
-
-.action-icon {
-  width: 52rpx;
-  height: 52rpx;
-}
-
-.action-label {
-  font-size: 24rpx;
-  color: #555;
-}
-
-/* ===== Appointment List ===== */
-.appt-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.appt-item {
-  background: #F7F9FF;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 10rpx;
-}
-
-.appt-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.appt-type {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.status-badge {
-  padding: 4rpx 16rpx;
-  border-radius: 20rpx;
   font-size: 22rpx;
-}
-
-.status-badge.status-pending  { background: #FFF3E8; }
-.status-badge.status-accepted { background: #EDF3FF; }
-.status-badge.status-completed{ background: #F0F0F0; }
-
-.status-badge.status-pending  .status-text { color: #FF8C00; }
-.status-badge.status-accepted .status-text { color: #3B7EFF; }
-.status-badge.status-completed .status-text { color: #999; }
-
-.appt-time,
-.appt-member {
-  font-size: 24rpx;
-  color: #888;
-}
-
-/* ===== Empty ===== */
-.empty-tip {
-  padding: 60rpx 0;
-  display: flex;
-  justify-content: center;
-}
-
-.empty-text {
-  font-size: 28rpx;
-  color: #ccc;
+  color: #9CA3B4;
+  margin-top: 6rpx;
+  letter-spacing: 0.5rpx;
 }

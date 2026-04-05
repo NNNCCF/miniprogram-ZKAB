@@ -1,89 +1,94 @@
 <view class="page">
-  <view style="height:{{statusH}}px;background:#fff;"></view>
-  <view class="nav-bar">
-    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
-    <text class="nav-title">预约医生</text>
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">预约医生</text>
+      <view style="width:60rpx;"></view>
+    </view>
   </view>
 
-  <scroll-view class="scroll-wrap" scroll-y>
-    <!-- Doctor Info -->
-    <view class="doctor-card">
-      <view class="doctor-avatar">
-        <text class="doctor-avatar-text">医</text>
-      </view>
-      <view class="doctor-info">
-        <text class="doctor-name">{{doctor.name || '王医生'}}</text>
-        <text class="doctor-title">{{doctor.title || '主任医师 · 内科'}}</text>
-        <text class="doctor-hospital">{{doctor.hospital || '北京协和医院'}}</text>
-      </view>
-    </view>
-
-    <view class="doctor-meta">
-      <view class="meta-item">
-        <text class="meta-num">{{doctor.experience || '20'}}年</text>
-        <text class="meta-label">从医经验</text>
-      </view>
-      <view class="meta-sep"></view>
-      <view class="meta-item">
-        <text class="meta-num">{{doctor.patients || '5000'}}+</text>
-        <text class="meta-label">服务患者</text>
-      </view>
-      <view class="meta-sep"></view>
-      <view class="meta-item">
-        <text class="meta-num">{{doctor.rating || '4.9'}}</text>
-        <text class="meta-label">评分</text>
-      </view>
-    </view>
-
-    <!-- Specialty -->
-    <view class="section-card">
-      <text class="section-title">擅长领域</text>
-      <text class="section-content">{{doctor.specialty || '高血压、冠心病、心力衰竭、心脏康复，擅长老年慢性病综合管理'}}</text>
-    </view>
-
-    <!-- Time Slots -->
-    <view class="section-card">
-      <text class="section-title">选择预约时间</text>
-      <view class="slots-grid">
-        <view
-          class="slot-item {{selectedSlot === item.id ? 'slot-active' : ''}} {{item.available ? '' : 'slot-disabled'}}"
-          wx:for="{{timeSlots}}"
-          wx:key="id"
-          bindtap="selectSlot"
-          data-id="{{item.id}}"
-          data-available="{{item.available}}"
-        >
-          <text class="slot-date">{{item.date}}</text>
-          <text class="slot-time">{{item.time}}</text>
+  <scroll-view class="body-area" scroll-y>
+    <view class="content-wrap">
+      <!-- Doctor Info -->
+      <view class="doctor-card">
+        <view class="doctor-avatar">
+          <text class="doctor-avatar-text">医</text>
+        </view>
+        <view class="doctor-info">
+          <text class="doctor-name">{{doctor.name || '王医生'}}</text>
+          <text class="doctor-title">{{doctor.title || '主任医师 · 内科'}}</text>
+          <text class="doctor-hospital">{{doctor.hospital || '北京协和医院'}}</text>
         </view>
       </view>
-    </view>
 
-    <!-- Patient Info Form -->
-    <view class="section-card">
-      <text class="section-title">患者信息</text>
-      <view class="form-row">
-        <text class="form-label">患者姓名</text>
-        <input class="form-input" placeholder="请输入患者姓名" value="{{form.patientName}}" bindinput="onInput" data-field="patientName"/>
+      <view class="doctor-meta">
+        <view class="meta-item">
+          <text class="meta-num">{{doctor.experience || '20'}}年</text>
+          <text class="meta-label">从医经验</text>
+        </view>
+        <view class="meta-sep"></view>
+        <view class="meta-item">
+          <text class="meta-num">{{doctor.patients || '5000'}}+</text>
+          <text class="meta-label">服务患者</text>
+        </view>
+        <view class="meta-sep"></view>
+        <view class="meta-item">
+          <text class="meta-num">{{doctor.rating || '4.9'}}</text>
+          <text class="meta-label">评分</text>
+        </view>
       </view>
-      <view class="form-row">
-        <text class="form-label">联系电话</text>
-        <input class="form-input" type="number" placeholder="请输入联系电话" value="{{form.phone}}" bindinput="onInput" data-field="phone"/>
-      </view>
-      <view class="form-row">
-        <text class="form-label">主诉症状</text>
-        <textarea class="form-textarea" placeholder="请简述症状（选填）" value="{{form.symptoms}}" bindinput="onInput" data-field="symptoms"/>
-      </view>
-    </view>
 
-    <!-- Price Info -->
-    <view class="price-bar">
-      <view>
-        <text class="price-label">预约费用</text>
-        <text class="price-val">¥{{doctor.price || '99'}}</text>
+      <!-- Specialty -->
+      <view class="section-card">
+        <text class="section-title">擅长领域</text>
+        <text class="section-content">{{doctor.specialty || '高血压、冠心病、心力衰竭、心脏康复，擅长老年慢性病综合管理'}}</text>
       </view>
-      <view class="book-btn" bindtap="onBook">
-        <text>{{loading ? '提交中...' : '立即预约'}}</text>
+
+      <!-- Time Slots -->
+      <view class="section-card">
+        <text class="section-title">选择预约时间</text>
+        <view class="slots-grid">
+          <view
+            class="slot-item {{selectedSlot === item.id ? 'slot-active' : ''}} {{item.available ? '' : 'slot-disabled'}}"
+            wx:for="{{timeSlots}}"
+            wx:key="id"
+            bindtap="selectSlot"
+            data-id="{{item.id}}"
+            data-available="{{item.available}}"
+          >
+            <text class="slot-date">{{item.date}}</text>
+            <text class="slot-time">{{item.time}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Patient Info Form -->
+      <view class="section-card">
+        <text class="section-title">患者信息</text>
+        <view class="form-row">
+          <text class="form-label">患者姓名</text>
+          <input class="form-input" placeholder="请输入患者姓名" value="{{form.patientName}}" bindinput="onInput" data-field="patientName"/>
+        </view>
+        <view class="form-row">
+          <text class="form-label">联系电话</text>
+          <input class="form-input" type="number" placeholder="请输入联系电话" value="{{form.phone}}" bindinput="onInput" data-field="phone"/>
+        </view>
+        <view class="form-row">
+          <text class="form-label">主诉症状</text>
+          <textarea class="form-textarea" placeholder="请简述症状（选填）" value="{{form.symptoms}}" bindinput="onInput" data-field="symptoms"/>
+        </view>
+      </view>
+
+      <!-- Price Info -->
+      <view class="price-bar">
+        <view>
+          <text class="price-label">预约费用</text>
+          <text class="price-val">¥{{doctor.price || '99'}}</text>
+        </view>
+        <view class="book-btn" bindtap="onBook">
+          <text>{{loading ? '提交中...' : '立即预约'}}</text>
+        </view>
       </view>
     </view>
   </scroll-view>

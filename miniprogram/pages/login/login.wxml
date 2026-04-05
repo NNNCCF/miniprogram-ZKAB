@@ -1,72 +1,122 @@
 <view class="page">
+
   <!-- Hero 区 -->
   <view class="hero">
-    <text class="plus p1">+</text>
-    <text class="plus p2">+</text>
-    <text class="plus p3">+</text>
-    <text class="plus p4">+</text>
-    <text class="plus p5">+</text>
-    <text class="plus p6">+</text>
-    <image class="logo" src="/images/tab_home.png" mode="aspectFit" />
-    <text class="app-name">欢迎来到卓凯安伴</text>
-    <view class="badge-row">
-      <text class="badge">{{roleText}}</text>
-    </view>
+    <!-- 背景图，不拉伸 -->
+    <image class="hero-bg" src="/images/login_bg.png" mode="aspectFill" />
+    <!-- 遮罩，保证文字可读 -->
+    <view class="hero-mask"></view>
+
+    <image class="logo" src="/images/logo.png" mode="aspectFit" />
+    <text class="app-name">卓凯安伴</text>
+    <text class="app-sub">专业养老关怀平台</text>
   </view>
 
   <!-- 表单卡片 -->
   <view class="form-card">
-    <!-- Tab 切换：医护 / 家属 -->
+
+    <!-- Tab 切换：登录 / 注册 -->
     <view class="tab-row">
-      <view class="tab-item {{activeTab==='staff'?'active':''}}" bindtap="setTab" data-tab="staff">
-        <text>医护登录</text>
+      <view class="tab-item {{activeTab==='login'?'active':''}}" bindtap="setTab" data-tab="login">
+        <text>登录</text>
       </view>
-      <view class="tab-item {{activeTab==='guardian'?'active':''}}" bindtap="setTab" data-tab="guardian">
-        <text>家属登录</text>
-      </view>
-    </view>
-
-    <!-- 手机号 -->
-    <view class="input-wrap">
-      <text class="input-icon">📱</text>
-      <input class="ipt" value="{{form.phone}}" bindinput="onInput" data-field="phone"
-        type="number" maxlength="11" placeholder="请输入手机号码" placeholder-class="ph" />
-    </view>
-
-    <!-- 密码 -->
-    <view class="input-wrap">
-      <text class="input-icon">🔒</text>
-      <input class="ipt" value="{{form.password}}" bindinput="onInput" data-field="password"
-        password="{{!showPwd}}" placeholder="请输入密码" placeholder-class="ph" />
-      <text class="eye-btn" bindtap="togglePwd">{{showPwd?'隐':'显'}}</text>
-    </view>
-
-    <!-- 验证码 -->
-    <view class="input-wrap captcha-row">
-      <input class="ipt captcha-ipt" value="{{form.captcha}}" bindinput="onInput" data-field="captcha"
-        maxlength="4" placeholder="验证码" placeholder-class="ph" />
-      <view class="captcha-box" bindtap="refreshCaptcha">
-        <text wx:for="{{captcha}}" wx:key="index"
-          style="color:{{item.color}};transform:rotate({{item.angle}}deg);font-size:34rpx;font-weight:700;font-family:serif;">
-          {{item.ch}}
-        </text>
+      <view class="tab-item {{activeTab==='register'?'active':''}}" bindtap="setTab" data-tab="register">
+        <text>注册</text>
       </view>
     </view>
 
-    <view class="btn-primary" bindtap="handleLogin">登 录</view>
+    <!-- ===== 登录表单 ===== -->
+    <block wx:if="{{activeTab==='login'}}">
 
-    <view class="link-row">
-      <text class="link-text" bindtap="goRegister">还没有账号？去注册</text>
-    </view>
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_phone.png" mode="aspectFit" />
+        <input class="ipt" value="{{loginForm.phone}}" bindinput="onLoginInput" data-field="phone"
+          type="number" maxlength="11" placeholder="请输入手机号码" placeholder-class="ph" />
+      </view>
 
-    <view class="divider-row">
-      <view class="div-line"></view>
-      <text class="div-text">第三方登录</text>
-      <view class="div-line"></view>
-    </view>
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_lock.png" mode="aspectFit" />
+        <input class="ipt" value="{{loginForm.password}}" bindinput="onLoginInput" data-field="password"
+          password="{{!showPwd}}" placeholder="请输入密码" placeholder-class="ph" />
+        <image class="eye-icon" src="/images/{{showPwd ? 'icon_eye_on' : 'icon_eye_off'}}.png"
+          mode="aspectFit" bindtap="togglePwd" />
+      </view>
 
-    <view class="wechat-row" bindtap="wechatLogin">
-      <text class="wechat-text">微信一键登录</text>
-    </view>
+
+      <view class="btn-primary {{submitting?'btn-loading':''}}" bindtap="handleLogin">
+        {{submitting ? '登录中...' : '登 录'}}
+      </view>
+
+      <view class="divider-row">
+        <view class="div-line"></view>
+        <text class="div-text">第三方登录</text>
+        <view class="div-line"></view>
+      </view>
+
+      <view class="wechat-row" bindtap="wechatLogin">
+        <image class="wechat-icon" src="/images/icon_wechat.png" mode="aspectFit" />
+      </view>
+
+    </block>
+
+    <!-- ===== 注册表单 ===== -->
+    <block wx:else>
+
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_phone.png" mode="aspectFit" />
+        <input class="ipt" value="{{regForm.phone}}" bindinput="onRegInput" data-field="phone"
+          type="number" maxlength="11" placeholder="请输入手机号码" placeholder-class="ph" />
+      </view>
+
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_user.png" mode="aspectFit" />
+        <input class="ipt" value="{{regForm.name}}" bindinput="onRegInput" data-field="name"
+          placeholder="请输入真实姓名" placeholder-class="ph" />
+      </view>
+
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_lock.png" mode="aspectFit" />
+        <input class="ipt" value="{{regForm.password}}" bindinput="onRegInput" data-field="password"
+          password="{{!showRegPwd}}" placeholder="请设置密码（6-20位）" placeholder-class="ph" />
+        <image class="eye-icon" src="/images/{{showRegPwd ? 'icon_eye_on' : 'icon_eye_off'}}.png"
+          mode="aspectFit" bindtap="toggleRegPwd" />
+      </view>
+
+      <view class="input-wrap">
+        <image class="input-icon" src="/images/icon_lock.png" mode="aspectFit" />
+        <input class="ipt" value="{{regForm.confirmPassword}}" bindinput="onRegInput" data-field="confirmPassword"
+          password="{{!showRegPwd}}" placeholder="请再次输入密码" placeholder-class="ph" />
+      </view>
+
+      <!-- 角色选择 -->
+      <view class="role-section">
+        <text class="role-title">我的身份</text>
+        <view class="role-row">
+          <view class="role-btn {{regForm.role==='staff'?'role-active':''}}"
+            bindtap="selectRole" data-role="staff">
+            <image class="role-icon-img" src="/images/icon_medical.png" mode="aspectFit" />
+            <text class="role-label">医护人员</text>
+          </view>
+          <view class="role-btn {{regForm.role==='guardian'?'role-active':''}}"
+            bindtap="selectRole" data-role="guardian">
+            <image class="role-icon-img" src="/images/icon_family.png" mode="aspectFit" />
+            <text class="role-label">家属</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 机构码（医护专属）-->
+      <view class="input-wrap" wx:if="{{regForm.role==='staff'}}">
+        <image class="input-icon" src="/images/icon_building.png" mode="aspectFit" />
+        <input class="ipt" value="{{regForm.orgCode}}" bindinput="onRegInput" data-field="orgCode"
+          placeholder="请输入所属机构码" placeholder-class="ph" />
+      </view>
+
+      <view class="btn-primary {{submitting?'btn-loading':''}}" bindtap="handleRegister">
+        {{submitting ? '注册中...' : '立即注册'}}
+      </view>
+
+    </block>
+
   </view>
 </view>

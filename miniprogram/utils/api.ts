@@ -4,6 +4,10 @@
 import { get, post, put } from './request'
 
 // ─── 认证 ────────────────────────────────────────────────
+/** 统一登录：后端自动识别角色，返回 { token, role, userInfo } */
+export const unifiedLogin = (data: { phone: string; password: string }) =>
+  post('/auth/login', data)
+
 export const nurseLogin    = (data: { phone: string; password: string }) =>
   post('/auth/nurse/login', data)
 

@@ -1,16 +1,42 @@
-.page {
-  min-height: 100vh;
-  background: #F5F7FA;
+page {
+  background: #EEF2FF;
+  height: 100vh;
+  overflow: hidden;
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #EEF2FF;
+}
+
+/* ===== 导航栏 ===== */
 .nav-bar {
+  position: relative;
+  overflow: hidden;
+  height: 136rpx;
+  flex-shrink: 0;
+}
+.header-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.nav-inner {
+  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 24rpx;
-  height: 88rpx;
-  background: #fff;
   position: relative;
+  z-index: 1;
 }
+/* 以下为原有样式兼容占位 */
+.nav-bar-old {
+  flex-shrink: 0;
+}
+
 .nav-back {
   width: 60rpx;
   height: 60rpx;
@@ -18,134 +44,145 @@
   align-items: center;
   justify-content: center;
 }
+
 .back-arrow {
   font-size: 52rpx;
-  color: #111827;
+  color: #fff;
   line-height: 1;
 }
+
 .nav-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #111827;
-}
-
-.content {
-  padding: 40rpx 32rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.illus-wrap {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  background: #EEF3FF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24rpx;
-}
-.illus-icon { font-size: 80rpx; }
-.tip-title {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 12rpx;
-}
-.tip-desc {
-  font-size: 26rpx;
-  color: #6B7280;
-  text-align: center;
-  line-height: 1.6;
-  margin-bottom: 40rpx;
-}
-
-.input-section {
-  width: 100%;
-  margin-bottom: 24rpx;
-}
-.input-label {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 12rpx;
-}
-.input-wrap {
-  background: #fff;
-  border-radius: 16rpx;
-  border: 2rpx solid #E5E7EB;
-  display: flex;
-  align-items: center;
-  padding: 0 24rpx;
-}
-.device-input {
   flex: 1;
-  height: 96rpx;
-  font-size: 28rpx;
-  color: #111827;
-}
-.input-clear {
-  padding: 10rpx;
-  color: #9CA3AF;
-  font-size: 28rpx;
-}
-
-.scan-btn {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  border: 2rpx dashed #3B7EFF;
-  border-radius: 16rpx;
-  padding: 24rpx 40rpx;
-  width: 100%;
-  justify-content: center;
-  margin-bottom: 32rpx;
-  background: #EEF3FF;
-}
-.scan-icon { font-size: 36rpx; }
-.scan-text {
-  font-size: 28rpx;
-  color: #3B7EFF;
-  font-weight: 600;
-}
-
-.confirm-btn {
-  width: 100%;
-  height: 96rpx;
-  background: #3B7EFF;
-  border-radius: 48rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 32rpx;
-}
-.btn-disabled { background: #B0C4FF; }
-.confirm-text {
-  font-size: 32rpx;
+  text-align: center;
+  font-size: 34rpx;
   font-weight: 700;
   color: #fff;
 }
 
-.help-card {
-  background: #FFFBEB;
-  border-radius: 16rpx;
-  padding: 24rpx;
+/* ===== 白色内容区 ===== */
+.body-area {
+  flex: 1;
+  background: #fff;
+  border-radius: 28rpx 28rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
+  overflow-y: auto;
+  padding: 56rpx 48rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ===== 链接图标 ===== */
+.icon-wrap {
+  margin-bottom: 60rpx;
+}
+
+.icon-outer {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: rgba(91, 127, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-inner {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chain-icon {
+  font-size: 56rpx;
+  filter: grayscale(1) brightness(10);
+}
+
+/* ===== 表单 ===== */
+.form {
   width: 100%;
-  border: 1rpx solid #FDE68A;
+  margin-bottom: 60rpx;
 }
-.help-title {
-  display: block;
-  font-size: 26rpx;
-  font-weight: 600;
-  color: #92400E;
-  margin-bottom: 8rpx;
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 0;
+  min-height: 96rpx;
 }
-.help-desc {
-  display: block;
+
+.field-label {
+  font-size: 28rpx;
+  color: #111827;
+  flex-shrink: 0;
+  min-width: 140rpx;
+}
+
+.required {
+  color: #E63A35;
+  font-size: 28rpx;
+}
+
+.field-input {
+  flex: 1;
+  text-align: right;
+  font-size: 28rpx;
+  color: #111827;
+  height: 60rpx;
+}
+
+.field-ph {
+  color: #B0B8CC;
+  font-size: 28rpx;
+}
+
+.location-val {
+  flex: 1;
+  text-align: right;
+}
+
+.field-val-text {
+  font-size: 28rpx;
+  color: #E63A35;
+}
+
+.pin {
   font-size: 24rpx;
-  color: #B45309;
-  line-height: 1.6;
+}
+
+.field-divider {
+  height: 1rpx;
+  background: #F0F2F8;
+}
+
+/* ===== 确认按钮 ===== */
+.confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(59, 110, 240, 0.35);
+}
+
+.btn-disabled {
+  background: #B0C4FF;
+  box-shadow: none;
+}
+
+.confirm-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 4rpx;
 }

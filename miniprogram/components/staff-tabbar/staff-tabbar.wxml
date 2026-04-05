@@ -7,7 +7,10 @@
     data-key="{{item.key}}"
     data-url="{{item.url}}"
   >
-    <image class="tab-icon" src="{{active === item.key ? item.iconOn : item.icon}}" mode="aspectFit" />
+    <view class="icon-wrap">
+      <image class="tab-icon" src="{{active === item.key ? item.iconOn : item.icon}}" mode="aspectFit" />
+      <view wx:if="{{item.badge}}" class="badge">{{item.badge}}</view>
+    </view>
     <text class="tab-label">{{item.label}}</text>
   </view>
 </view>

@@ -1,23 +1,29 @@
-<view class="nav-bar" style="padding-top:{{statusH}}px;">
-  <view class="back-btn" bindtap="goBack"><text class="back-icon">‹</text></view>
-  <text class="nav-title">系统设置</text>
-</view>
-<view class="body">
-  <view class="card">
-    <view class="row">
-      <text class="row-label">报警推送通知</text>
-      <switch checked="{{pushOn}}" bindchange="onPush" color="#3B7EFF" />
+<view class="page">
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">系统设置</text>
+      <view style="width:60rpx;"></view>
     </view>
   </view>
-  <view class="card" style="margin-top:24rpx;">
-    <view class="row" bindtap="clearCache">
-      <text class="row-label">清除缓存</text>
-      <text class="row-arrow">›</text>
+  <scroll-view class="body-area" scroll-y>
+    <view class="card">
+      <view class="row">
+        <text class="row-label">报警推送通知</text>
+        <switch checked="{{pushOn}}" bindchange="onPush" color="#3B7EFF" />
+      </view>
     </view>
-    <view class="row" bindtap="showAbout">
-      <text class="row-label">关于我们</text>
-      <text class="row-val">v1.0.0</text>
+    <view class="card" style="margin-top:24rpx;">
+      <view class="row" bindtap="clearCache">
+        <text class="row-label">清除缓存</text>
+        <text class="row-arrow">›</text>
+      </view>
+      <view class="row" bindtap="showAbout">
+        <text class="row-label">关于我们</text>
+        <text class="row-val">v1.0.0</text>
+      </view>
     </view>
-  </view>
-  <view class="logout-btn" bindtap="logout">退出登录</view>
+    <view class="logout-btn" bindtap="logout">退出登录</view>
+  </scroll-view>
 </view>

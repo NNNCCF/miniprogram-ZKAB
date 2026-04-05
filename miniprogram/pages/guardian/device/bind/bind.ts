@@ -6,7 +6,12 @@ Page({
   data: {
     statusH: 0,
     deviceCode: '',
-    loading: false
+    location: '',
+    locationText: '',
+    address: '',
+    roomLocation: '',
+    loading: false,
+    canSubmit: false
   },
 
   onLoad() {
@@ -19,39 +24,66 @@ Page({
 
   onDeviceCodeInput(e: any) {
     this.setData({ deviceCode: e.detail.value })
+    this.checkSubmit()
   },
 
-  clearInput() {
-    this.setData({ deviceCode: '' })
+  onAddressInput(e: any) {
+    this.setData({ address: e.detail.value })
+    this.checkSubmit()
   },
 
-  scanQR() {
-    wx.scanCode({
+  onRoomInput(e: any) {
+    this.setData({ roomLocation: e.detail.value })
+    this.checkSubmit()
+  },
+
+  checkSubmit() {
+    const { deviceCode, location, address, roomLocation } = this.data
+    this.setData({ canSubmit: !!(deviceCode && location && address && roomLocation) })
+  },
+
+  getLocation() {
+    wx.showLoading({ title: '定位中...' })
+    wx.getLocation({
+      type: 'gcj02',
       success: (res) => {
-        const code = res.result || ''
-        this.setData({ deviceCode: code })
+        wx.hideLoading()
+        const loc = `${res.latitude},${res.longitude}`
+        // 逆地理编码获取地址文字
+        wx.request({
+          url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${loc}&key=YOUR_KEY&output=json`,
+          success: (r: any) => {
+            const addr = r.data?.result?.address || loc
+            this.setData({ location: loc, locationText: addr })
+            this.checkSubmit()
+          },
+          fail: () => {
+            this.setData({ location: loc, locationText: loc })
+            this.checkSubmit()
+          }
+        })
       },
       fail: () => {
-        wx.showToast({ title: '扫码失败', icon: 'none' })
+        wx.hideLoading()
+        wx.showToast({ title: '定位失败，请检查权限', icon: 'none' })
       }
     })
   },
 
   async onConfirm() {
-    const { deviceCode, loading } = this.data
-    if (!deviceCode || loading) return
+    const { deviceCode, location, address, roomLocation, loading, canSubmit } = this.data
+    if (!canSubmit || loading) return
 
     this.setData({ loading: true })
     wx.showLoading({ title: '绑定中...' })
     try {
-      const result = await bindDevice({ deviceCode })
+      await bindDevice({ deviceCode, location, address: `${address} ${roomLocation}`.trim() })
       wx.hideLoading()
-      wx.setStorageSync('bindResult', { success: true, device: result, deviceCode })
-      wx.redirectTo({ url: '/pages/guardian/device/bindResult/bindResult?status=success' })
+      wx.showToast({ title: '绑定成功', icon: 'success' })
+      setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: any) {
       wx.hideLoading()
-      wx.setStorageSync('bindResult', { success: false, error: e.message, deviceCode })
-      wx.redirectTo({ url: '/pages/guardian/device/bindResult/bindResult?status=fail' })
+      wx.showToast({ title: e.message || '绑定失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }

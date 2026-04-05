@@ -1,8 +1,9 @@
+page { background: #EEF2FF; height: 100vh; overflow: hidden; }
 .page {
-  min-height: 100vh;
-  background: #F5F7FA;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #EEF2FF;
 }
 
 .nav-bar {
@@ -185,3 +186,53 @@
 }
 .status-normal { background: #ECFDF5; color: #10B981; }
 .status-warn { background: #FEF2F2; color: #EF4444; }
+
+/* ===== 顶部 nav-bar ===== */
+.nav-bar {
+  position: relative;
+  overflow: hidden;
+  height: 136rpx;
+  flex-shrink: 0;
+}
+.header-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.nav-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24rpx;
+  position: relative;
+  z-index: 1;
+}
+.nav-back {
+  width: 60rpx; height: 60rpx;
+  display: flex; align-items: center; justify-content: center;
+}
+.back-arrow {
+  font-size: 52rpx;
+  color: #fff;
+  line-height: 1;
+}
+.nav-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ===== Body Area ===== */
+.body-area {
+  flex: 1;
+  background: #fff;
+  border-radius: 28rpx 28rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+

@@ -14,10 +14,30 @@
   justify-content: center;
   padding: 10rpx 0;
 }
-.tab-icon {
-  width: 48rpx;
-  height: 48rpx;
+.icon-wrap {
+  position: relative;
+  width: 36rpx;
+  height: 36rpx;
   margin-bottom: 6rpx;
+}
+.tab-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+.badge {
+  position: absolute;
+  top: -8rpx;
+  right: -14rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  padding: 0 8rpx;
+  background: #FF4B4B;
+  border-radius: 16rpx;
+  font-size: 18rpx;
+  color: #fff;
+  text-align: center;
+  box-sizing: border-box;
 }
 .tab-label {
   font-size: 20rpx;
@@ -25,4 +45,5 @@
 }
 .tab-item.active .tab-label {
   color: #3B7EFF;
+  font-weight: 600;
 }

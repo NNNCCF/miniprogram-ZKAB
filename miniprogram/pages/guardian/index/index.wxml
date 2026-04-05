@@ -1,129 +1,176 @@
 <view class="page">
-  <!-- Status Bar Placeholder -->
-  <view style="height:{{statusH}}px;background:#3B7EFF;"></view>
 
-  <!-- Header -->
-  <view class="header">
-    <text class="header-title">健康守护</text>
-    <view class="header-right" bindtap="goNotification">
-      <image class="bell-icon" src="/images/bell.png" mode="aspectFit"/>
-    </view>
-  </view>
+  <!-- 蓝色头部 -->
+  <view class="header" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="header-inner">
+      <image class="brand-logo" src="/images/g-logo.png" mode="aspectFit" />
 
-  <!-- Member Health Card -->
-  <view class="health-card">
-    <view class="card-top">
-      <view class="avatar-wrap">
-        <text class="avatar-text">{{member.name ? member.name[0] : '?'}}</text>
+      <!-- 未绑定 -->
+      <view wx:if="{{!hasMember}}" class="unbound-badge" bindtap="goBindDevice">
+        <text class="unbound-text">未绑定</text>
       </view>
-      <view class="card-info">
-        <text class="member-name">{{member.name || '暂无成员'}}</text>
-        <text class="member-age">{{member.age ? member.age + '岁' : '--'}} · {{member.relationship || ''}}</text>
-      </view>
-      <view class="status-badge {{member.status === 'normal' ? 'badge-normal' : 'badge-warn'}}">
-        <text>{{member.status === 'normal' ? '正常' : '预警'}}</text>
-      </view>
-    </view>
-    <view class="card-divider"></view>
-    <view class="card-vitals">
-      <view class="vital-item">
-        <text class="vital-val">{{vitals.heartRate || '--'}}</text>
-        <text class="vital-label">心率 bpm</text>
-      </view>
-      <view class="vital-sep"></view>
-      <view class="vital-item">
-        <text class="vital-val">{{vitals.systolic || '--'}}/{{vitals.diastolic || '--'}}</text>
-        <text class="vital-label">血压 mmHg</text>
-      </view>
-      <view class="vital-sep"></view>
-      <view class="vital-item">
-        <text class="vital-val">{{vitals.steps || '--'}}</text>
-        <text class="vital-label">步数</text>
+
+      <!-- 已绑定：成员选择器 -->
+      <view wx:else class="member-chip" bindtap="goSwitch">
+        <view class="member-avatar-sm">
+          <text class="member-initial">{{member.name ? member.name[0] : '?'}}</text>
+        </view>
+        <text class="member-chip-name">{{member.name || '--'}}</text>
+        <text class="chip-arrow">∨</text>
       </view>
     </view>
   </view>
 
-  <!-- Quick Actions -->
-  <view class="quick-actions">
-    <view class="action-item" bindtap="goHistory">
-      <view class="action-icon-wrap blue">
-        <text class="action-icon">📊</text>
+  <!-- 白色卡片区域 -->
+  <view class="card-area">
+
+    <!-- ===== 空状态 ===== -->
+    <block wx:if="{{!hasMember}}">
+      <view class="bind-entry" bindtap="goBindDevice">
+        <!-- 主操作行 -->
+        <view class="bind-main">
+          <view class="bind-plus-btn">
+            <text class="plus-text">+</text>
+          </view>
+          <view class="bind-info-wrap">
+            <text class="bind-title">设备绑定</text>
+            <text class="bind-sub">设备绑定后才可创建成员</text>
+          </view>
+        </view>
+        <!-- 功能预览 -->
+        <view class="feature-hint">
+          <text class="hint-desc">建档后可监测成员呼吸频率、心率、行动轨迹和跌倒报警</text>
+          <view class="feat-icon-row">
+            <image class="feat-icon" src="/images/icon_sensor.png" mode="aspectFit" />
+            <image class="feat-icon" src="/images/icon_heartwave.png" mode="aspectFit" />
+            <image class="feat-icon" src="/images/icon_walk.png" mode="aspectFit" />
+            <image class="feat-icon" src="/images/icon_fall.png" mode="aspectFit" />
+          </view>
+        </view>
       </view>
-      <text class="action-label">历史记录</text>
-    </view>
-    <view class="action-item" bindtap="goSwitch">
-      <view class="action-icon-wrap green">
-        <text class="action-icon">👥</text>
-      </view>
-      <text class="action-label">人员切换</text>
-    </view>
-    <view class="action-item" bindtap="goService">
-      <view class="action-icon-wrap orange">
-        <text class="action-icon">🏥</text>
-      </view>
-      <text class="action-label">预约服务</text>
-    </view>
-    <view class="action-item" bindtap="goBindDevice">
-      <view class="action-icon-wrap purple">
-        <text class="action-icon">📡</text>
-      </view>
-      <text class="action-label">绑定设备</text>
-    </view>
+    </block>
+
+    <!-- ===== 有成员：监控数据 ===== -->
+    <block wx:else>
+      <scroll-view scroll-y class="data-scroll">
+
+        <!-- 呼吸频率卡片 -->
+        <view class="metric-card">
+          <image class="metric-panel-bg" src="/images/heart-panel.png" mode="aspectFit" />
+          <view class="metric-header">
+            <text class="metric-name">呼吸频率</text>
+            <view class="status-chip {{breathHistory.isWarn ? 'chip-warn' : 'chip-ok'}}">
+              <text>{{breathHistory.status || '正常'}}</text>
+            </view>
+            <text class="history-link" bindtap="goBreathHistory">历史记录</text>
+          </view>
+          <canvas canvas-id="breathChart" id="breathChart"
+            style="width:{{chartW}}px;height:80px;" class="chart-canvas"></canvas>
+          <view class="time-bar">
+            <text class="time-label">{{breathHistory.startTime || '00:00'}}</text>
+            <text class="time-label">{{breathHistory.endTime || '--:--'}}</text>
+          </view>
+          <view class="metric-divider"></view>
+          <view class="stats-row">
+            <view class="stat-block">
+              <text class="stat-label">平均</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{breathHistory.avg || '--'}}</text>
+                <text class="stat-unit">次/分</text>
+              </view>
+            </view>
+            <view class="stat-block">
+              <text class="stat-label">最高</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{breathHistory.max || '--'}}</text>
+                <text class="stat-unit">次/分</text>
+              </view>
+            </view>
+            <view class="stat-block">
+              <text class="stat-label">最低</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{breathHistory.min || '--'}}</text>
+                <text class="stat-unit">次/分</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 心率卡片 -->
+        <view class="metric-card">
+          <image class="metric-panel-bg" src="/images/heart-panel.png" mode="aspectFit" />
+          <view class="metric-header">
+            <text class="metric-name">心率</text>
+            <view class="status-chip {{heartHistory.isWarn ? 'chip-warn' : 'chip-ok'}}">
+              <text>{{heartHistory.status || '正常'}}</text>
+            </view>
+            <text class="history-link" bindtap="goHeartHistory">历史记录</text>
+          </view>
+          <canvas canvas-id="heartChart" id="heartChart"
+            style="width:{{chartW}}px;height:80px;" class="chart-canvas"></canvas>
+          <view class="time-bar">
+            <text class="time-label">{{heartHistory.startTime || '00:00'}}</text>
+            <text class="time-label">{{heartHistory.endTime || '--:--'}}</text>
+          </view>
+          <view class="metric-divider"></view>
+          <view class="stats-row">
+            <view class="stat-block">
+              <text class="stat-label">平均</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{heartHistory.avg || '--'}}</text>
+                <text class="stat-unit">bpm</text>
+              </view>
+            </view>
+            <view class="stat-block">
+              <text class="stat-label">最高</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{heartHistory.max || '--'}}</text>
+                <text class="stat-unit">bpm</text>
+              </view>
+            </view>
+            <view class="stat-block">
+              <text class="stat-label">最低</text>
+              <view class="stat-val-row">
+                <text class="stat-val">{{heartHistory.min || '--'}}</text>
+                <text class="stat-unit">bpm</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 跌倒 + 行动 小卡片 -->
+        <view class="mini-row">
+          <view class="mini-card">
+            <view class="mini-card-info">
+              <text class="mini-title">跌倒报警</text>
+              <view class="status-chip {{vitals.fallStatus ? 'chip-warn' : 'chip-ok'}}">
+                <text>{{vitals.fallStatus ? '报警' : '正常'}}</text>
+              </view>
+            </view>
+            <image class="mini-icon" src="/images/icon_fall.png" mode="aspectFit" />
+          </view>
+          <view class="mini-card">
+            <view class="mini-card-info">
+              <text class="mini-title">行动轨迹</text>
+              <view class="status-chip chip-ok">
+                <text>正常</text>
+              </view>
+            </view>
+            <image class="mini-icon" src="/images/icon_walk.png" mode="aspectFit" />
+          </view>
+        </view>
+
+        <view style="height:20rpx;"></view>
+      </scroll-view>
+    </block>
+
   </view>
 
-  <!-- Real-time Data Section -->
-  <view class="section-title">实时健康数据</view>
-  <view class="realtime-list">
-    <view class="realtime-item">
-      <view class="realtime-left">
-        <text class="realtime-icon">❤️</text>
-        <view>
-          <text class="realtime-name">心率</text>
-          <text class="realtime-time">{{vitals.updateTime || '刚刚更新'}}</text>
-        </view>
-      </view>
-      <view class="realtime-right">
-        <text class="realtime-value {{vitals.heartRateStatus === 'warn' ? 'value-warn' : ''}}">{{vitals.heartRate || '--'}} <text class="realtime-unit">bpm</text></text>
-      </view>
-    </view>
-    <view class="realtime-item">
-      <view class="realtime-left">
-        <text class="realtime-icon">🩸</text>
-        <view>
-          <text class="realtime-name">血压</text>
-          <text class="realtime-time">{{vitals.updateTime || '刚刚更新'}}</text>
-        </view>
-      </view>
-      <view class="realtime-right">
-        <text class="realtime-value {{vitals.bpStatus === 'warn' ? 'value-warn' : ''}}">{{vitals.systolic || '--'}}/{{vitals.diastolic || '--'}} <text class="realtime-unit">mmHg</text></text>
-      </view>
-    </view>
-    <view class="realtime-item">
-      <view class="realtime-left">
-        <text class="realtime-icon">🚶</text>
-        <view>
-          <text class="realtime-name">今日步数</text>
-          <text class="realtime-time">{{vitals.updateTime || '刚刚更新'}}</text>
-        </view>
-      </view>
-      <view class="realtime-right">
-        <text class="realtime-value">{{vitals.steps || '--'}} <text class="realtime-unit">步</text></text>
-      </view>
-    </view>
-    <view class="realtime-item">
-      <view class="realtime-left">
-        <text class="realtime-icon">🌡️</text>
-        <view>
-          <text class="realtime-name">体温</text>
-          <text class="realtime-time">{{vitals.updateTime || '刚刚更新'}}</text>
-        </view>
-      </view>
-      <view class="realtime-right">
-        <text class="realtime-value">{{vitals.temperature || '--'}} <text class="realtime-unit">°C</text></text>
-      </view>
-    </view>
+  <!-- 底部标语 -->
+  <view class="slogan-wrap">
+    <text class="slogan">守护长辈安康</text>
   </view>
 
-  <!-- Tabbar -->
   <guardian-tabbar active="home"></guardian-tabbar>
 </view>

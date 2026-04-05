@@ -1,18 +1,24 @@
-<view class="nav-bar" style="padding-top:{{statusH}}px;">
-  <view class="back-btn" bindtap="goBack"><text class="back-icon">‹</text></view>
-  <text class="nav-title">意见反馈</text>
-</view>
-<view class="body">
-  <view class="section-title">反馈类型</view>
-  <view class="radio-group">
-    <view wx:for="{{types}}" wx:key="val" class="radio-item {{activeType===item.val?'active':''}}" bindtap="setType" data-val="{{item.val}}">
-      <text>{{item.label}}</text>
+<view class="page">
+  <view class="nav-bar" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="nav-inner">
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <text class="nav-title">意见反馈</text>
+      <view style="width:60rpx;"></view>
     </view>
   </view>
-  <view class="section-title">反馈内容</view>
-  <view class="textarea-wrap">
-    <textarea class="tarea" value="{{content}}" bindinput="onContent" placeholder="请描述您的问题（至少10字）" placeholder-class="ph" maxlength="500" />
-    <text class="char-count {{content.length<10?'red':''}}">{{content.length}}/500</text>
-  </view>
-  <view class="btn-primary" bindtap="submit">提 交</view>
+  <scroll-view class="body-area" scroll-y>
+    <view class="section-title">反馈类型</view>
+    <view class="radio-group">
+      <view wx:for="{{types}}" wx:key="val" class="radio-item {{activeType===item.val?'active':''}}" bindtap="setType" data-val="{{item.val}}">
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+    <view class="section-title">反馈内容</view>
+    <view class="textarea-wrap">
+      <textarea class="tarea" value="{{content}}" bindinput="onContent" placeholder="请描述您的问题（至少10字）" placeholder-class="ph" maxlength="500" />
+      <text class="char-count {{content.length<10?'red':''}}">{{content.length}}/500</text>
+    </view>
+    <view class="btn-primary" bindtap="submit">提 交</view>
+  </scroll-view>
 </view>

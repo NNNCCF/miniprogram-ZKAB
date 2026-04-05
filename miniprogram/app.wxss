@@ -1,6 +1,6 @@
 /* app.wxss — 全局样式 */
 page {
-  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-family: 'HarmonyOS_Sans_SC', 'PingFang SC', 'Noto Sans SC', sans-serif;
   background: #F5F6FA;
   box-sizing: border-box;
 }

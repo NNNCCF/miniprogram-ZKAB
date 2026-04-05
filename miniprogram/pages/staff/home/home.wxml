@@ -1,6 +1,6 @@
 <view class="page">
 
-  <!-- 地图 -->
+  <!-- 地图：全屏铺满 -->
   <map
     id="map"
     class="map"
@@ -15,48 +15,64 @@
     enable-zoom
   />
 
-  <!-- 地图筛选栏 -->
-  <view class="filter-bar">
-    <view
-      wx:for="{{filters}}"
-      wx:key="key"
-      class="filter-item {{item.active ? 'filter-active' : ''}}"
-      bindtap="onFilter"
-      data-key="{{item.key}}"
-    >
-      <image class="filter-icon" src="{{item.icon}}" mode="aspectFit" />
-      <text class="filter-label">{{item.label}}</text>
-    </view>
-  </view>
+  <!-- 底部抽屉面板 -->
+  <view class="bottom-panel">
 
-  <!-- 统计区域 -->
-  <view class="stats-wrap">
+    <!-- 把手（点击收起/展开） -->
+    <view class="panel-handle-wrap" bindtap="togglePanel">
+      <view class="panel-handle"></view>
+      <text class="panel-arrow {{panelOpen ? 'arrow-down' : 'arrow-up'}}">⌃</text>
+    </view>
+
+    <!-- 可折叠内容区 -->
+    <view class="panel-body {{panelOpen ? '' : 'panel-body-closed'}}">
+
+    <!-- 筛选栏 -->
+    <view class="filter-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="key"
+        class="filter-chip {{item.active ? 'filter-chip-active' : ''}}"
+        bindtap="onFilter"
+        data-key="{{item.key}}"
+      >
+        <image class="filter-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text class="filter-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="panel-divider"></view>
+
+    <!-- 统计数据 -->
     <view class="stats-grid">
       <view class="stat-item" bindtap="goToArchive">
         <text class="stat-num">{{stats.families}}</text>
-        <text class="stat-label">服务家庭数量</text>
+        <text class="stat-label">服务家庭</text>
       </view>
       <view class="stat-item">
         <text class="stat-num">{{stats.members}}</text>
-        <text class="stat-label">监护人员数量</text>
+        <text class="stat-label">监护人员</text>
       </view>
       <view class="stat-item" bindtap="goToAlarm">
         <text class="stat-num stat-alarm">{{stats.todayAlarms}}</text>
-        <text class="stat-label">今日报警数量</text>
+        <text class="stat-label">今日报警</text>
       </view>
       <view class="stat-item">
         <text class="stat-num">{{stats.nurses}}</text>
-        <text class="stat-label">医护人员数量</text>
+        <text class="stat-label">医护人员</text>
       </view>
       <view class="stat-item" bindtap="goToAppt">
         <text class="stat-num">{{stats.totalAppts}}</text>
-        <text class="stat-label">预约上门总数</text>
+        <text class="stat-label">预约总数</text>
       </view>
       <view class="stat-item" bindtap="goToAppt">
         <text class="stat-num">{{stats.todayVisits}}</text>
-        <text class="stat-label">今日上门数量</text>
+        <text class="stat-label">今日上门</text>
       </view>
     </view>
+
+    </view><!-- /panel-body -->
   </view>
 
 </view>
