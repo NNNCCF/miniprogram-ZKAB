@@ -1,53 +1,17 @@
-<staff-navbar title="接受预约" show-back="{{true}}" />
+<staff-navbar title="指派护士" show-back="{{true}}" />
 
 <view class="page-body">
 
-  <!-- Visit Date Picker -->
+  <!-- Nurse Name -->
   <view class="field-group">
-    <text class="field-label">计划上门日期</text>
-    <picker
-      mode="date"
-      value="{{form.visitDate}}"
-      bindchange="onDateChange"
-    >
-      <view class="picker-trigger">
-        <text class="picker-text {{form.visitDate ? '' : 'placeholder'}}">
-          {{form.visitDate || '请选择上门日期'}}
-        </text>
-        <text class="picker-arrow">›</text>
-      </view>
-    </picker>
-  </view>
-
-  <!-- Visit Time Picker -->
-  <view class="field-group">
-    <text class="field-label">计划上门时间</text>
-    <picker
-      mode="time"
-      value="{{form.visitTime}}"
-      bindchange="onTimeChange"
-    >
-      <view class="picker-trigger">
-        <text class="picker-text {{form.visitTime ? '' : 'placeholder'}}">
-          {{form.visitTime || '请选择上门时间'}}
-        </text>
-        <text class="picker-arrow">›</text>
-      </view>
-    </picker>
-  </view>
-
-  <!-- Notes Textarea -->
-  <view class="field-group">
-    <text class="field-label">接受备注</text>
-    <textarea
-      class="field-textarea"
-      placeholder="可填写接受说明或注意事项..."
-      value="{{form.notes}}"
-      bindinput="onNotesInput"
-      maxlength="300"
-      auto-height
+    <text class="field-label required-label">护士姓名</text>
+    <input
+      class="field-input"
+      type="text"
+      placeholder="请输入负责护士姓名"
+      value="{{nurseName}}"
+      bindinput="onNurseNameInput"
     />
-    <text class="char-count">{{form.notes.length}}/300</text>
   </view>
 
   <!-- Submit -->
@@ -56,7 +20,7 @@
     bindtap="handleSubmit"
     disabled="{{submitting}}"
   >
-    {{submitting ? '提交中...' : '确认接受预约'}}
+    {{submitting ? '提交中...' : '确认指派'}}
   </button>
 
 </view>

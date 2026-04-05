@@ -1,4 +1,4 @@
-import { get } from '../../../../utils/request'
+import { getAlarms } from '../../../../utils/api'
 
 interface Alarm {
   id: string
@@ -11,7 +11,8 @@ interface Alarm {
 
 const STATUS_LABEL_MAP: Record<string, string> = {
   unhandled: '未处理',
-  handled: '已处理'
+  handled: '已处理',
+  ignored: '已忽略'
 }
 
 Page({
@@ -33,13 +34,13 @@ Page({
 
   loadList() {
     this.setData({ loading: true })
-    get<Alarm[]>('/alarms')
-      .then(list => {
-        const mapped = (list || []).map(item => ({
+    getAlarms()
+      .then((list: any) => {
+        const mapped = (list || []).map((item: any) => ({
           ...item,
           statusLabel: STATUS_LABEL_MAP[item.status] || item.status
         }))
-        const unhandledCount = mapped.filter(a => a.status === 'unhandled').length
+        const unhandledCount = mapped.filter((a: any) => a.status === 'unhandled').length
         this.setData({ allList: mapped, unhandledCount, loading: false })
         this.applyFilter()
       })

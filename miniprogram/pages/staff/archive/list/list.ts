@@ -1,4 +1,4 @@
-import { get } from '../../../../utils/request'
+import { getFamilyList } from '../../../../utils/api'
 
 interface Archive {
   id: string
@@ -10,7 +10,6 @@ interface Archive {
 
 function getFamilyInitial(name: string): string {
   if (!name) return '家'
-  // Take up to 2 characters from the family name
   return name.slice(0, 2)
 }
 
@@ -32,9 +31,9 @@ Page({
 
   loadList() {
     this.setData({ loading: true })
-    get<Archive[]>('/archives')
-      .then(list => {
-        const mapped = (list || []).map(item => ({
+    getFamilyList()
+      .then((list: any) => {
+        const mapped = (list || []).map((item: any) => ({
           ...item,
           familyInitial: getFamilyInitial(item.familyName)
         }))

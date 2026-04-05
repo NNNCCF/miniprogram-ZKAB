@@ -1,11 +1,11 @@
-import { post } from '../../../../../utils/request'
+import { bindDevice } from '../../../../../utils/api'
 
 const app = getApp<any>()
 
 Page({
   data: {
     statusH: 0,
-    deviceId: '',
+    deviceCode: '',
     loading: false
   },
 
@@ -17,19 +17,19 @@ Page({
     wx.navigateBack()
   },
 
-  onDeviceIdInput(e: any) {
-    this.setData({ deviceId: e.detail.value })
+  onDeviceCodeInput(e: any) {
+    this.setData({ deviceCode: e.detail.value })
   },
 
   clearInput() {
-    this.setData({ deviceId: '' })
+    this.setData({ deviceCode: '' })
   },
 
   scanQR() {
     wx.scanCode({
       success: (res) => {
         const code = res.result || ''
-        this.setData({ deviceId: code })
+        this.setData({ deviceCode: code })
       },
       fail: () => {
         wx.showToast({ title: '扫码失败', icon: 'none' })
@@ -38,19 +38,19 @@ Page({
   },
 
   async onConfirm() {
-    const { deviceId, loading } = this.data
-    if (!deviceId || loading) return
+    const { deviceCode, loading } = this.data
+    if (!deviceCode || loading) return
 
     this.setData({ loading: true })
     wx.showLoading({ title: '绑定中...' })
     try {
-      const result = await post('/guardian/device/bind', { deviceId })
+      const result = await bindDevice({ deviceCode })
       wx.hideLoading()
-      wx.setStorageSync('bindResult', { success: true, device: result, deviceId })
+      wx.setStorageSync('bindResult', { success: true, device: result, deviceCode })
       wx.redirectTo({ url: '/pages/guardian/device/bindResult/bindResult?status=success' })
     } catch (e: any) {
       wx.hideLoading()
-      wx.setStorageSync('bindResult', { success: false, error: e.message, deviceId })
+      wx.setStorageSync('bindResult', { success: false, error: e.message, deviceCode })
       wx.redirectTo({ url: '/pages/guardian/device/bindResult/bindResult?status=fail' })
     } finally {
       this.setData({ loading: false })

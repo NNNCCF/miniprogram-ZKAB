@@ -16,8 +16,8 @@
         <text class="status-icon">{{alarm.level === 'high' ? '🆘' : alarm.level === 'medium' ? '⚠️' : 'ℹ️'}}</text>
       </view>
       <view class="status-info">
-        <text class="alarm-type">{{alarm.type || '健康预警'}}</text>
-        <text class="alarm-status-text">{{alarm.status === 'resolved' ? '已处理' : '待处理'}}</text>
+        <text class="alarm-type">{{alarm.alarmType || '健康预警'}}</text>
+        <text class="alarm-status-text">{{alarm.status === 'handled' ? '已处理' : alarm.status === 'ignored' ? '已忽略' : '待处理'}}</text>
       </view>
       <view class="level-badge {{alarm.level === 'high' ? 'badge-high' : alarm.level === 'medium' ? 'badge-medium' : 'badge-low'}}">
         <text>{{alarm.level === 'high' ? '高危' : alarm.level === 'medium' ? '中危' : '低危'}}</text>
@@ -33,7 +33,7 @@
       </view>
       <view class="detail-row">
         <text class="detail-key">发生时间</text>
-        <text class="detail-val">{{alarm.time || '--'}}</text>
+        <text class="detail-val">{{alarm.alarmTime || '--'}}</text>
       </view>
       <view class="detail-row">
         <text class="detail-key">发生位置</text>
@@ -41,8 +41,8 @@
       </view>
       <view class="detail-row">
         <text class="detail-key">当前状态</text>
-        <text class="detail-val {{alarm.status === 'resolved' ? 'text-green' : 'text-red'}}">
-          {{alarm.status === 'resolved' ? '已处理' : '待处理'}}
+        <text class="detail-val {{alarm.status === 'handled' || alarm.status === 'ignored' ? 'text-green' : 'text-red'}}">
+          {{alarm.status === 'handled' ? '已处理' : alarm.status === 'ignored' ? '已忽略' : '待处理'}}
         </text>
       </view>
     </view>
@@ -54,9 +54,9 @@
     </view>
 
     <!-- Action Buttons -->
-    <view class="action-row" wx:if="{{alarm.status !== 'resolved'}}">
-      <view class="handle-btn" bindtap="markResolved">
-        <text>标记已处理</text>
+    <view class="action-row" wx:if="{{alarm.status === 'unhandled'}}">
+      <view class="handle-btn" bindtap="markIgnored">
+        <text>忽略预警</text>
       </view>
       <view class="call-btn" bindtap="callEmergency">
         <text>拨打急救</text>

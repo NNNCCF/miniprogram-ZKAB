@@ -18,12 +18,12 @@
       <view class="input-wrap">
         <input
           class="device-input"
-          placeholder="请输入设备ID（如：ZK-2024-XXXXXX）"
-          value="{{deviceId}}"
-          bindinput="onDeviceIdInput"
+          placeholder="请输入设备编号（如：ZK-2024-XXXXXX）"
+          value="{{deviceCode}}"
+          bindinput="onDeviceCodeInput"
           maxlength="30"
         />
-        <view class="input-clear" wx:if="{{deviceId}}" bindtap="clearInput">
+        <view class="input-clear" wx:if="{{deviceCode}}" bindtap="clearInput">
           <text>✕</text>
         </view>
       </view>
@@ -36,7 +36,7 @@
     </view>
 
     <!-- Confirm Button -->
-    <view class="confirm-btn {{deviceId ? '' : 'btn-disabled'}}" bindtap="onConfirm">
+    <view class="confirm-btn {{deviceCode ? '' : 'btn-disabled'}}" bindtap="onConfirm">
       <text class="confirm-text">{{loading ? '绑定中...' : '确认绑定'}}</text>
     </view>
 

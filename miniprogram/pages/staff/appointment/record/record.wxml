@@ -4,7 +4,7 @@
 
   <!-- Visit Date Picker -->
   <view class="field-group">
-    <text class="field-label required">实际上门日期</text>
+    <text class="field-label required-label">实际上门日期</text>
     <picker mode="date" value="{{form.visitDate}}" bindchange="onVisitDateChange">
       <view class="picker-trigger">
         <text class="picker-text {{form.visitDate ? '' : 'placeholder'}}">
@@ -15,46 +15,47 @@
     </picker>
   </view>
 
-  <!-- Service Summary -->
+  <!-- Remark -->
   <view class="field-group">
-    <text class="field-label required">服务内容摘要</text>
+    <text class="field-label required-label">服务备注</text>
     <textarea
       class="field-textarea"
-      placeholder="请描述本次服务内容..."
-      value="{{form.serviceContent}}"
-      bindinput="onServiceContentInput"
+      placeholder="请描述本次服务情况、健康观察及跟进计划..."
+      value="{{form.remark}}"
+      bindinput="onRemarkInput"
       maxlength="500"
       auto-height
     />
-    <text class="char-count">{{form.serviceContent.length}}/500</text>
+    <text class="char-count">{{form.remark.length}}/500</text>
   </view>
 
-  <!-- Health Observations -->
+  <!-- Pay Amount -->
   <view class="field-group">
-    <text class="field-label">健康观察</text>
-    <textarea
-      class="field-textarea"
-      placeholder="记录老人健康状况、体征等观察情况..."
-      value="{{form.healthObservation}}"
-      bindinput="onHealthObservationInput"
-      maxlength="500"
-      auto-height
+    <text class="field-label">收费金额（元）</text>
+    <input
+      class="field-input"
+      type="digit"
+      placeholder="选填"
+      value="{{form.payAmount}}"
+      bindinput="onPayAmountInput"
     />
-    <text class="char-count">{{form.healthObservation.length}}/500</text>
   </view>
 
-  <!-- Follow-up Plan -->
+  <!-- Pay Status -->
   <view class="field-group">
-    <text class="field-label">跟进计划</text>
-    <textarea
-      class="field-textarea"
-      placeholder="填写后续跟进安排或建议..."
-      value="{{form.followUpPlan}}"
-      bindinput="onFollowUpPlanInput"
-      maxlength="500"
-      auto-height
-    />
-    <text class="char-count">{{form.followUpPlan.length}}/500</text>
+    <text class="field-label">付款状态</text>
+    <view class="pay-options">
+      <view
+        class="pay-opt {{form.payStatus === 'unpaid' ? 'opt-active' : ''}}"
+        bindtap="onPayStatusChange"
+        data-status="unpaid"
+      >未付款</view>
+      <view
+        class="pay-opt {{form.payStatus === 'paid' ? 'opt-active' : ''}}"
+        bindtap="onPayStatusChange"
+        data-status="paid"
+      >已付款</view>
+    </view>
   </view>
 
   <!-- Submit -->

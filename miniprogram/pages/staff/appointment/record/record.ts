@@ -1,4 +1,4 @@
-import { post } from '../../../../utils/request'
+import { submitVisitRecord } from '../../../../utils/api'
 
 Page({
   data: {
@@ -6,9 +6,9 @@ Page({
     id: '',
     form: {
       visitDate: '',
-      serviceContent: '',
-      healthObservation: '',
-      followUpPlan: ''
+      remark: '',
+      payAmount: '',
+      payStatus: 'unpaid'
     }
   },
 
@@ -20,16 +20,16 @@ Page({
     this.setData({ 'form.visitDate': e.detail.value as string })
   },
 
-  onServiceContentInput(e: WechatMiniprogram.Input) {
-    this.setData({ 'form.serviceContent': e.detail.value })
+  onRemarkInput(e: WechatMiniprogram.Input) {
+    this.setData({ 'form.remark': e.detail.value })
   },
 
-  onHealthObservationInput(e: WechatMiniprogram.Input) {
-    this.setData({ 'form.healthObservation': e.detail.value })
+  onPayAmountInput(e: WechatMiniprogram.Input) {
+    this.setData({ 'form.payAmount': e.detail.value })
   },
 
-  onFollowUpPlanInput(e: WechatMiniprogram.Input) {
-    this.setData({ 'form.followUpPlan': e.detail.value })
+  onPayStatusChange(e: WechatMiniprogram.TouchEvent) {
+    this.setData({ 'form.payStatus': e.currentTarget.dataset.status })
   },
 
   async handleSubmit() {
@@ -37,8 +37,8 @@ Page({
     if (!form.visitDate) {
       return wx.showToast({ title: '请选择实际上门日期', icon: 'none' })
     }
-    if (!form.serviceContent.trim()) {
-      return wx.showToast({ title: '请填写服务内容摘要', icon: 'none' })
+    if (!form.remark.trim()) {
+      return wx.showToast({ title: '请填写服务备注', icon: 'none' })
     }
     if (!id) {
       return wx.showToast({ title: '预约ID缺失', icon: 'none' })
@@ -48,11 +48,11 @@ Page({
     wx.showLoading({ title: '提交中...' })
 
     try {
-      await post('/appointments/' + id + '/record', {
-        visitDate: form.visitDate,
-        serviceContent: form.serviceContent.trim(),
-        healthObservation: form.healthObservation.trim(),
-        followUpPlan: form.followUpPlan.trim()
+      await submitVisitRecord(id, {
+        visitTime: form.visitDate + ' 00:00:00',
+        remark: form.remark.trim(),
+        payAmount: form.payAmount || undefined,
+        payStatus: form.payStatus
       })
       wx.hideLoading()
       wx.showToast({ title: '记录已提交', icon: 'success' })

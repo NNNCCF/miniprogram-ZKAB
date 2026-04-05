@@ -1,52 +1,34 @@
-import { post } from '../../../../utils/request'
+import { dispatchAppointment } from '../../../../utils/api'
 
 Page({
   data: {
     submitting: false,
     id: '',
-    form: {
-      visitDate: '',
-      visitTime: '',
-      notes: ''
-    }
+    nurseName: ''
   },
 
   onLoad(options: Record<string, string>) {
     this.setData({ id: options.id || '' })
   },
 
-  onDateChange(e: WechatMiniprogram.PickerChange) {
-    this.setData({ 'form.visitDate': e.detail.value as string })
-  },
-
-  onTimeChange(e: WechatMiniprogram.PickerChange) {
-    this.setData({ 'form.visitTime': e.detail.value as string })
-  },
-
-  onNotesInput(e: WechatMiniprogram.Input) {
-    this.setData({ 'form.notes': e.detail.value })
+  onNurseNameInput(e: WechatMiniprogram.Input) {
+    this.setData({ nurseName: e.detail.value })
   },
 
   async handleSubmit() {
-    const { form, id } = this.data
-    if (!form.visitDate) {
-      return wx.showToast({ title: '请选择上门日期', icon: 'none' })
+    const { id, nurseName, submitting } = this.data
+    if (!nurseName.trim()) {
+      return wx.showToast({ title: '请填写护士姓名', icon: 'none' })
     }
-    if (!id) {
-      return wx.showToast({ title: '预约ID缺失', icon: 'none' })
-    }
+    if (!id || submitting) return
 
     this.setData({ submitting: true })
     wx.showLoading({ title: '提交中...' })
 
     try {
-      await post('/appointments/' + id + '/accept', {
-        visitDate: form.visitDate,
-        visitTime: form.visitTime,
-        notes: form.notes.trim()
-      })
+      await dispatchAppointment(id, { nurseName: nurseName.trim() })
       wx.hideLoading()
-      wx.showToast({ title: '接受成功', icon: 'success' })
+      wx.showToast({ title: '指派成功', icon: 'success' })
       setTimeout(() => {
         wx.navigateBack()
       }, 1500)

@@ -1,4 +1,4 @@
-import { post } from '../../utils/request'
+import { nurseLogin, guardianLogin } from '../../utils/api'
 
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
 const COLORS = ['#3B7EFF', '#FF5722', '#009688', '#9C27B0', '#F44336', '#2196F3']
@@ -55,11 +55,8 @@ Page({
 
     wx.showLoading({ title: '登录中...' })
     try {
-      const res: any = await post('/auth/login', {
-        phone: form.phone,
-        password: form.password,
-        role: activeTab
-      })
+      const loginFn = activeTab === 'staff' ? nurseLogin : guardianLogin
+      const res: any = await loginFn({ phone: form.phone, password: form.password })
       wx.hideLoading()
       if (res?.token) {
         const app = getApp<any>()

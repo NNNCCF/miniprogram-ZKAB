@@ -1,12 +1,10 @@
-import { get } from '../../../utils/request'
+import { getFamilyMapList } from '../../../utils/api'
 
-interface MemberLocation {
+interface FamilyMapItem {
   id: string
-  name: string
-  latitude: number
-  longitude: number
+  familyName: string
   address: string
-  status: string
+  location: string
 }
 
 interface MapMarker {
@@ -19,12 +17,22 @@ interface MapMarker {
   height: number
 }
 
+function parseLocation(location: string): { lat: number; lng: number } | null {
+  if (!location) return null
+  const parts = location.split(',')
+  if (parts.length !== 2) return null
+  const lat = parseFloat(parts[0])
+  const lng = parseFloat(parts[1])
+  if (isNaN(lat) || isNaN(lng)) return null
+  return { lat, lng }
+}
+
 Page({
   data: {
     lat: 39.9042,
     lng: 116.4074,
     markers: [] as MapMarker[],
-    locations: [] as MemberLocation[]
+    families: [] as FamilyMapItem[]
   },
 
   onLoad() {
@@ -32,27 +40,31 @@ Page({
   },
 
   loadLocations() {
-    get<MemberLocation[]>('/staff/members/locations')
-      .then(res => {
-        const locations = res || []
-        const markers: MapMarker[] = locations.map((item, index) => ({
-          id: index,
-          latitude: item.latitude,
-          longitude: item.longitude,
-          title: item.name,
-          iconPath: '/images/tab_home.png',
-          width: 30,
-          height: 30
-        }))
+    getFamilyMapList()
+      .then((res: any) => {
+        const families = res || []
+        const markers: MapMarker[] = []
+        families.forEach((item: any, index: number) => {
+          const coords = parseLocation(item.location)
+          if (coords) {
+            markers.push({
+              id: index,
+              latitude: coords.lat,
+              longitude: coords.lng,
+              title: item.familyName,
+              iconPath: '/images/tab_home.png',
+              width: 30,
+              height: 30
+            })
+          }
+        })
 
-        // Center map on first marker if available
-        const centerUpdate: Record<string, any> = { markers, locations }
-        if (locations.length > 0) {
-          centerUpdate.lat = locations[0].latitude
-          centerUpdate.lng = locations[0].longitude
+        const update: Record<string, any> = { markers, families }
+        if (markers.length > 0) {
+          update.lat = markers[0].latitude
+          update.lng = markers[0].longitude
         }
-
-        this.setData(centerUpdate)
+        this.setData(update)
       })
       .catch(() => {
         wx.showToast({ title: '位置加载失败', icon: 'none' })
@@ -61,12 +73,12 @@ Page({
 
   onMarkerTap(e: WechatMiniprogram.MapMarkerTap) {
     const markerId = e.detail.markerId
-    const location = this.data.locations[markerId]
-    if (!location) return
+    const family = this.data.families[markerId]
+    if (!family) return
 
     wx.showModal({
-      title: location.name,
-      content: `地址：${location.address || '未知'}\n状态：${location.status || '正常'}`,
+      title: family.familyName,
+      content: `地址：${family.address || '未知'}`,
       showCancel: false,
       confirmText: '知道了'
     })

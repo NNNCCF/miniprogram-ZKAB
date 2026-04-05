@@ -1,4 +1,4 @@
-import { get } from '../../../../../utils/request'
+import { getFamilyList, getMemberHistory } from '../../../../../utils/api'
 
 const app = getApp<any>()
 
@@ -15,18 +15,44 @@ Page({
       { key: 'steps', label: '步数' }
     ],
     list: [] as any[],
-    loading: false
+    loading: false,
+    familyId: '',
+    memberId: ''
   },
 
   onLoad() {
     this.setData({ statusH: app.globalData.statusBarHeight || 0 })
-    // Default to last 7 days
     const now = new Date()
     const end = now.toISOString().slice(0, 10)
     now.setDate(now.getDate() - 7)
     const start = now.toISOString().slice(0, 10)
     this.setData({ startDate: start, endDate: end })
-    this.loadHistory()
+    this.initFamilyIds()
+  },
+
+  async initFamilyIds() {
+    // Try to get cached familyId/memberId from storage first
+    const cachedFamilyId = wx.getStorageSync('currentFamilyId')
+    const cachedMemberId = wx.getStorageSync('currentMemberId')
+    if (cachedFamilyId && cachedMemberId) {
+      this.setData({ familyId: cachedFamilyId, memberId: cachedMemberId })
+      this.loadHistory()
+      return
+    }
+    // Otherwise load from family list
+    try {
+      const families: any = await getFamilyList()
+      if (families && families.length > 0) {
+        const family = families[0]
+        const members = family.members || []
+        const familyId = String(family.id)
+        const memberId = members.length > 0 ? String(members[0].id) : ''
+        this.setData({ familyId, memberId })
+        this.loadHistory()
+      }
+    } catch {
+      this.setData({ loading: false })
+    }
   },
 
   onStartDateChange(e: any) {
@@ -43,20 +69,19 @@ Page({
   },
 
   async loadHistory() {
+    const { familyId, memberId } = this.data
+    if (!familyId || !memberId) return
     this.setData({ loading: true })
     try {
       const { startDate, endDate, activeType } = this.data
-      const list = await get('/guardian/member/history', { startDate, endDate, type: activeType })
-      this.setData({ list: list || [] })
-    } catch {
-      // Placeholder data
-      this.setData({
-        list: [
-          { id: 1, date: '2024-03-15', time: '09:30', heartRate: 72, systolic: 118, diastolic: 78, steps: 3500, temperature: 36.5, heartRateStatus: 'normal', overall: 'normal' },
-          { id: 2, date: '2024-03-15', time: '14:00', heartRate: 115, systolic: 145, diastolic: 95, steps: 5200, temperature: 36.8, heartRateStatus: 'warn', overall: 'warn' },
-          { id: 3, date: '2024-03-14', time: '10:15', heartRate: 68, systolic: 120, diastolic: 80, steps: 2800, temperature: 36.4, heartRateStatus: 'normal', overall: 'normal' }
-        ]
+      const list = await getMemberHistory(familyId, memberId, {
+        startDate,
+        endDate,
+        type: activeType === 'all' ? undefined : activeType
       })
+      this.setData({ list: (list as any) || [] })
+    } catch {
+      this.setData({ list: [] })
     } finally {
       this.setData({ loading: false })
     }

@@ -1,23 +1,12 @@
-import { get } from '../../../utils/request'
+import { getAppointments, getAlarms, getFamilyList } from '../../../utils/api'
 
 interface Appointment {
   id: string
   type: string
   status: string
   statusLabel: string
-  appointmentTime: string
+  appointTime: string
   memberName: string
-}
-
-interface HomeStats {
-  todayAppts: number
-  pendingAlarms: number
-  totalArchives: number
-}
-
-interface DoctorInfo {
-  name: string
-  orgName: string
 }
 
 const WEEK_LABELS = ['日', '一', '二', '三', '四', '五', '六']
@@ -43,7 +32,7 @@ Page({
 
   onLoad() {
     this.initDate()
-    this.loadDoctorInfo()
+    this.loadUserInfo()
     this.loadStats()
     this.loadRecentAppts()
   },
@@ -64,58 +53,48 @@ Page({
     })
   },
 
-  loadDoctorInfo() {
-    get<DoctorInfo>('/staff/profile').then(res => {
-      const name = res.name || '医护人员'
+  loadUserInfo() {
+    try {
+      const stored = JSON.parse(wx.getStorageSync('userInfo') || '{}')
+      const name = stored.name || stored.nurseName || '医护人员'
       this.setData({
         doctorName: name,
-        orgName: res.orgName || '',
+        orgName: stored.orgName || stored.organizationName || '',
         avatarText: name.slice(-2)
       })
-    }).catch(() => {
-      const stored = wx.getStorageSync('userInfo') || {}
-      const name = stored.name || '医护人员'
-      this.setData({
-        doctorName: name,
-        orgName: stored.orgName || '',
-        avatarText: name.slice(-2)
-      })
-    })
+    } catch {
+      this.setData({ doctorName: '医护人员', avatarText: '护' })
+    }
   },
 
   loadStats() {
-    get<HomeStats>('/staff/home/stats').then(res => {
+    const today = new Date().toISOString().slice(0, 10)
+    Promise.allSettled([
+      getAppointments({ startDate: today, endDate: today }),
+      getAlarms({ status: 'unhandled' }),
+      getFamilyList()
+    ]).then(([appts, alarms, archives]) => {
       this.setData({
-        todayAppts: res.todayAppts || 0,
-        pendingAlarms: res.pendingAlarms || 0,
-        totalArchives: res.totalArchives || 0
-      })
-    }).catch(() => {
-      // fallback: load counts from individual endpoints
-      Promise.allSettled([
-        get<any[]>('/appointments', { date: 'today' }),
-        get<any[]>('/alarms', { status: 'unhandled' }),
-        get<any[]>('/archives')
-      ]).then(([appts, alarms, archives]) => {
-        this.setData({
-          todayAppts: appts.status === 'fulfilled' ? (appts.value?.length ?? 0) : 0,
-          pendingAlarms: alarms.status === 'fulfilled' ? (alarms.value?.length ?? 0) : 0,
-          totalArchives: archives.status === 'fulfilled' ? (archives.value?.length ?? 0) : 0
-        })
+        todayAppts: appts.status === 'fulfilled' ? ((appts.value as any)?.length ?? 0) : 0,
+        pendingAlarms: alarms.status === 'fulfilled' ? ((alarms.value as any)?.length ?? 0) : 0,
+        totalArchives: archives.status === 'fulfilled' ? ((archives.value as any)?.length ?? 0) : 0
       })
     })
   },
 
   loadRecentAppts() {
-    get<Appointment[]>('/appointments', { date: 'today', limit: 5 }).then(list => {
-      const mapped = (list || []).map(item => ({
-        ...item,
-        statusLabel: STATUS_LABEL_MAP[item.status] || item.status
-      }))
-      this.setData({ recentAppts: mapped })
-    }).catch(() => {
-      this.setData({ recentAppts: [] })
-    })
+    const today = new Date().toISOString().slice(0, 10)
+    getAppointments({ startDate: today, endDate: today })
+      .then((list: any) => {
+        const mapped = ((list || []) as any[]).slice(0, 5).map((item: any) => ({
+          ...item,
+          statusLabel: STATUS_LABEL_MAP[item.status] || item.status
+        }))
+        this.setData({ recentAppts: mapped })
+      })
+      .catch(() => {
+        this.setData({ recentAppts: [] })
+      })
   },
 
   goToAppt() {

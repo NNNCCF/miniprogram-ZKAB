@@ -1,107 +1,64 @@
-<staff-navbar title="首页" show-back="{{false}}" />
+<view class="page">
 
-<view class="page-body">
+  <!-- 地图 -->
+  <map
+    id="map"
+    class="map"
+    latitude="{{mapLat}}"
+    longitude="{{mapLng}}"
+    scale="{{mapScale}}"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
+    bindtap="onMapTap"
+    show-location
+    enable-scroll
+    enable-zoom
+  />
 
-  <!-- Welcome Card -->
-  <view class="welcome-card">
-    <view class="welcome-left">
-      <view class="avatar">
-        <text class="avatar-text">{{avatarText}}</text>
-      </view>
-      <view class="welcome-info">
-        <text class="welcome-name">{{doctorName}}</text>
-        <text class="welcome-org">{{orgName}}</text>
-      </view>
-    </view>
-    <view class="welcome-date">
-      <text class="date-text">{{dateText}}</text>
-      <text class="week-text">{{weekText}}</text>
-    </view>
-  </view>
-
-  <!-- Stats Row -->
-  <view class="stats-row">
-    <view class="stat-card" bindtap="goToAppt">
-      <text class="stat-num">{{todayAppts}}</text>
-      <text class="stat-label">今日预约</text>
-    </view>
-    <view class="stat-divider"></view>
-    <view class="stat-card" bindtap="goToAlarm">
-      <text class="stat-num stat-alarm">{{pendingAlarms}}</text>
-      <text class="stat-label">待处理报警</text>
-    </view>
-    <view class="stat-divider"></view>
-    <view class="stat-card" bindtap="goToArchive">
-      <text class="stat-num">{{totalArchives}}</text>
-      <text class="stat-label">家庭档案</text>
-    </view>
-  </view>
-
-  <!-- Quick Actions -->
-  <view class="section-title">快捷功能</view>
-  <view class="quick-actions">
-    <view class="action-item" bindtap="goToAppt">
-      <view class="action-icon-wrap action-blue">
-        <image class="action-icon" src="/images/tab_appt_on.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">预约管理</text>
-    </view>
-    <view class="action-item" bindtap="goToAlarm">
-      <view class="action-icon-wrap action-red">
-        <image class="action-icon" src="/images/tab_alarm_on.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">报警信息</text>
-    </view>
-    <view class="action-item" bindtap="goToArchive">
-      <view class="action-icon-wrap action-green">
-        <image class="action-icon" src="/images/tab_archive_on.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">家庭档案</text>
-    </view>
-    <view class="action-item" bindtap="goToMap">
-      <view class="action-icon-wrap action-orange">
-        <image class="action-icon" src="/images/tab_home.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">地图总览</text>
-    </view>
-    <view class="action-item" bindtap="goToSummary">
-      <view class="action-icon-wrap action-purple">
-        <image class="action-icon" src="/images/tab_me.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">上门汇总</text>
-    </view>
-    <view class="action-item" bindtap="goToPublish">
-      <view class="action-icon-wrap action-teal">
-        <image class="action-icon" src="/images/tab_home.png" mode="aspectFit" />
-      </view>
-      <text class="action-label">消息发布</text>
-    </view>
-  </view>
-
-  <!-- Recent Appointments -->
-  <view class="section-title">今日预约</view>
-  <view class="appt-list" wx:if="{{recentAppts.length > 0}}">
+  <!-- 地图筛选栏 -->
+  <view class="filter-bar">
     <view
-      class="appt-item"
-      wx:for="{{recentAppts}}"
-      wx:key="id"
-      bindtap="goToApptDetail"
-      data-id="{{item.id}}"
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="filter-item {{item.active ? 'filter-active' : ''}}"
+      bindtap="onFilter"
+      data-key="{{item.key}}"
     >
-      <view class="appt-top">
-        <text class="appt-type">{{item.type}}</text>
-        <view class="status-badge status-{{item.status}}">
-          <text class="status-text">{{item.statusLabel}}</text>
-        </view>
-      </view>
-      <text class="appt-time">预约时间：{{item.appointmentTime}}</text>
-      <text class="appt-member">成员：{{item.memberName}}</text>
+      <image class="filter-icon" src="{{item.icon}}" mode="aspectFit" />
+      <text class="filter-label">{{item.label}}</text>
     </view>
   </view>
-  <view class="empty-tip" wx:else>
-    <text class="empty-text">暂无今日预约</text>
+
+  <!-- 统计区域 -->
+  <view class="stats-wrap">
+    <view class="stats-grid">
+      <view class="stat-item" bindtap="goToArchive">
+        <text class="stat-num">{{stats.families}}</text>
+        <text class="stat-label">服务家庭数量</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.members}}</text>
+        <text class="stat-label">监护人员数量</text>
+      </view>
+      <view class="stat-item" bindtap="goToAlarm">
+        <text class="stat-num stat-alarm">{{stats.todayAlarms}}</text>
+        <text class="stat-label">今日报警数量</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.nurses}}</text>
+        <text class="stat-label">医护人员数量</text>
+      </view>
+      <view class="stat-item" bindtap="goToAppt">
+        <text class="stat-num">{{stats.totalAppts}}</text>
+        <text class="stat-label">预约上门总数</text>
+      </view>
+      <view class="stat-item" bindtap="goToAppt">
+        <text class="stat-num">{{stats.todayVisits}}</text>
+        <text class="stat-label">今日上门数量</text>
+      </view>
+    </view>
   </view>
 
 </view>
 
-<staff-tabbar active="home" />
+<staff-tabbar active="home" alarm-count="{{stats.todayAlarms}}" appt-count="{{stats.pendingAppts}}" />

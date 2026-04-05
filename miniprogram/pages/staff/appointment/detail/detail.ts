@@ -1,4 +1,4 @@
-import { get } from '../../../../utils/request'
+import { getAppointmentDetail, acceptAppointment } from '../../../../utils/api'
 
 const STATUS_LABEL: Record<string, string> = {
   pending: '待处理',
@@ -7,30 +7,22 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: '已取消'
 }
 
-interface ApptRecord {
-  serviceContent: string
-  healthObservation: string
-  followUpPlan: string
-}
-
 interface AppointmentDetail {
   id: string
   type: string
   status: string
   statusLabel: string
-  appointmentTime: string
-  notes: string
+  appointTime: string
+  requirement: string
   memberName: string
-  memberPhone: string
-  memberAddress: string
-  doctorName: string
-  doctorPhone: string
-  record: ApptRecord | null
+  guardianName: string
+  nurseName: string
 }
 
 Page({
   data: {
     loading: false,
+    accepting: false,
     id: '',
     appt: null as AppointmentDetail | null
   },
@@ -48,8 +40,8 @@ Page({
   loadDetail(id: string) {
     if (!id) return
     this.setData({ loading: true })
-    get<AppointmentDetail>('/appointments/' + id)
-      .then(res => {
+    getAppointmentDetail(id)
+      .then((res: any) => {
         this.setData({
           appt: {
             ...res,
@@ -64,10 +56,22 @@ Page({
       })
   },
 
-  goToAccept() {
-    wx.navigateTo({
-      url: `/pages/staff/appointment/accept/accept?id=${this.data.id}`
-    })
+  async goToAccept() {
+    const { id, accepting } = this.data
+    if (accepting || !id) return
+    this.setData({ accepting: true })
+    wx.showLoading({ title: '接受中...' })
+    try {
+      await acceptAppointment(id)
+      wx.hideLoading()
+      wx.showToast({ title: '已接受预约', icon: 'success' })
+      setTimeout(() => this.loadDetail(id), 1500)
+    } catch (err: any) {
+      wx.hideLoading()
+      wx.showToast({ title: err.message || '操作失败', icon: 'none' })
+    } finally {
+      this.setData({ accepting: false })
+    }
   },
 
   goToRecord() {

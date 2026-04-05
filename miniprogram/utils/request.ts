@@ -20,14 +20,28 @@ export function request<T = any>(
         Authorization: token ? `Bearer ${token}` : ''
       },
       success(res: any) {
-        if (res.statusCode === 200) {
-          resolve(res.data as T)
-        } else if (res.statusCode === 401) {
+        if (res.statusCode === 401) {
           wx.removeStorageSync('token')
           wx.reLaunch({ url: '/pages/login/login' })
           reject(new Error('未授权'))
+          return
+        }
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          const body = res.data as any
+          // 解包后端 ApiResponse<T> 包装 { code, message, data }
+          if (body && typeof body === 'object' && 'code' in body) {
+            if (body.code === 0) {
+              resolve(body.data as T)
+            } else {
+              reject(new Error(body.message || '请求失败'))
+            }
+          } else {
+            // 非标准包装，直接返回
+            resolve(res.data as T)
+          }
         } else {
-          reject(new Error((res.data as any)?.msg || '请求失败'))
+          const body = res.data as any
+          reject(new Error(body?.message || body?.msg || '请求失败'))
         }
       },
       fail(err: any) {

@@ -2,46 +2,34 @@
 
 <view class="page-body">
 
-  <!-- Result Select -->
+  <!-- Called Guardian Switch -->
   <view class="field-group">
-    <text class="field-label">处理结果</text>
-    <view class="result-options">
-      <view
-        class="result-opt {{form.result === 'resolved' ? 'opt-active' : ''}}"
-        bindtap="selectResult"
-        data-result="resolved"
-      >
-        <text>已处理</text>
-      </view>
-      <view
-        class="result-opt {{form.result === 'follow_up' ? 'opt-active' : ''}}"
-        bindtap="selectResult"
-        data-result="follow_up"
-      >
-        <text>需跟进</text>
-      </view>
-      <view
-        class="result-opt {{form.result === 'false_alarm' ? 'opt-active' : ''}}"
-        bindtap="selectResult"
-        data-result="false_alarm"
-      >
-        <text>误报</text>
-      </view>
+    <view class="field-row">
+      <text class="field-label">是否已联系监护人</text>
+      <switch checked="{{form.calledGuardian}}" bindchange="onCalledGuardianChange" color="#3B7EFF" />
     </view>
   </view>
 
-  <!-- Description Textarea -->
+  <!-- Member Danger Switch -->
   <view class="field-group">
-    <text class="field-label">处理描述</text>
+    <view class="field-row">
+      <text class="field-label">成员是否处于危险</text>
+      <switch checked="{{form.memberDanger}}" bindchange="onMemberDangerChange" color="#FF4B4B" />
+    </view>
+  </view>
+
+  <!-- Remark Textarea -->
+  <view class="field-group">
+    <text class="field-label">处理备注 <text class="required">*</text></text>
     <textarea
       class="field-textarea"
       placeholder="请描述处理过程和结果..."
-      value="{{form.description}}"
-      bindinput="onDescInput"
+      value="{{form.remark}}"
+      bindinput="onRemarkInput"
       maxlength="500"
       auto-height
     />
-    <text class="char-count">{{form.description.length}}/500</text>
+    <text class="char-count">{{form.remark.length}}/500</text>
   </view>
 
   <!-- Submit -->

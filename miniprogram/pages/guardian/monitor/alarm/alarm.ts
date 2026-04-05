@@ -1,4 +1,4 @@
-import { get, put } from '../../../../../utils/request'
+import { getAlarmDetail, ignoreAlarm } from '../../../../../utils/api'
 
 const app = getApp<any>()
 
@@ -12,26 +12,27 @@ Page({
   onLoad(options: any) {
     this.setData({ statusH: app.globalData.statusBarHeight || 0 })
     const id = options.id
-    if (id) this.loadAlarm(id)
-    else this.setData({ loading: false })
+    if (id && id !== 'latest') {
+      this.loadAlarm(id)
+    } else {
+      this.setData({ loading: false })
+    }
   },
 
   async loadAlarm(id: string) {
     this.setData({ loading: true })
     try {
-      const alarm = await get('/alarms/' + id)
+      const alarm = await getAlarmDetail(id)
       this.setData({ alarm })
     } catch {
-      // Placeholder
       this.setData({
         alarm: {
           id,
-          type: '心率异常',
-          level: 'medium',
-          status: 'pending',
-          time: '2024-03-15 14:32',
+          alarmType: '心率异常',
+          status: 'unhandled',
+          alarmTime: new Date().toLocaleString(),
           location: '客厅',
-          description: '检测到心率持续偏高，当前心率为110 bpm，超过正常范围。请注意关注被监护人状态，必要时联系医生。'
+          description: '检测到异常状态，请及时关注被监护人。'
         }
       })
     } finally {
@@ -39,15 +40,15 @@ Page({
     }
   },
 
-  async markResolved() {
+  async markIgnored() {
     const { alarm } = this.data
     if (!alarm) return
     wx.showLoading({ title: '处理中...' })
     try {
-      await put('/alarms/' + alarm.id + '/resolve')
-      this.setData({ 'alarm.status': 'resolved' })
+      await ignoreAlarm(alarm.id)
+      this.setData({ 'alarm.status': 'ignored' })
       wx.hideLoading()
-      wx.showToast({ title: '已标记处理', icon: 'success' })
+      wx.showToast({ title: '已忽略', icon: 'success' })
     } catch {
       wx.hideLoading()
       wx.showToast({ title: '操作失败', icon: 'none' })

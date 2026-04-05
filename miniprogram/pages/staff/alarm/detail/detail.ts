@@ -1,15 +1,10 @@
-import { get } from '../../../../utils/request'
-
-const LEVEL_LABEL: Record<string, string> = {
-  red: '红色预警',
-  orange: '橙色预警',
-  yellow: '黄色预警'
-}
+import { getAlarmDetail } from '../../../../utils/api'
 
 const STATUS_LABEL: Record<string, string> = {
   unhandled: '未处理',
   handling: '处理中',
-  handled: '已处理'
+  handled: '已处理',
+  ignored: '已忽略'
 }
 
 interface AlarmDetail {
@@ -19,8 +14,6 @@ interface AlarmDetail {
   alarmTime: string
   location: string
   description: string
-  level: string
-  levelLabel: string
   status: string
   statusLabel: string
 }
@@ -41,12 +34,11 @@ Page({
   loadDetail(id: string) {
     if (!id) return
     this.setData({ loading: true })
-    get<AlarmDetail>('/alarms/' + id)
-      .then(res => {
+    getAlarmDetail(id)
+      .then((res: any) => {
         this.setData({
           alarm: {
             ...res,
-            levelLabel: LEVEL_LABEL[res.level] || res.level,
             statusLabel: STATUS_LABEL[res.status] || res.status
           },
           loading: false

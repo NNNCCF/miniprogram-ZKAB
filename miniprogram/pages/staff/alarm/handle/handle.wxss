@@ -27,31 +27,18 @@ page {
   color: #333;
 }
 
-/* ===== Result Options ===== */
-.result-options {
-  display: flex;
-  gap: 20rpx;
-}
-
-.result-opt {
-  flex: 1;
-  height: 88rpx;
-  border-radius: 16rpx;
-  background: #F7F9FF;
+/* ===== Field Row (label + switch) ===== */
+.field-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
-  color: #666;
-  border: 2rpx solid transparent;
-  box-sizing: border-box;
+  justify-content: space-between;
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 24rpx;
 }
 
-.opt-active {
-  background: #EEF4FF;
-  border-color: #3B7EFF;
-  color: #3B7EFF;
-  font-weight: 600;
+.required {
+  color: #FF4B4B;
 }
 
 /* ===== Textarea ===== */

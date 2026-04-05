@@ -27,49 +27,20 @@ page {
   color: #333;
 }
 
-/* ===== Picker ===== */
-.picker-trigger {
-  height: 88rpx;
+.required-label::before {
+  content: '* ';
+  color: #FF4D4F;
+}
+
+/* ===== Input ===== */
+.field-input {
   background: #F7F9FF;
   border-radius: 16rpx;
   padding: 0 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.picker-text {
+  height: 88rpx;
   font-size: 28rpx;
   color: #1a1a1a;
-}
-
-.picker-text.placeholder {
-  color: #bbb;
-}
-
-.picker-arrow {
-  font-size: 40rpx;
-  color: #ccc;
-}
-
-/* ===== Textarea ===== */
-.field-textarea {
-  background: #F7F9FF;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  font-size: 28rpx;
-  color: #1a1a1a;
-  min-height: 180rpx;
-  width: 100%;
   box-sizing: border-box;
-  line-height: 1.7;
-}
-
-.char-count {
-  font-size: 22rpx;
-  color: #bbb;
-  text-align: right;
 }
 
 /* ===== Submit Button ===== */

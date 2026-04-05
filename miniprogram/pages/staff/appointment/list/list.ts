@@ -1,14 +1,13 @@
-import { get } from '../../../../utils/request'
+import { getAppointments } from '../../../../utils/api'
 
 interface Appointment {
   id: string
   type: string
   status: string
   statusLabel: string
-  appointmentTime: string
-  visitTime: string
+  appointTime: string
   memberName: string
-  notes: string
+  requirement: string
 }
 
 const TYPE_FILTERS = [
@@ -61,9 +60,10 @@ Page({
 
   loadList() {
     this.setData({ loading: true })
-    get<Appointment[]>('/appointments', { month: this.data.currentMonth })
-      .then(list => {
-        const mapped = (list || []).map(item => ({
+    const { currentMonth } = this.data
+    getAppointments({ startDate: currentMonth + '-01', endDate: currentMonth + '-31' })
+      .then((list: any) => {
+        const mapped = (list || []).map((item: any) => ({
           ...item,
           statusLabel: STATUS_LABEL_MAP[item.status] || item.status
         }))
@@ -83,7 +83,7 @@ Page({
       const matchStatus = !activeStatus || item.status === activeStatus
       const matchSearch = !keyword ||
         (item.memberName || '').toLowerCase().includes(keyword) ||
-        (item.notes || '').toLowerCase().includes(keyword)
+        (item.requirement || '').toLowerCase().includes(keyword)
       return matchType && matchStatus && matchSearch
     })
     this.setData({ filteredList: filtered })

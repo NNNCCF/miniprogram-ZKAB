@@ -1,12 +1,13 @@
-import { post } from '../../../../utils/request'
+import { handleAlarm } from '../../../../utils/api'
 
 Page({
   data: {
     submitting: false,
     id: '',
     form: {
-      description: '',
-      result: 'resolved'
+      calledGuardian: false,
+      memberDanger: false,
+      remark: ''
     }
   },
 
@@ -14,19 +15,22 @@ Page({
     this.setData({ id: options.id || '' })
   },
 
-  selectResult(e: WechatMiniprogram.TouchEvent) {
-    const result = e.currentTarget.dataset.result as string
-    this.setData({ 'form.result': result })
+  onCalledGuardianChange(e: WechatMiniprogram.SwitchChange) {
+    this.setData({ 'form.calledGuardian': e.detail.value })
   },
 
-  onDescInput(e: WechatMiniprogram.Input) {
-    this.setData({ 'form.description': e.detail.value })
+  onMemberDangerChange(e: WechatMiniprogram.SwitchChange) {
+    this.setData({ 'form.memberDanger': e.detail.value })
+  },
+
+  onRemarkInput(e: WechatMiniprogram.Input) {
+    this.setData({ 'form.remark': e.detail.value })
   },
 
   async handleSubmit() {
     const { form, id } = this.data
-    if (!form.description.trim()) {
-      return wx.showToast({ title: '请填写处理描述', icon: 'none' })
+    if (!form.remark.trim()) {
+      return wx.showToast({ title: '请填写处理备注', icon: 'none' })
     }
     if (!id) {
       return wx.showToast({ title: '报警ID缺失', icon: 'none' })
@@ -36,9 +40,11 @@ Page({
     wx.showLoading({ title: '提交中...' })
 
     try {
-      await post('/alarms/' + id + '/handle', {
-        description: form.description.trim(),
-        result: form.result
+      await handleAlarm(id, {
+        calledGuardian: form.calledGuardian,
+        memberDanger: form.memberDanger,
+        handled: true,
+        remark: form.remark.trim()
       })
       wx.hideLoading()
       wx.showToast({ title: '处理成功', icon: 'success' })

@@ -27,10 +27,47 @@ page {
   color: #333;
 }
 
-.field-label.required::before {
-  content: '*';
+.required-label::before {
+  content: '* ';
   color: #FF4D4F;
-  margin-right: 6rpx;
+}
+
+/* ===== Input ===== */
+.field-input {
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  height: 88rpx;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+/* ===== Pay Options ===== */
+.pay-options {
+  display: flex;
+  gap: 20rpx;
+}
+
+.pay-opt {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 16rpx;
+  background: #F7F9FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #666;
+  border: 2rpx solid transparent;
+  box-sizing: border-box;
+}
+
+.opt-active {
+  background: #EEF4FF;
+  border-color: #3B7EFF;
+  color: #3B7EFF;
+  font-weight: 600;
 }
 
 /* ===== Picker ===== */
