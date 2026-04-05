@@ -4,7 +4,6 @@
     <view class="nav-inner">
       <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
       <text class="nav-title">切换成员</text>
-      <view class="nav-add" bindtap="goCreate"><text class="add-icon">+</text></view>
     </view>
   </view>
 
@@ -43,10 +42,6 @@
       </view>
     </view>
 
-    <!-- Add Button -->
-    <view class="add-member-btn" bindtap="goCreate">
-      <text class="add-member-icon">+</text>
-      <text class="add-member-text">添加家庭成员</text>
-    </view>
+    
   </scroll-view>
 </view>

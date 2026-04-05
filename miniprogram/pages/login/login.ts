@@ -44,6 +44,28 @@ Page({
       return wx.showToast({ title: '请输入密码', icon: 'none' })
     }
 
+    // ── 虚拟账户（仅供前端开发调试使用）──────────────────────────────
+    const MOCK_ACCOUNTS: Record<string, { role: 'guardian' | 'staff'; name: string }> = {
+      '13333333333': { role: 'guardian', name: '测试家属' },
+      '15555555555': { role: 'staff',    name: '测试医护' },
+    }
+    const mockAccount = MOCK_ACCOUNTS[loginForm.phone]
+    if (mockAccount && loginForm.password === '123456') {
+      const app = getApp<any>()
+      const mockToken = `mock_${mockAccount.role}_token`
+      app.globalData.token = mockToken
+      app.globalData.role  = mockAccount.role
+      wx.setStorageSync('token', mockToken)
+      wx.setStorageSync('role',  mockAccount.role)
+      wx.setStorageSync('userInfo', JSON.stringify({ name: mockAccount.name, phone: loginForm.phone }))
+      const url = mockAccount.role === 'staff'
+        ? '/pages/staff/home/home'
+        : '/pages/guardian/index/index'
+      wx.reLaunch({ url })
+      return
+    }
+    // ──────────────────────────────────────────────────────────────────
+
     this.setData({ submitting: true })
     wx.showLoading({ title: '登录中...' })
 

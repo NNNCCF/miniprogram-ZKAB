@@ -32,11 +32,11 @@ page {
   z-index: 1;
 }
 .header-title {
-  font-size: 43rpx;
-  font-weight: 700;
+  font-size: 32rpx;
+  font-weight: 500;
   color: #fff;
   letter-spacing: 2rpx;
-  transform: translateY(-35rpx);
+  transform: translateY(-30rpx);
 }
 
 /* ===== Body Area ===== */

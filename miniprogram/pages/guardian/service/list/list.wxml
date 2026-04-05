@@ -41,25 +41,25 @@
     <view class="quick-row">
       <view class="quick-item" bindtap="goQuick" data-type="medicine">
         <view class="quick-circle">
-          <image class="quick-icon" src="/images/送药.png" mode="aspectFit" />
+          <image class="quick-icon" src="/images/送药.png" mode="aspectFill" />
         </view>
         <text class="quick-label">送药</text>
       </view>
       <view class="quick-item" bindtap="goQuick" data-type="visit">
         <view class="quick-circle">
-          <image class="quick-icon" src="/images/家访探视.png" mode="aspectFit" />
+          <image class="quick-icon" src="/images/家访探视.png" mode="aspectFill" />
         </view>
         <text class="quick-label">家访探视</text>
       </view>
       <view class="quick-item" bindtap="goQuick" data-type="checkup">
         <view class="quick-circle">
-          <image class="quick-icon" src="/images/预约体检.png" mode="aspectFit" />
+          <image class="quick-icon" src="/images/预约体检.png" mode="aspectFill" />
         </view>
         <text class="quick-label">预约体检</text>
       </view>
       <view class="quick-item" bindtap="goQuick" data-type="nursing">
         <view class="quick-circle">
-          <image class="quick-icon" src="/images/护理.png" mode="aspectFit" />
+          <image class="quick-icon" src="/images/护理.png" mode="aspectFill" />
         </view>
         <text class="quick-label">护理</text>
       </view>

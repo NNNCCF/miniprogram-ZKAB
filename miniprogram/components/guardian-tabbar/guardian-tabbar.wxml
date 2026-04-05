@@ -11,3 +11,18 @@
     <text class="tab-label">{{item.label}}</text>
   </view>
 </view>
+
+<!-- 一键呼救弹窗 -->
+<view class="sos-mask" wx:if="{{showSOS}}" bindtap="closeSOS">
+  <view class="sos-panel" style="padding-bottom:calc({{safeBottom}}px + 32rpx)" catchtap="">
+    <view class="sos-call-btn" bindtap="onSOSCall">
+      <view class="sos-phone-wrap">
+        <image class="sos-phone-icon" src="/images/客服电话.png" mode="aspectFit" />
+      </view>
+      <text class="sos-call-text">呼叫 0351-1234567</text>
+    </view>
+    <view class="sos-cancel-btn" bindtap="closeSOS">
+      <text class="sos-cancel-text">取消</text>
+    </view>
+  </view>
+</view>

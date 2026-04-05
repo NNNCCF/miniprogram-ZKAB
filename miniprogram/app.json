@@ -31,6 +31,7 @@
     "pages/guardian/monitor/alarm/alarm",
     "pages/guardian/monitor/history/history",
     "pages/guardian/service/list/list",
+    "pages/guardian/serviceCenter/serviceCenter",
     "pages/guardian/service/doctorDetail/doctorDetail",
     "pages/guardian/service/medicineDetail/medicineDetail",
     "pages/guardian/service/newsDetail/newsDetail",

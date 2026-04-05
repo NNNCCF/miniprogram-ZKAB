@@ -6,57 +6,55 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
   background: #EEF2FF;
 }
 
+/* ===== Nav Bar ===== */
 .nav-bar {
+  position: relative;
+  overflow: hidden;
+  height: 100rpx;
+  flex-shrink: 0;
+}
+.header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.nav-inner {
+  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 24rpx;
-  height: 88rpx;
-  background: #fff;
   position: relative;
-  border-bottom: 1rpx solid #F3F4F6;
+  z-index: 1;
+  transform: translateY(-30rpx);
 }
 .nav-back {
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 60rpx; height: 60rpx;
+  display: flex; align-items: center; justify-content: center;
 }
-.back-arrow {
-  font-size: 52rpx;
-  color: #111827;
-  line-height: 1;
-}
+.back-arrow { font-size: 52rpx; color: #fff; line-height: 1; }
 .nav-title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #111827;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #fff;
 }
-.nav-add {
-  margin-left: auto;
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.add-icon {
-  font-size: 44rpx;
-  color: #3B7EFF;
-  font-weight: 300;
+
+/* ===== Body Area ===== */
+.body-area {
+  flex: 1;
+  background: #fff;
+  border-radius: 28rpx 28rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .tip-bar {
   padding: 20rpx 32rpx;
   background: #EEF3FF;
 }
-.tip-text {
-  font-size: 24rpx;
-  color: #3B7EFF;
-}
+.tip-text { font-size: 24rpx; color: #3B7EFF; }
 
 .member-list {
   padding: 24rpx;
@@ -72,140 +70,46 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
   border-radius: 20rpx;
   padding: 28rpx 24rpx;
   border: 2rpx solid transparent;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
 }
-.card-active {
-  border-color: #3B7EFF;
-  background: #F5F8FF;
-}
+.card-active { border-color: #3B7EFF; background: #F5F8FF; }
 .card-avatar {
-  width: 96rpx;
-  height: 96rpx;
+  width: 96rpx; height: 96rpx;
   border-radius: 50%;
   background: #F3F4F6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 .avatar-active { background: #EEF3FF; }
-.avatar-text {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #3B7EFF;
-}
+.avatar-text { font-size: 36rpx; font-weight: 700; color: #3B7EFF; }
 .card-info { flex: 1; }
 .card-name-row {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
+  display: flex; align-items: center; gap: 12rpx;
   margin-bottom: 8rpx;
 }
-.card-name {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #111827;
-}
+.card-name { font-size: 32rpx; font-weight: 700; color: #111827; }
 .current-tag {
-  background: #3B7EFF;
-  border-radius: 20rpx;
-  padding: 4rpx 14rpx;
-  font-size: 20rpx;
-  color: #fff;
+  background: #3B7EFF; border-radius: 20rpx;
+  padding: 4rpx 14rpx; font-size: 20rpx; color: #fff;
 }
-.card-meta {
-  display: block;
-  font-size: 24rpx;
-  color: #9CA3AF;
-  margin-bottom: 8rpx;
-}
-.card-status {
-  font-size: 24rpx;
-  font-weight: 600;
-}
+.card-meta { display: block; font-size: 24rpx; color: #9CA3AF; margin-bottom: 8rpx; }
+.card-status { font-size: 24rpx; font-weight: 600; }
 .status-normal { color: #10B981; }
 .status-warn { color: #F59E0B; }
-
 .check-wrap {
-  width: 48rpx;
-  height: 48rpx;
-  border-radius: 50%;
+  width: 48rpx; height: 48rpx; border-radius: 50%;
   background: #3B7EFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
-.check-icon {
-  font-size: 28rpx;
-  color: #fff;
-  font-weight: 700;
-}
+.check-icon { font-size: 28rpx; color: #fff; font-weight: 700; }
 
 .add-member-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-  margin: 8rpx 24rpx 0;
+  display: flex; align-items: center; justify-content: center; gap: 12rpx;
+  margin: 8rpx 24rpx 40rpx;
   height: 96rpx;
   border: 2rpx dashed #3B7EFF;
   border-radius: 20rpx;
   background: #EEF3FF;
 }
-.add-member-icon {
-  font-size: 44rpx;
-  color: #3B7EFF;
-  font-weight: 300;
-}
-.add-member-text {
-  font-size: 30rpx;
-  color: #3B7EFF;
-  font-weight: 600;
-}
-
-/* ===== 顶部 nav-bar（返回款）===== */
-.nav-bar {
-  position: relative;
-  overflow: hidden;
-  height: 136rpx;
-  flex-shrink: 0;
-}
-.body-area {
-  flex: 1;
-  background: #fff;
-  border-radius: 28rpx 28rpx 0 0;
-  margin-top: -32rpx;
-  position: relative;
-  z-index: 2;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-.header-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-}
-.nav-inner {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24rpx;
-  position: relative;
-  z-index: 1;
-}
-.nav-back {
-  width: 60rpx; height: 60rpx;
-  display: flex; align-items: center; justify-content: center;
-}
-.back-arrow {
-  font-size: 52rpx;
-  color: #fff;
-  line-height: 1;
-}
-.nav-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #fff;
-}
-
+.add-member-icon { font-size: 44rpx; color: #3B7EFF; font-weight: 300; }
+.add-member-text { font-size: 30rpx; color: #3B7EFF; font-weight: 600; }

@@ -1,0 +1,70 @@
+<view class="page">
+  <!-- Map fills the upper portion -->
+  <map
+    class="map"
+    longitude="{{longitude}}"
+    latitude="{{latitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    show-location
+  ></map>
+
+  <!-- Floating header over map -->
+  <view class="header-float" style="padding-top:{{statusH}}px;">
+    <view class="header-inner">
+      <text class="header-title">服务中心</text>
+    </view>
+  </view>
+
+  <!-- Bottom panel -->
+  <view class="bottom-panel">
+    <!-- Quick actions -->
+    <view class="quick-actions">
+      <view class="quick-action" bindtap="goIntro">
+        <view class="quick-icon-wrap">
+          <image class="quick-icon" src="/images/中心介绍.png" mode="aspectFill" />
+        </view>
+        <text class="quick-label">中心介绍</text>
+      </view>
+      <view class="quick-action" bindtap="callService">
+        <view class="quick-icon-wrap">
+          <image class="quick-icon" src="/images/客服电话.png" mode="aspectFill" />
+        </view>
+        <text class="quick-label">客服电话</text>
+      </view>
+      <view class="quick-action" bindtap="goWeChat">
+        <view class="quick-icon-wrap">
+          <image class="quick-icon" src="/images/微信公众号.png" mode="aspectFill" />
+        </view>
+        <text class="quick-label">微信公众号</text>
+      </view>
+      <view class="quick-action" bindtap="goFeedback">
+        <view class="quick-icon-wrap">
+          <image class="quick-icon" src="/images/意见反馈.png" mode="aspectFill" />
+        </view>
+        <text class="quick-label">意见反馈</text>
+      </view>
+    </view>
+
+    <!-- Divider -->
+    <view class="panel-divider"></view>
+
+    <!-- Notices section -->
+    <view class="notices-header">
+      <image class="horn-icon" src="/images/服务中心喇叭图标.png" mode="aspectFill" />
+      <text class="notices-title">通知公告</text>
+    </view>
+    <scroll-view class="notices-scroll" scroll-y>
+      <view class="notice-item" wx:for="{{notices}}" wx:key="id" bindtap="goNotice" data-id="{{item.id}}">
+        <view class="notice-dot"></view>
+        <view class="notice-content">
+          <text class="notice-title">{{item.title}}</text>
+          <text class="notice-date">{{item.date}}</text>
+        </view>
+        <text class="notice-arrow">›</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <guardian-tabbar active="service"></guardian-tabbar>
+</view>
