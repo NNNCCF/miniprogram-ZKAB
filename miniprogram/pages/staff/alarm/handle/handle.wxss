@@ -1,0 +1,91 @@
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 48rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+/* ===== Field Group ===== */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.field-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== Result Options ===== */
+.result-options {
+  display: flex;
+  gap: 20rpx;
+}
+
+.result-opt {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 16rpx;
+  background: #F7F9FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #666;
+  border: 2rpx solid transparent;
+  box-sizing: border-box;
+}
+
+.opt-active {
+  background: #EEF4FF;
+  border-color: #3B7EFF;
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
+/* ===== Textarea ===== */
+.field-textarea {
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  min-height: 200rpx;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+.char-count {
+  font-size: 22rpx;
+  color: #bbb;
+  text-align: right;
+}
+
+/* ===== Submit Button ===== */
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: #3B7EFF;
+  border-radius: 48rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  margin-top: auto;
+}
+
+.btn-disabled {
+  background: #A0BEFF;
+}

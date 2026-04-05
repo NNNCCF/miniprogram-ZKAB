@@ -1,0 +1,151 @@
+.page {
+  min-height: 100vh;
+  background: #F5F7FA;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  height: 88rpx;
+  background: #fff;
+  position: relative;
+}
+.nav-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back-arrow {
+  font-size: 52rpx;
+  color: #111827;
+  line-height: 1;
+}
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.content {
+  padding: 40rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.illus-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: #EEF3FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+.illus-icon { font-size: 80rpx; }
+.tip-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12rpx;
+}
+.tip-desc {
+  font-size: 26rpx;
+  color: #6B7280;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.input-section {
+  width: 100%;
+  margin-bottom: 24rpx;
+}
+.input-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12rpx;
+}
+.input-wrap {
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+}
+.device-input {
+  flex: 1;
+  height: 96rpx;
+  font-size: 28rpx;
+  color: #111827;
+}
+.input-clear {
+  padding: 10rpx;
+  color: #9CA3AF;
+  font-size: 28rpx;
+}
+
+.scan-btn {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  border: 2rpx dashed #3B7EFF;
+  border-radius: 16rpx;
+  padding: 24rpx 40rpx;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 32rpx;
+  background: #EEF3FF;
+}
+.scan-icon { font-size: 36rpx; }
+.scan-text {
+  font-size: 28rpx;
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  background: #3B7EFF;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+.btn-disabled { background: #B0C4FF; }
+.confirm-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.help-card {
+  background: #FFFBEB;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  width: 100%;
+  border: 1rpx solid #FDE68A;
+}
+.help-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #92400E;
+  margin-bottom: 8rpx;
+}
+.help-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #B45309;
+  line-height: 1.6;
+}

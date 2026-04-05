@@ -1,0 +1,143 @@
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 88rpx 32rpx 24rpx;
+  position: relative;
+}
+
+.navbar-back {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-back-icon {
+  font-size: 56rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.navbar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-right: 64rpx;
+}
+
+/* ===== Page Body ===== */
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 48rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== Form ===== */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+  margin-bottom: 48rpx;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.field-label {
+  font-size: 26rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.field-input {
+  height: 88rpx;
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  border: 2rpx solid transparent;
+  box-sizing: border-box;
+}
+
+.field-input:focus {
+  border-color: #3B7EFF;
+}
+
+/* ===== Role Selector ===== */
+.role-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.role-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 16rpx;
+  background: #F7F9FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #666;
+  border: 2rpx solid transparent;
+  box-sizing: border-box;
+}
+
+.role-active {
+  background: #EEF4FF;
+  border-color: #3B7EFF;
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
+/* ===== Submit Button ===== */
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: #3B7EFF;
+  border-radius: 48rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  margin-bottom: 32rpx;
+}
+
+.btn-disabled {
+  background: #A0BEFF;
+}
+
+/* ===== Login Link ===== */
+.login-link-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.login-link-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.login-link {
+  font-size: 26rpx;
+  color: #3B7EFF;
+  font-weight: 500;
+}

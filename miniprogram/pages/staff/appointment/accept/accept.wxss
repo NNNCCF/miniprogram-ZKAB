@@ -1,0 +1,90 @@
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 48rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+/* ===== Field Group ===== */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.field-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== Picker ===== */
+.picker-trigger {
+  height: 88rpx;
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #1a1a1a;
+}
+
+.picker-text.placeholder {
+  color: #bbb;
+}
+
+.picker-arrow {
+  font-size: 40rpx;
+  color: #ccc;
+}
+
+/* ===== Textarea ===== */
+.field-textarea {
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  min-height: 180rpx;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+.char-count {
+  font-size: 22rpx;
+  color: #bbb;
+  text-align: right;
+}
+
+/* ===== Submit Button ===== */
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: #3B7EFF;
+  border-radius: 48rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  margin-top: auto;
+}
+
+.btn-disabled {
+  background: #A0BEFF;
+}

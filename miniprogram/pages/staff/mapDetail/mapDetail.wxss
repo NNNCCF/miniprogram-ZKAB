@@ -1,0 +1,35 @@
+page {
+  background: #3B7EFF;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Map fills the area below the navbar */
+.map-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* navbar height is handled by the component; map fills remaining space */
+  padding-top: 180rpx;
+  box-sizing: border-box;
+}
+
+/* ===== Count Badge ===== */
+.count-badge {
+  position: fixed;
+  bottom: calc(40rpx + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(59, 126, 255, 0.92);
+  border-radius: 40rpx;
+  padding: 16rpx 40rpx;
+  backdrop-filter: blur(8px);
+}
+
+.count-text {
+  font-size: 26rpx;
+  color: #fff;
+  font-weight: 600;
+}

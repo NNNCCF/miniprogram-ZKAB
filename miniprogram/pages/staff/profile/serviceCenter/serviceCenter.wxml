@@ -1,0 +1,47 @@
+<staff-navbar title="服务中心" show-back="{{true}}" />
+
+<view class="page-body">
+
+  <!-- FAQ Section -->
+  <view class="section-title">常见问题</view>
+  <view class="card faq-card">
+    <block wx:for="{{faqs}}" wx:key="id">
+      <view class="faq-item" bindtap="toggleFaq" data-id="{{item.id}}">
+        <view class="faq-header">
+          <text class="faq-q">{{item.question}}</text>
+          <text class="faq-arrow {{item.expanded ? 'faq-arrow--open' : ''}}">›</text>
+        </view>
+        <view class="faq-body {{item.expanded ? 'faq-body--open' : ''}}">
+          <text class="faq-a">{{item.answer}}</text>
+        </view>
+      </view>
+      <view class="divider" wx:if="{{index < faqs.length - 1}}"></view>
+    </block>
+  </view>
+
+  <!-- Contact Section -->
+  <view class="section-title">联系我们</view>
+  <view class="card">
+    <view class="contact-row" bindtap="onCallPhone">
+      <view class="contact-icon-wrap contact-icon-blue">
+        <text class="contact-icon-char">📞</text>
+      </view>
+      <view class="contact-info">
+        <text class="contact-label">客服电话</text>
+        <text class="contact-value contact-value--blue">400-888-9999</text>
+      </view>
+      <text class="contact-arrow">›</text>
+    </view>
+    <view class="divider"></view>
+    <view class="contact-row">
+      <view class="contact-icon-wrap contact-icon-green">
+        <text class="contact-icon-char">✉</text>
+      </view>
+      <view class="contact-info">
+        <text class="contact-label">电子邮箱</text>
+        <text class="contact-value">support@zhuokai.com</text>
+      </view>
+    </view>
+  </view>
+
+</view>

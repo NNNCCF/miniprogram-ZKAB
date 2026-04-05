@@ -1,0 +1,171 @@
+.page {
+  min-height: 100vh;
+  background: #F5F7FA;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  padding: 20rpx 32rpx 24rpx;
+  background: #fff;
+  text-align: center;
+}
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* SOS Section */
+.sos-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 32rpx 40rpx;
+  background: #fff;
+}
+.sos-tip {
+  font-size: 26rpx;
+  color: #6B7280;
+  margin-bottom: 48rpx;
+  text-align: center;
+}
+.sos-outer {
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: rgba(239,68,68,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+}
+.sos-pressing {
+  transform: scale(0.95);
+}
+.sos-middle {
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(239,68,68,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sos-btn {
+  width: 210rpx;
+  height: 210rpx;
+  border-radius: 50%;
+  background: #EF4444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(239,68,68,0.5);
+}
+.sos-text {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+.sos-sub {
+  font-size: 24rpx;
+  color: #9CA3AF;
+  margin-top: 36rpx;
+  text-align: center;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #111827;
+  padding: 32rpx 32rpx 16rpx;
+}
+
+/* Contacts */
+.contact-list {
+  background: #fff;
+  margin: 0 24rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid #F3F4F6;
+  gap: 20rpx;
+}
+.contact-item:last-child { border-bottom: none; }
+.contact-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #EEF3FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-avatar-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #3B7EFF;
+}
+.contact-info { flex: 1; }
+.contact-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #111827;
+}
+.contact-rel {
+  display: block;
+  font-size: 24rpx;
+  color: #9CA3AF;
+  margin-top: 4rpx;
+}
+.call-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #EEF3FF;
+  border-radius: 30rpx;
+  padding: 10rpx 24rpx;
+}
+.call-icon { font-size: 28rpx; }
+.call-text {
+  font-size: 26rpx;
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
+/* Emergency Numbers */
+.emergency-nums {
+  display: flex;
+  gap: 16rpx;
+  margin: 24rpx 24rpx 0;
+}
+.enum-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+.enum-icon { font-size: 40rpx; }
+.enum-label {
+  font-size: 22rpx;
+  color: #6B7280;
+}
+.enum-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #EF4444;
+}

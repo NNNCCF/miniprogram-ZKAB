@@ -1,0 +1,49 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+    <text class="nav-title">绑定设备</text>
+  </view>
+
+  <view class="content">
+    <view class="illus-wrap">
+      <text class="illus-icon">📡</text>
+    </view>
+    <text class="tip-title">绑定健康监测设备</text>
+    <text class="tip-desc">请输入设备底部的设备编号，或扫描设备二维码</text>
+
+    <!-- Input -->
+    <view class="input-section">
+      <view class="input-label">设备编号</view>
+      <view class="input-wrap">
+        <input
+          class="device-input"
+          placeholder="请输入设备ID（如：ZK-2024-XXXXXX）"
+          value="{{deviceId}}"
+          bindinput="onDeviceIdInput"
+          maxlength="30"
+        />
+        <view class="input-clear" wx:if="{{deviceId}}" bindtap="clearInput">
+          <text>✕</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- QR Scan Button -->
+    <view class="scan-btn" bindtap="scanQR">
+      <text class="scan-icon">📷</text>
+      <text class="scan-text">扫描设备二维码</text>
+    </view>
+
+    <!-- Confirm Button -->
+    <view class="confirm-btn {{deviceId ? '' : 'btn-disabled'}}" bindtap="onConfirm">
+      <text class="confirm-text">{{loading ? '绑定中...' : '确认绑定'}}</text>
+    </view>
+
+    <!-- Help -->
+    <view class="help-card">
+      <text class="help-title">❓ 找不到设备编号？</text>
+      <text class="help-desc">设备编号印在设备背面或包装盒上，格式为 ZK-XXXX-XXXXXX</text>
+    </view>
+  </view>
+</view>

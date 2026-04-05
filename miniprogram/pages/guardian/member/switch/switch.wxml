@@ -1,0 +1,50 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+    <text class="nav-title">切换成员</text>
+    <view class="nav-add" bindtap="goCreate">
+      <text class="add-icon">+</text>
+    </view>
+  </view>
+
+  <view class="tip-bar">
+    <text class="tip-text">选择要监护的家庭成员</text>
+  </view>
+
+  <!-- Member List -->
+  <view class="member-list">
+    <view
+      class="member-card {{item.id === currentId ? 'card-active' : ''}}"
+      wx:for="{{members}}"
+      wx:key="id"
+      bindtap="switchMember"
+      data-id="{{item.id}}"
+    >
+      <view class="card-avatar {{item.id === currentId ? 'avatar-active' : ''}}">
+        <text class="avatar-text">{{item.name[0]}}</text>
+      </view>
+      <view class="card-info">
+        <view class="card-name-row">
+          <text class="card-name">{{item.name}}</text>
+          <view class="current-tag" wx:if="{{item.id === currentId}}">
+            <text>当前</text>
+          </view>
+        </view>
+        <text class="card-meta">{{item.age}}岁 · {{item.relationship}}</text>
+        <text class="card-status {{item.status === 'normal' ? 'status-normal' : 'status-warn'}}">
+          {{item.status === 'normal' ? '健康正常' : '需要关注'}}
+        </text>
+      </view>
+      <view class="check-wrap" wx:if="{{item.id === currentId}}">
+        <text class="check-icon">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Add Button -->
+  <view class="add-member-btn" bindtap="goCreate">
+    <text class="add-member-icon">+</text>
+    <text class="add-member-text">添加家庭成员</text>
+  </view>
+</view>

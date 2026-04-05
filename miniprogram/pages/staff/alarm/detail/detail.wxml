@@ -1,0 +1,65 @@
+<staff-navbar title="报警详情" show-back="{{true}}" />
+
+<view class="page-body" wx:if="{{!loading && alarm}}">
+
+  <!-- Header Info -->
+  <view class="alarm-header">
+    <view class="alarm-icon-wrap alarm-{{alarm.level}}">
+      <text class="alarm-icon-text">!</text>
+    </view>
+    <view class="header-info">
+      <text class="member-name">{{alarm.memberName}}</text>
+      <view class="level-badge level-{{alarm.level}}">
+        <text class="level-text">{{alarm.levelLabel}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Info Cards -->
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">报警类型</text>
+      <text class="info-value">{{alarm.alarmType}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">报警时间</text>
+      <text class="info-value">{{alarm.alarmTime}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">位置信息</text>
+      <text class="info-value">{{alarm.location || '暂无位置'}}</text>
+    </view>
+  </view>
+
+  <!-- Description -->
+  <view class="section-card">
+    <text class="section-title">报警描述</text>
+    <text class="section-content">{{alarm.description || '暂无描述'}}</text>
+  </view>
+
+  <!-- Status -->
+  <view class="status-row">
+    <text class="status-label-text">当前状态：</text>
+    <view class="status-badge status-{{alarm.status}}">
+      <text class="status-text">{{alarm.statusLabel}}</text>
+    </view>
+  </view>
+
+</view>
+
+<!-- Loading -->
+<view class="center-wrap" wx:if="{{loading}}">
+  <text class="hint-text">加载中...</text>
+</view>
+
+<!-- Bottom Buttons -->
+<view class="bottom-bar" wx:if="{{!loading && alarm && alarm.status === 'unhandled'}}">
+  <button class="btn-secondary" bindtap="goBack">查看历史</button>
+  <button class="btn-primary" bindtap="goToHandle">开始处理</button>
+</view>
+
+<view class="bottom-bar" wx:if="{{!loading && alarm && alarm.status !== 'unhandled'}}">
+  <button class="btn-primary btn-full" bindtap="goBack">返回列表</button>
+</view>

@@ -1,0 +1,57 @@
+/* ===== Page ===== */
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #F5F6FA;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 32rpx 32rpx calc(60rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== Card ===== */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* ===== Info Row ===== */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 32rpx 36rpx;
+  gap: 24rpx;
+}
+
+.info-label {
+  flex-shrink: 0;
+  width: 180rpx;
+  font-size: 28rpx;
+  color: #888;
+  line-height: 1.6;
+}
+
+.info-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  text-align: right;
+  line-height: 1.6;
+}
+
+.info-value--wrap {
+  text-align: right;
+  word-break: break-all;
+}
+
+/* ===== Divider ===== */
+.divider {
+  height: 1rpx;
+  background: #F5F5F5;
+  margin: 0 36rpx;
+}

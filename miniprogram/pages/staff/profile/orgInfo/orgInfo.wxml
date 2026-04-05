@@ -1,0 +1,35 @@
+<staff-navbar title="机构信息" show-back="{{true}}" />
+
+<view class="page-body">
+  <view class="card">
+    <view class="info-row">
+      <text class="info-label">机构名称</text>
+      <text class="info-value">{{orgInfo.name || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">机构类型</text>
+      <text class="info-value">{{orgInfo.type || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">所在地区</text>
+      <text class="info-value">{{orgInfo.region || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">详细地址</text>
+      <text class="info-value info-value--wrap">{{orgInfo.address || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">联系电话</text>
+      <text class="info-value">{{orgInfo.phone || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">执业许可证号</text>
+      <text class="info-value info-value--wrap">{{orgInfo.license || '—'}}</text>
+    </view>
+  </view>
+</view>

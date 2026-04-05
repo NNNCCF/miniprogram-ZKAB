@@ -1,0 +1,86 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+    <text class="nav-title">健康历史记录</text>
+  </view>
+
+  <!-- Filter Bar -->
+  <view class="filter-bar">
+    <view class="date-picker-wrap">
+      <text class="filter-label">开始日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="date-btn">
+          <text>{{startDate || '选择日期'}}</text>
+          <text class="date-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <text class="date-sep">至</text>
+    <view class="date-picker-wrap">
+      <text class="filter-label">结束日期</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="date-btn">
+          <text>{{endDate || '选择日期'}}</text>
+          <text class="date-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <view class="search-btn" bindtap="loadHistory">
+      <text>查询</text>
+    </view>
+  </view>
+
+  <!-- Type Tabs -->
+  <view class="type-tabs">
+    <view
+      class="type-tab {{activeType === item.key ? 'tab-active' : ''}}"
+      wx:for="{{types}}"
+      wx:key="key"
+      bindtap="switchType"
+      data-key="{{item.key}}"
+    >
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- History List -->
+  <scroll-view class="list-scroll" scroll-y>
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <text class="loading-text">加载中...</text>
+    </view>
+    <view wx:elif="{{list.length === 0}}" class="empty-wrap">
+      <text class="empty-icon">📊</text>
+      <text class="empty-text">暂无历史记录</text>
+    </view>
+    <view wx:else class="history-list">
+      <view class="history-item" wx:for="{{list}}" wx:key="id">
+        <view class="item-left">
+          <text class="item-date">{{item.date}}</text>
+          <text class="item-time">{{item.time}}</text>
+        </view>
+        <view class="item-data">
+          <view class="data-row" wx:if="{{item.heartRate}}">
+            <text class="data-label">心率</text>
+            <text class="data-val {{item.heartRateStatus === 'warn' ? 'val-warn' : ''}}">{{item.heartRate}} bpm</text>
+          </view>
+          <view class="data-row" wx:if="{{item.systolic}}">
+            <text class="data-label">血压</text>
+            <text class="data-val">{{item.systolic}}/{{item.diastolic}} mmHg</text>
+          </view>
+          <view class="data-row" wx:if="{{item.steps}}">
+            <text class="data-label">步数</text>
+            <text class="data-val">{{item.steps}} 步</text>
+          </view>
+          <view class="data-row" wx:if="{{item.temperature}}">
+            <text class="data-label">体温</text>
+            <text class="data-val">{{item.temperature}} °C</text>
+          </view>
+        </view>
+        <view class="item-status {{item.overall === 'normal' ? 'status-normal' : 'status-warn'}}">
+          <text>{{item.overall === 'normal' ? '正常' : '异常'}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

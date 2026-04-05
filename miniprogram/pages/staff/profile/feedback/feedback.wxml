@@ -1,0 +1,36 @@
+<staff-navbar title="意见反馈" show-back="{{true}}" />
+
+<view class="page-body">
+  <view class="card">
+    <!-- Type -->
+    <view class="field-group">
+      <text class="field-label">反馈类型</text>
+      <radio-group bindchange="onTypeChange" class="radio-group">
+        <label class="radio-item" wx:for="{{types}}" wx:key="value">
+          <radio value="{{item.value}}" checked="{{item.value === form.type}}" color="#3B7EFF" />
+          <text class="radio-text">{{item.label}}</text>
+        </label>
+      </radio-group>
+    </view>
+    <view class="divider"></view>
+    <!-- Content -->
+    <view class="field-group">
+      <text class="field-label">问题描述</text>
+      <textarea
+        class="textarea"
+        placeholder="请描述问题（至少10字）"
+        maxlength="500"
+        value="{{form.content}}"
+        bindinput="onContentInput"
+        auto-height
+      />
+      <view class="char-count">
+        <text class="char-count-text {{form.content.length < 10 ? 'char-count-warn' : ''}}">
+          {{form.content.length}}/500
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="onSubmit" loading="{{submitting}}">提交反馈</button>
+</view>

@@ -1,0 +1,49 @@
+<staff-navbar title="系统设置" show-back="{{true}}" />
+
+<view class="page-body">
+
+  <!-- Notifications -->
+  <view class="section-title">通知设置</view>
+  <view class="card">
+    <view class="setting-row">
+      <text class="setting-label">新预约通知</text>
+      <switch checked="{{notify.appointment}}" bindchange="onNotifyChange" data-key="appointment" color="#3B7EFF" />
+    </view>
+    <view class="divider"></view>
+    <view class="setting-row">
+      <text class="setting-label">报警通知</text>
+      <switch checked="{{notify.alarm}}" bindchange="onNotifyChange" data-key="alarm" color="#3B7EFF" />
+    </view>
+  </view>
+
+  <!-- General -->
+  <view class="section-title">通用</view>
+  <view class="card">
+    <view class="setting-row" bindtap="onClearCache">
+      <text class="setting-label">清除缓存</text>
+      <text class="setting-arrow">›</text>
+    </view>
+    <view class="divider"></view>
+    <view class="setting-row" bindtap="onAbout">
+      <text class="setting-label">关于我们</text>
+      <text class="setting-sub">v1.0.0</text>
+      <text class="setting-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- Logout -->
+  <view class="logout-card" bindtap="onLogout">
+    <text class="logout-text">退出登录</text>
+  </view>
+
+  <text class="version-text">卓凯安伴 v1.0.0</text>
+</view>
+
+<!-- About modal -->
+<view class="modal-mask" wx:if="{{showAbout}}" bindtap="closeAbout">
+  <view class="modal-box" catchtap="">
+    <text class="modal-title">关于我们</text>
+    <text class="modal-body">卓凯安伴小程序\n版本：v1.0.0\n\n致力于提供专业的居家健康服务，连接医护人员与家庭，守护每一位老人的健康。</text>
+    <button class="modal-btn" bindtap="closeAbout">我知道了</button>
+  </view>
+</view>

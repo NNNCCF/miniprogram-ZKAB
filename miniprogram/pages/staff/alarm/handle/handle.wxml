@@ -1,0 +1,56 @@
+<staff-navbar title="处理报警" show-back="{{true}}" />
+
+<view class="page-body">
+
+  <!-- Result Select -->
+  <view class="field-group">
+    <text class="field-label">处理结果</text>
+    <view class="result-options">
+      <view
+        class="result-opt {{form.result === 'resolved' ? 'opt-active' : ''}}"
+        bindtap="selectResult"
+        data-result="resolved"
+      >
+        <text>已处理</text>
+      </view>
+      <view
+        class="result-opt {{form.result === 'follow_up' ? 'opt-active' : ''}}"
+        bindtap="selectResult"
+        data-result="follow_up"
+      >
+        <text>需跟进</text>
+      </view>
+      <view
+        class="result-opt {{form.result === 'false_alarm' ? 'opt-active' : ''}}"
+        bindtap="selectResult"
+        data-result="false_alarm"
+      >
+        <text>误报</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Description Textarea -->
+  <view class="field-group">
+    <text class="field-label">处理描述</text>
+    <textarea
+      class="field-textarea"
+      placeholder="请描述处理过程和结果..."
+      value="{{form.description}}"
+      bindinput="onDescInput"
+      maxlength="500"
+      auto-height
+    />
+    <text class="char-count">{{form.description.length}}/500</text>
+  </view>
+
+  <!-- Submit -->
+  <button
+    class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
+    bindtap="handleSubmit"
+    disabled="{{submitting}}"
+  >
+    {{submitting ? '提交中...' : '提交处理结果'}}
+  </button>
+
+</view>

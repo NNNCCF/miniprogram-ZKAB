@@ -1,0 +1,235 @@
+/* ===== Page Layout ===== */
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 32rpx 32rpx calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== Welcome Card ===== */
+.welcome-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #3B7EFF 0%, #5B9BFF 100%);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.welcome-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.welcome-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.welcome-name {
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.welcome-org {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 24rpx;
+}
+
+.welcome-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4rpx;
+}
+
+.date-text {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.week-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 24rpx;
+}
+
+/* ===== Stats Row ===== */
+.stats-row {
+  display: flex;
+  align-items: center;
+  background: #F7F9FF;
+  border-radius: 20rpx;
+  padding: 32rpx 0;
+  margin-bottom: 40rpx;
+}
+
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  cursor: pointer;
+}
+
+.stat-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: #E0E6F5;
+}
+
+.stat-num {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #3B7EFF;
+  line-height: 1.1;
+}
+
+.stat-num.stat-alarm {
+  color: #FF4D4F;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #888;
+}
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24rpx;
+  padding-left: 12rpx;
+  border-left: 6rpx solid #3B7EFF;
+}
+
+/* ===== Quick Actions ===== */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.action-item {
+  width: calc((100% - 48rpx) / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.action-icon-wrap {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-blue  { background: #EDF3FF; }
+.action-red   { background: #FFF1F0; }
+.action-green { background: #F0FFF4; }
+.action-orange{ background: #FFF7E6; }
+.action-purple{ background: #F5F0FF; }
+.action-teal  { background: #E6FFFB; }
+
+.action-icon {
+  width: 52rpx;
+  height: 52rpx;
+}
+
+.action-label {
+  font-size: 24rpx;
+  color: #555;
+}
+
+/* ===== Appointment List ===== */
+.appt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.appt-item {
+  background: #F7F9FF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.appt-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.appt-type {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.status-badge {
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+}
+
+.status-badge.status-pending  { background: #FFF3E8; }
+.status-badge.status-accepted { background: #EDF3FF; }
+.status-badge.status-completed{ background: #F0F0F0; }
+
+.status-badge.status-pending  .status-text { color: #FF8C00; }
+.status-badge.status-accepted .status-text { color: #3B7EFF; }
+.status-badge.status-completed .status-text { color: #999; }
+
+.appt-time,
+.appt-member {
+  font-size: 24rpx;
+  color: #888;
+}
+
+/* ===== Empty ===== */
+.empty-tip {
+  padding: 60rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #ccc;
+}

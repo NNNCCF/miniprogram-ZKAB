@@ -1,0 +1,61 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+
+  <!-- Header -->
+  <view class="header">
+    <text class="header-title">紧急救援</text>
+  </view>
+
+  <!-- SOS Section -->
+  <view class="sos-section">
+    <text class="sos-tip">遇到紧急情况，按下按钮立即求救</text>
+    <view class="sos-outer {{sosPressed ? 'sos-pressing' : ''}}" bindtap="onSOS">
+      <view class="sos-middle">
+        <view class="sos-btn">
+          <text class="sos-text">一键</text>
+          <text class="sos-text">呼救</text>
+        </view>
+      </view>
+    </view>
+    <text class="sos-sub">按下后将自动拨打急救电话并通知家人</text>
+  </view>
+
+  <!-- Contacts -->
+  <view class="section-title">紧急联系人</view>
+  <view class="contact-list">
+    <view class="contact-item" wx:for="{{contacts}}" wx:key="id" bindtap="callContact" data-phone="{{item.phone}}">
+      <view class="contact-avatar">
+        <text class="contact-avatar-text">{{item.name[0]}}</text>
+      </view>
+      <view class="contact-info">
+        <text class="contact-name">{{item.name}}</text>
+        <text class="contact-rel">{{item.relationship}}</text>
+      </view>
+      <view class="call-btn">
+        <text class="call-icon">📞</text>
+        <text class="call-text">拨打</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Emergency Numbers -->
+  <view class="emergency-nums">
+    <view class="enum-item" bindtap="callEmergency" data-phone="120">
+      <text class="enum-icon">🚑</text>
+      <text class="enum-label">急救中心</text>
+      <text class="enum-num">120</text>
+    </view>
+    <view class="enum-item" bindtap="callEmergency" data-phone="110">
+      <text class="enum-icon">🚔</text>
+      <text class="enum-label">报警电话</text>
+      <text class="enum-num">110</text>
+    </view>
+    <view class="enum-item" bindtap="callEmergency" data-phone="119">
+      <text class="enum-icon">🚒</text>
+      <text class="enum-label">消防救援</text>
+      <text class="enum-num">119</text>
+    </view>
+  </view>
+
+  <guardian-tabbar active="emergency"></guardian-tabbar>
+</view>

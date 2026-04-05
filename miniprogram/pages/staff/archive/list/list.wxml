@@ -1,0 +1,71 @@
+<staff-navbar title="家庭档案" show-back="{{false}}" />
+
+<view class="page-body">
+
+  <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-wrap">
+      <image class="search-icon" src="/images/tab_home.png" mode="aspectFit" />
+      <input
+        class="search-input"
+        placeholder="搜索家庭名称"
+        placeholder-style="color:#bbb;font-size:26rpx"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+        bindconfirm="onSearchConfirm"
+      />
+      <view class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">
+        <text class="clear-icon">×</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Count -->
+  <view class="list-count" wx:if="{{!loading}}">
+    <text class="count-text">共 {{filteredList.length}} 个家庭</text>
+  </view>
+
+  <!-- Archive List -->
+  <view class="archive-list" wx:if="{{filteredList.length > 0}}">
+    <view
+      class="archive-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-left">
+        <view class="family-avatar">
+          <text class="family-avatar-text">{{item.familyInitial}}</text>
+        </view>
+      </view>
+
+      <view class="card-main">
+        <view class="family-name">{{item.familyName}}</view>
+        <view class="family-meta">
+          <text class="meta-item">成员 {{item.memberCount}} 人</text>
+          <text class="meta-dot">·</text>
+          <text class="meta-item">更新 {{item.lastUpdateTime}}</text>
+        </view>
+      </view>
+
+      <view class="card-arrow">
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty -->
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">{{searchText ? '未找到相关家庭档案' : '暂无家庭档案'}}</text>
+  </view>
+
+  <!-- Loading -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+</view>
+
+<staff-tabbar active="archive" />

@@ -1,0 +1,167 @@
+/* ===== Page Layout ===== */
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 24rpx 0 calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== Search Bar ===== */
+.search-bar {
+  padding: 0 32rpx 20rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  background: #F5F6FA;
+  border-radius: 40rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #333;
+  height: 44rpx;
+}
+
+.search-clear {
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-icon {
+  font-size: 32rpx;
+  color: #bbb;
+  line-height: 1;
+}
+
+/* ===== List Count ===== */
+.list-count {
+  padding: 16rpx 32rpx;
+}
+
+.count-text {
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+/* ===== Archive List ===== */
+.archive-list {
+  padding: 0 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.archive-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+  position: relative;
+}
+
+.archive-card:last-child {
+  border-bottom: none;
+}
+
+/* Family avatar */
+.card-left {
+  flex-shrink: 0;
+}
+
+.family-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3B7EFF 0%, #5B9BFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.family-avatar-text {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Card main */
+.card-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.family-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.family-meta {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meta-item {
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+.meta-dot {
+  font-size: 24rpx;
+  color: #ddd;
+}
+
+/* Arrow */
+.card-arrow {
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  font-size: 40rpx;
+  color: #ccc;
+}
+
+/* ===== Empty & Loading ===== */
+.empty-wrap,
+.loading-wrap {
+  padding: 80rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-text,
+.loading-text {
+  font-size: 28rpx;
+  color: #ccc;
+}

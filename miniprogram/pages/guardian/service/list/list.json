@@ -1,0 +1,6 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "guardian-tabbar": "/components/guardian-tabbar/guardian-tabbar"
+  }
+}

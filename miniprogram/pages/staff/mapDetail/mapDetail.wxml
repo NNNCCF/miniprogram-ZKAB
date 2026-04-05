@@ -1,0 +1,19 @@
+<staff-navbar title="地图总览" show-back="{{true}}" />
+
+<view class="map-container">
+  <map
+    id="map"
+    longitude="{{lng}}"
+    latitude="{{lat}}"
+    scale="13"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
+    show-location="{{true}}"
+    style="width:100%;height:100%;"
+  />
+</view>
+
+<!-- Member Count Badge -->
+<view class="count-badge" wx:if="{{markers.length > 0}}">
+  <text class="count-text">共 {{markers.length}} 位成员</text>
+</view>

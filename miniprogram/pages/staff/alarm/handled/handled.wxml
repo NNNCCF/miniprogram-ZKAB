@@ -1,0 +1,73 @@
+<staff-navbar title="已处理详情" show-back="{{true}}" />
+
+<view class="page-body" wx:if="{{!loading && alarm}}">
+
+  <!-- Original Alarm Info -->
+  <view class="section-title-row">
+    <text class="section-title">报警信息</text>
+    <view class="level-badge level-{{alarm.level}}">
+      <text class="level-text">{{alarm.levelLabel}}</text>
+    </view>
+  </view>
+
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">成员姓名</text>
+      <text class="info-value">{{alarm.memberName}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">报警类型</text>
+      <text class="info-value">{{alarm.alarmType}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">报警时间</text>
+      <text class="info-value">{{alarm.alarmTime}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">位置信息</text>
+      <text class="info-value">{{alarm.location || '暂无'}}</text>
+    </view>
+  </view>
+
+  <view class="section-card" wx:if="{{alarm.description}}">
+    <text class="section-label">报警描述</text>
+    <text class="section-content">{{alarm.description}}</text>
+  </view>
+
+  <!-- Handle Record -->
+  <view class="section-title-row handle-section">
+    <text class="section-title">处理记录</text>
+    <view class="result-badge result-{{alarm.handleResult}}">
+      <text class="result-text">{{alarm.handleResultLabel}}</text>
+    </view>
+  </view>
+
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">处理人</text>
+      <text class="info-value">{{alarm.handlerName || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">处理时间</text>
+      <text class="info-value">{{alarm.handleTime || '—'}}</text>
+    </view>
+  </view>
+
+  <view class="section-card">
+    <text class="section-label">处理描述</text>
+    <text class="section-content">{{alarm.handleDescription || '暂无描述'}}</text>
+  </view>
+
+</view>
+
+<view class="center-wrap" wx:if="{{loading}}">
+  <text class="hint-text">加载中...</text>
+</view>
+
+<view class="bottom-bar">
+  <button class="btn-primary btn-full" bindtap="goBack">返回列表</button>
+</view>

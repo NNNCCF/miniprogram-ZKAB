@@ -1,0 +1,67 @@
+<staff-navbar title="家庭档案" show-back="{{true}}" />
+
+<view class="loading-wrap" wx:if="{{loading}}">
+  <text class="hint-text">加载中...</text>
+</view>
+
+<view class="page-body" wx:elif="{{archive}}">
+
+  <!-- Family Header -->
+  <view class="family-header">
+    <view class="family-icon">
+      <text class="family-icon-text">家</text>
+    </view>
+    <view class="family-info">
+      <text class="family-name">{{archive.familyName}}</text>
+      <text class="family-address">{{archive.address || '暂无地址'}}</text>
+    </view>
+    <view class="care-badge care-{{archive.careLevel}}">
+      <text class="care-badge-text">{{archive.careLevelLabel}}</text>
+    </view>
+  </view>
+
+  <!-- Members Section -->
+  <view class="section-title">家庭成员</view>
+  <view class="member-card" wx:for="{{archive.members}}" wx:key="id">
+    <view class="member-main">
+      <view class="member-avatar">
+        <text class="member-avatar-text">{{item.name[0]}}</text>
+      </view>
+      <view class="member-info">
+        <text class="member-name">{{item.name}}</text>
+        <text class="member-meta">{{item.age}}岁 · {{item.genderLabel}}</text>
+      </view>
+    </view>
+    <view class="device-status">
+      <view class="device-dot device-{{item.device ? item.device.status : 'offline'}}"></view>
+      <text class="device-label">{{item.device && item.device.status === 'online' ? '设备在线' : '设备离线'}}</text>
+    </view>
+  </view>
+
+  <view class="empty-members" wx:if="{{archive.members.length === 0}}">
+    <text class="hint-text">暂无成员信息</text>
+  </view>
+
+  <!-- Recent Alarms Section -->
+  <view class="section-title section-title-mt">近期报警记录</view>
+
+  <view wx:if="{{archive.recentAlarms.length > 0}}">
+    <view class="alarm-item" wx:for="{{archive.recentAlarms}}" wx:key="id">
+      <view class="alarm-left">
+        <view class="alarm-dot alarm-dot-{{item.handled ? 'handled' : 'pending'}}"></view>
+        <view class="alarm-content">
+          <text class="alarm-type">{{item.type}}</text>
+          <text class="alarm-time">{{item.time}}</text>
+        </view>
+      </view>
+      <view class="alarm-tag alarm-tag-{{item.handled ? 'handled' : 'pending'}}">
+        <text class="alarm-tag-text">{{item.handled ? '已处理' : '待处理'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-alarms" wx:else>
+    <text class="hint-text">近期无报警记录</text>
+  </view>
+
+</view>

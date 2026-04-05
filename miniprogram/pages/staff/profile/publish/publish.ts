@@ -1,0 +1,75 @@
+import { post } from '../../../../utils/request'
+
+Page({
+  data: {
+    types: [
+      { label: '健康提示', value: 'health' },
+      { label: '活动通知', value: 'activity' },
+      { label: '紧急通知', value: 'urgent' }
+    ],
+    form: {
+      title: '',
+      type: 'health',
+      content: '',
+      target: 'all',
+      familyName: ''
+    },
+    submitting: false
+  },
+
+  onInput(e: WechatMiniprogram.Input) {
+    const field = e.currentTarget.dataset.field as string
+    this.setData({ [`form.${field}`]: e.detail.value })
+  },
+
+  onTypeChange(e: WechatMiniprogram.RadioGroupChange) {
+    this.setData({ 'form.type': e.detail.value })
+  },
+
+  onContentInput(e: WechatMiniprogram.Input) {
+    this.setData({ 'form.content': e.detail.value })
+  },
+
+  onTargetChange(e: WechatMiniprogram.RadioGroupChange) {
+    this.setData({ 'form.target': e.detail.value })
+  },
+
+  async onSubmit() {
+    const { form } = this.data
+
+    if (!form.title.trim()) {
+      wx.showToast({ title: '请输入标题', icon: 'none' })
+      return
+    }
+    if (form.content.trim().length < 10) {
+      wx.showToast({ title: '内容至少10字', icon: 'none' })
+      return
+    }
+    if (form.target === 'specific' && !form.familyName.trim()) {
+      wx.showToast({ title: '请输入目标家庭姓名', icon: 'none' })
+      return
+    }
+
+    this.setData({ submitting: true })
+    try {
+      await post('/staff/publish', {
+        title: form.title.trim(),
+        type: form.type,
+        content: form.content.trim(),
+        target: form.target,
+        familyName: form.target === 'specific' ? form.familyName.trim() : undefined
+      })
+      wx.showToast({ title: '发布成功', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1500)
+    } catch (err: any) {
+      wx.showToast({
+        title: err.message || '发布失败',
+        icon: 'none'
+      })
+    } finally {
+      this.setData({ submitting: false })
+    }
+  }
+})

@@ -1,0 +1,33 @@
+<view class="nav-bar" style="padding-top:{{statusH}}px;">
+  <view class="back-btn" bindtap="goBack"><text class="back-icon">‹</text></view>
+  <text class="nav-title">送药服务</text>
+</view>
+<scroll-view scroll-y class="body">
+  <view class="section-title">所需药品</view>
+  <view class="med-list">
+    <view wx:for="{{medicines}}" wx:key="index" class="med-row">
+      <view class="med-info">
+        <text class="med-name">{{item.name}}</text>
+        <text class="med-spec">{{item.spec}}</text>
+      </view>
+      <view class="qty-ctrl">
+        <view class="qty-btn" bindtap="changeQty" data-index="{{index}}" data-delta="-1">-</view>
+        <text class="qty-num">{{item.qty}}</text>
+        <view class="qty-btn" bindtap="changeQty" data-index="{{index}}" data-delta="1">+</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-title">配送地址</view>
+  <view class="input-wrap">
+    <input class="ipt" value="{{address}}" bindinput="onAddress" placeholder="请输入配送地址" placeholder-class="ph" />
+  </view>
+
+  <view class="section-title">备注</view>
+  <view class="textarea-wrap">
+    <textarea class="tarea" value="{{notes}}" bindinput="onNotes" placeholder="其他说明（选填）" placeholder-class="ph" maxlength="200" />
+  </view>
+
+  <view class="btn-primary" bindtap="submit">提交订单</view>
+  <view style="height:40rpx;"></view>
+</scroll-view>

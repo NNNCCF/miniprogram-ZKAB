@@ -1,0 +1,70 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+    <text class="nav-title">预警详情</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <view wx:elif="{{alarm}}" class="content">
+    <!-- Alarm Status Card -->
+    <view class="status-card {{alarm.level === 'high' ? 'card-high' : alarm.level === 'medium' ? 'card-medium' : 'card-low'}}">
+      <view class="status-icon-wrap">
+        <text class="status-icon">{{alarm.level === 'high' ? '🆘' : alarm.level === 'medium' ? '⚠️' : 'ℹ️'}}</text>
+      </view>
+      <view class="status-info">
+        <text class="alarm-type">{{alarm.type || '健康预警'}}</text>
+        <text class="alarm-status-text">{{alarm.status === 'resolved' ? '已处理' : '待处理'}}</text>
+      </view>
+      <view class="level-badge {{alarm.level === 'high' ? 'badge-high' : alarm.level === 'medium' ? 'badge-medium' : 'badge-low'}}">
+        <text>{{alarm.level === 'high' ? '高危' : alarm.level === 'medium' ? '中危' : '低危'}}</text>
+      </view>
+    </view>
+
+    <!-- Details -->
+    <view class="detail-card">
+      <view class="detail-title">预警信息</view>
+      <view class="detail-row">
+        <text class="detail-key">预警类型</text>
+        <text class="detail-val">{{alarm.type || '--'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-key">发生时间</text>
+        <text class="detail-val">{{alarm.time || '--'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-key">发生位置</text>
+        <text class="detail-val">{{alarm.location || '--'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-key">当前状态</text>
+        <text class="detail-val {{alarm.status === 'resolved' ? 'text-green' : 'text-red'}}">
+          {{alarm.status === 'resolved' ? '已处理' : '待处理'}}
+        </text>
+      </view>
+    </view>
+
+    <!-- Description -->
+    <view class="desc-card" wx:if="{{alarm.description}}">
+      <view class="detail-title">详细描述</view>
+      <text class="desc-text">{{alarm.description}}</text>
+    </view>
+
+    <!-- Action Buttons -->
+    <view class="action-row" wx:if="{{alarm.status !== 'resolved'}}">
+      <view class="handle-btn" bindtap="markResolved">
+        <text>标记已处理</text>
+      </view>
+      <view class="call-btn" bindtap="callEmergency">
+        <text>拨打急救</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{!loading}}" class="empty-wrap">
+    <text class="empty-text">暂无预警信息</text>
+  </view>
+</view>

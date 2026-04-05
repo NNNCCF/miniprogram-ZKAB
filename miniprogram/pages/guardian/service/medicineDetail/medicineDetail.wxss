@@ -1,0 +1,20 @@
+.nav-bar { background:#3B7EFF; display:flex; align-items:flex-end; padding-bottom:10px; position:relative; }
+.nav-title { flex:1; text-align:center; color:#fff; font-size:34rpx; font-weight:600; }
+.back-btn { position:absolute; left:0; bottom:0; width:80rpx; height:44px; display:flex; align-items:center; justify-content:center; }
+.back-icon { font-size:56rpx; color:#fff; }
+.body { padding:24rpx; background:#F5F6FA; }
+.section-title { font-size:28rpx; font-weight:600; color:#1A1A2E; margin:24rpx 0 12rpx; }
+.med-list { background:#fff; border-radius:16rpx; overflow:hidden; }
+.med-row { display:flex; align-items:center; justify-content:space-between; padding:24rpx; border-bottom:1rpx solid #F0F1F5; }
+.med-row:last-child { border-bottom:none; }
+.med-name { font-size:28rpx; color:#1A1A2E; font-weight:500; }
+.med-spec { font-size:24rpx; color:#9CA3AF; margin-top:4rpx; }
+.qty-ctrl { display:flex; align-items:center; gap:16rpx; }
+.qty-btn { width:52rpx; height:52rpx; border-radius:50%; background:#EEF3FB; display:flex; align-items:center; justify-content:center; font-size:36rpx; color:#3B7EFF; font-weight:700; }
+.qty-num { font-size:28rpx; color:#1A1A2E; min-width:32rpx; text-align:center; }
+.input-wrap { background:#fff; border-radius:16rpx; padding:24rpx; }
+.ipt { font-size:28rpx; color:#1A1A2E; width:100%; }
+.textarea-wrap { background:#fff; border-radius:16rpx; padding:24rpx; }
+.tarea { width:100%; font-size:28rpx; color:#1A1A2E; height:160rpx; }
+.ph { color:#9CA3AF; }
+.btn-primary { background:linear-gradient(135deg,#3B7EFF,#2060E0); color:#fff; font-size:32rpx; font-weight:600; border-radius:100rpx; height:96rpx; line-height:96rpx; text-align:center; margin-top:40rpx; }

@@ -1,0 +1,69 @@
+<staff-navbar title="上门记录" show-back="{{true}}" />
+
+<view class="page-body">
+
+  <!-- Visit Date Picker -->
+  <view class="field-group">
+    <text class="field-label required">实际上门日期</text>
+    <picker mode="date" value="{{form.visitDate}}" bindchange="onVisitDateChange">
+      <view class="picker-trigger">
+        <text class="picker-text {{form.visitDate ? '' : 'placeholder'}}">
+          {{form.visitDate || '请选择上门日期'}}
+        </text>
+        <text class="picker-arrow">›</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- Service Summary -->
+  <view class="field-group">
+    <text class="field-label required">服务内容摘要</text>
+    <textarea
+      class="field-textarea"
+      placeholder="请描述本次服务内容..."
+      value="{{form.serviceContent}}"
+      bindinput="onServiceContentInput"
+      maxlength="500"
+      auto-height
+    />
+    <text class="char-count">{{form.serviceContent.length}}/500</text>
+  </view>
+
+  <!-- Health Observations -->
+  <view class="field-group">
+    <text class="field-label">健康观察</text>
+    <textarea
+      class="field-textarea"
+      placeholder="记录老人健康状况、体征等观察情况..."
+      value="{{form.healthObservation}}"
+      bindinput="onHealthObservationInput"
+      maxlength="500"
+      auto-height
+    />
+    <text class="char-count">{{form.healthObservation.length}}/500</text>
+  </view>
+
+  <!-- Follow-up Plan -->
+  <view class="field-group">
+    <text class="field-label">跟进计划</text>
+    <textarea
+      class="field-textarea"
+      placeholder="填写后续跟进安排或建议..."
+      value="{{form.followUpPlan}}"
+      bindinput="onFollowUpPlanInput"
+      maxlength="500"
+      auto-height
+    />
+    <text class="char-count">{{form.followUpPlan.length}}/500</text>
+  </view>
+
+  <!-- Submit -->
+  <button
+    class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
+    bindtap="handleSubmit"
+    disabled="{{submitting}}"
+  >
+    {{submitting ? '提交中...' : '提交上门记录'}}
+  </button>
+
+</view>

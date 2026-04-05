@@ -1,0 +1,73 @@
+<staff-navbar title="报警信息" show-back="{{false}}" />
+
+<view class="page-body">
+
+  <!-- Status Filter Tabs -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeStatus === 'unhandled' ? 'tab-active' : ''}}"
+      bindtap="onTabSwitch"
+      data-status="unhandled"
+    >
+      <text>待处理</text>
+      <view class="tab-dot" wx:if="{{unhandledCount > 0}}">
+        <text class="tab-dot-text">{{unhandledCount > 99 ? '99+' : unhandledCount}}</text>
+      </view>
+    </view>
+    <view
+      class="tab-item {{activeStatus === 'handled' ? 'tab-active' : ''}}"
+      bindtap="onTabSwitch"
+      data-status="handled"
+    >
+      <text>已处理</text>
+    </view>
+  </view>
+
+  <!-- Alarm List -->
+  <view class="alarm-list" wx:if="{{filteredList.length > 0}}">
+    <view
+      class="alarm-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <!-- Red dot for unhandled -->
+      <view class="red-dot" wx:if="{{item.status === 'unhandled'}}"></view>
+
+      <view class="card-left">
+        <view class="alarm-icon-wrap alarm-{{item.status}}">
+          <text class="alarm-icon-text">!</text>
+        </view>
+      </view>
+
+      <view class="card-main">
+        <view class="card-top-row">
+          <text class="member-name">{{item.memberName}}</text>
+          <view class="status-badge status-{{item.status}}">
+            <text class="status-text">{{item.statusLabel}}</text>
+          </view>
+        </view>
+        <text class="alarm-type">{{item.alarmType}}</text>
+        <text class="alarm-time">{{item.alarmTime}}</text>
+      </view>
+
+      <view class="card-arrow">
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty -->
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">暂无{{activeStatus === 'unhandled' ? '待处理' : '已处理'}}报警</text>
+  </view>
+
+  <!-- Loading -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+</view>
+
+<staff-tabbar active="alarm" />

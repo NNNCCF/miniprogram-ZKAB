@@ -1,0 +1,246 @@
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  min-height: calc(100vh - 180rpx);
+  padding: 40rpx 32rpx calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== Loading ===== */
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.hint-text {
+  font-size: 28rpx;
+  color: #ccc;
+}
+
+/* ===== Family Header ===== */
+.family-header {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  background: #F7F9FF;
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.family-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: #3B7EFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.family-icon-text {
+  font-size: 36rpx;
+  color: #fff;
+  font-weight: 700;
+}
+
+.family-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 0;
+}
+
+.family-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.family-address {
+  font-size: 24rpx;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Care Level Badge ===== */
+.care-badge {
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+}
+
+.care-light   { background: #E6F7FF; }
+.care-medium  { background: #FFF7E6; }
+.care-heavy   { background: #FFF1F0; }
+
+.care-badge-text {
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.care-light .care-badge-text   { color: #1890FF; }
+.care-medium .care-badge-text  { color: #FA8C16; }
+.care-heavy .care-badge-text   { color: #FF4D4F; }
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.section-title-mt {
+  margin-top: 40rpx;
+}
+
+/* ===== Member Card ===== */
+.member-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F7F9FF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.member-main {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.member-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #D6E4FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.member-avatar-text {
+  font-size: 28rpx;
+  color: #3B7EFF;
+  font-weight: 700;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.member-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.member-meta {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* ===== Device Status ===== */
+.device-status {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.device-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+}
+
+.device-online  { background: #52C41A; }
+.device-offline { background: #D9D9D9; }
+
+.device-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* ===== Empty States ===== */
+.empty-members,
+.empty-alarms {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+/* ===== Alarm Items ===== */
+.alarm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.alarm-item:last-child {
+  border-bottom: none;
+}
+
+.alarm-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.alarm-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alarm-dot-pending { background: #FF4D4F; }
+.alarm-dot-handled { background: #52C41A; }
+
+.alarm-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.alarm-type {
+  font-size: 28rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.alarm-time {
+  font-size: 22rpx;
+  color: #bbb;
+}
+
+.alarm-tag {
+  padding: 6rpx 16rpx;
+  border-radius: 16rpx;
+}
+
+.alarm-tag-pending { background: #FFF1F0; }
+.alarm-tag-handled { background: #F6FFED; }
+
+.alarm-tag-text {
+  font-size: 22rpx;
+}
+
+.alarm-tag-pending .alarm-tag-text { color: #FF4D4F; }
+.alarm-tag-handled .alarm-tag-text { color: #52C41A; }

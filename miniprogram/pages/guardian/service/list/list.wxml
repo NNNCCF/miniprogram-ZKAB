@@ -1,0 +1,46 @@
+<view class="page">
+  <view style="height:{{statusH}}px;background:#fff;"></view>
+
+  <!-- Header -->
+  <view class="header">
+    <text class="header-title">服务中心</text>
+  </view>
+
+  <!-- Banner -->
+  <view class="banner">
+    <text class="banner-title">专业健康服务</text>
+    <text class="banner-sub">为您的家人提供全方位医疗保障</text>
+  </view>
+
+  <!-- Service Categories -->
+  <view class="section-title">热门服务</view>
+  <view class="service-grid">
+    <view class="service-card" wx:for="{{services}}" wx:key="id" bindtap="goDetail" data-item="{{item}}">
+      <view class="service-icon-wrap" style="background:{{item.bgColor}};">
+        <text class="service-icon">{{item.icon}}</text>
+      </view>
+      <view class="service-info">
+        <text class="service-title">{{item.title}}</text>
+        <text class="service-desc">{{item.desc}}</text>
+      </view>
+      <view class="service-price-wrap">
+        <text class="service-price">{{item.price}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- News Section -->
+  <view class="section-title" style="margin-top:24rpx;">健康资讯</view>
+  <view class="news-list">
+    <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="goNews" data-id="{{item.id}}">
+      <view class="news-content">
+        <text class="news-title">{{item.title}}</text>
+        <text class="news-meta">{{item.date}} · {{item.author}}</text>
+      </view>
+      <text class="news-arrow">›</text>
+    </view>
+  </view>
+
+  <guardian-tabbar active="service"></guardian-tabbar>
+</view>
