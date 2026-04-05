@@ -1,0 +1,12 @@
+<view class="s-nav" style="height: {{totalH}}px;">
+  <image class="s-nav-bg" src="/images/nav_top_bg.png" mode="scaleToFill" />
+  <view class="s-status" style="height: {{statusH}}px;"></view>
+  <view class="s-bar">
+    <view wx:if="{{showBack}}" class="s-back" bindtap="onBack">
+      <text class="s-back-icon">‹</text>
+    </view>
+    <text class="s-title">{{title}}</text>
+  </view>
+</view>
+<!-- 占位块：防止 fixed 导航栏遮挡内容 -->
+<view style="height: {{totalH}}px; flex-shrink: 0;"></view>

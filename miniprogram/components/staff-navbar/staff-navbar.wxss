@@ -1,0 +1,38 @@
+.s-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 99;
+  overflow: hidden;
+}
+.s-nav-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.s-bar {
+  position: relative;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.s-back {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.s-back-icon {
+  font-size: 56rpx;
+  color: #fff;
+  line-height: 1;
+  margin-top: -4rpx;
+}
+.s-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
