@@ -20,6 +20,10 @@ export const nurseRegister = (data: any) =>
 export const guardianRegister = (data: any) =>
   post('/auth/guardian/register', data)
 
+/** 获取已启用机构列表（注册时选择，无需登录）*/
+export const getPublicInstitutionList = () =>
+  get<{ id: number; name: string; address: string; type: string }[]>('/institution/list')
+
 // ─── 报警 /mini/alarms ───────────────────────────────────
 export const getAlarms = (params?: {
   status?: 'unhandled' | 'handled' | 'ignored'
@@ -100,8 +104,13 @@ export const getMemberList = () =>
   get('/mini/member/list')
 
 // ─── 设备 /mini/device ───────────────────────────────────
-export const bindDevice = (data: { deviceCode: string; location?: string; address?: string }) =>
-  post('/mini/device/bind', data)
+export const bindDevice = (data: {
+  deviceCode: string
+  location?: string
+  address?: string
+  latitude?: number
+  longitude?: number
+}) => post('/mini/device/bind', data)
 
 export const unbindDevice = (data: { deviceId: string; keepHistory?: boolean }) =>
   post('/mini/device/unbind', data)
@@ -112,6 +121,53 @@ export const getDeviceList = () =>
 // ─── 护士列表 ─────────────────────────────────────────────
 export const getNurseList = () =>
   get('/mini/nurse-list')
+
+// ─── 实时监控 /mini/monitor ───────────────────────────────
+export const getMonitorRealtime = (memberId: string | number) =>
+  get('/mini/monitor/realtime', { memberId })
+
+export const getMonitorHistory = (params: {
+  memberId: string | number
+  type?: string
+  startDate?: string
+  endDate?: string
+}) => get('/mini/monitor/history', params)
+
+// ─── 绑定的家庭医生（当前登录家属设备关联的医生）────────────
+export const getServiceDoctor = () =>
+  get('/mini/service/doctor')
+
+// ─── 医生详情（家属端）/mini/doctor ───────────────────────
+export const getMiniDoctorDetail = (id: string | number) =>
+  get(`/mini/doctor/${id}`)
+
+// ─── 送药上门订单 /mini/medicine/order ────────────────────
+export const createMedicineOrder = (data: {
+  medicines: { name: string; spec: string; qty: number }[]
+  address: string
+  notes?: string
+}) => post('/mini/medicine/order', data)
+
+// ─── 创建成员 /mini/member/create ─────────────────────────
+export const createMember = (data: {
+  name: string
+  gender: string
+  birthday?: string
+  mobile?: string
+  chronicDisease?: string
+  remark?: string
+  emergencyPhone?: string
+  deviceId?: string
+}) => post('/mini/member/create', data)
+
+// ─── 机构管理接口 /mini/institution ──────────────────────
+/** 获取本机构医护人员列表 */
+export const getInstitutionNurses = () =>
+  get('/mini/institution/nurses')
+
+/** 获取本机构绑定家庭列表 */
+export const getInstitutionFamilies = () =>
+  get('/mini/institution/families')
 
 // ─── 新闻动态 /api/news ───────────────────────────────────
 export const getNewsList = () =>

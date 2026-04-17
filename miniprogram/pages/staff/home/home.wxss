@@ -174,3 +174,46 @@ page {
   margin-top: 6rpx;
   letter-spacing: 0.5rpx;
 }
+
+/* ===== News Section (in panel) ===== */
+.news-section {
+  padding: 12rpx 28rpx 8rpx;
+  border-top: 1rpx solid #EBF0FA;
+}
+
+.news-section-title {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #8A94A8;
+  margin-bottom: 10rpx;
+}
+
+.news-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 8rpx 0;
+}
+
+.news-dot-sm {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: #3B7EFF;
+  flex-shrink: 0;
+}
+
+.news-text-sm {
+  flex: 1;
+  font-size: 22rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-arrow-sm {
+  font-size: 24rpx;
+  color: #ccc;
+  flex-shrink: 0;
+}

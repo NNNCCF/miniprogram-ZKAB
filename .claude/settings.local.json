@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find \"D:/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/miniprogram/pages/staff/appointment/\" -type f -name \"*.wxml\" -o -name \"*.ts\")",
+      "Read(//d/新建文件夹 \\(2\\)/vx/demo/**)",
+      "Read(//Volumes/D/新建文件夹 \\(2\\)/vx/**)",
+      "Bash(find '/d/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/' -name app.ts -o -name app.json)",
+      "Bash(find '/d/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/miniprogram/components' -type f)",
+      "Bash(find '/d/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/miniprogram/pages/staff' -type f)",
+      "Bash(find '/d/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/miniprogram/pages/staff' -type d)",
+      "Bash(find '/d/新建文件夹 \\(2\\)/vx/卓凯安伴小程序\\(1\\)/miniprogram/components' -type d)"
+    ]
+  }
+}

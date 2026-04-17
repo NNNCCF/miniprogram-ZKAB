@@ -1,75 +1,106 @@
-page { background: #EEF2FF; height: 100vh; overflow: hidden; }
-.page { height: 100vh; display: flex; flex-direction: column; background: #EEF2FF; }
+page { background: #3B7EFF; min-height: 100vh; }
+.page { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── 公共导航 ── */
 .nav-bar { flex-shrink: 0; height: 136rpx; position: relative; overflow: hidden; }
 .header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24rpx; position: relative; z-index: 1; }
 .nav-back { width: 60rpx; height: 60rpx; display: flex; align-items: center; justify-content: center; }
 .back-arrow { font-size: 52rpx; color: #fff; line-height: 1; }
-.nav-title { font-size: 34rpx; font-weight: 700; color: #fff; letter-spacing: 2rpx; }
-.body-area { flex: 1; background: #fff; border-radius: 28rpx 28rpx 0 0; margin-top: -32rpx; position: relative; z-index: 2; overflow-y: auto; box-sizing: border-box; }
+.nav-title  { font-size: 34rpx; font-weight: 700; color: #fff; }
 
-.content-wrap {
-  padding: 32rpx 32rpx 60rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
+/* ====================================
+   PROFILE 模式
+   ==================================== */
+.hero { background: linear-gradient(160deg, #2B6BE0, #4C8FFF); display: flex; flex-direction: column; align-items: center; padding-bottom: 48rpx; }
+.nav-row { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24rpx; height: 96rpx; box-sizing: border-box; }
+.avatar-wrap { position: relative; margin-top: 16rpx; margin-bottom: 20rpx; }
+.avatar-circle { width: 160rpx; height: 160rpx; border-radius: 50%; background: linear-gradient(135deg, #fff, #e8f0ff); display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.18); }
+.avatar-emoji { font-size: 80rpx; line-height: 1; }
+.rating-badge { position: absolute; bottom: -8rpx; right: -16rpx; background: linear-gradient(135deg, #4C8FFF, #3B7EFF); border-radius: 20rpx; padding: 4rpx 14rpx; display: flex; align-items: center; gap: 4rpx; box-shadow: 0 4rpx 12rpx rgba(59,126,255,0.5); }
+.rating-star { font-size: 20rpx; color: #FFD700; }
+.rating-num  { font-size: 22rpx; color: #fff; font-weight: 700; }
+.doctor-name { font-size: 44rpx; font-weight: 800; color: #fff; letter-spacing: 2rpx; margin-bottom: 16rpx; }
+.org-pill { background: rgba(255,255,255,0.22); border: 1rpx solid rgba(255,255,255,0.45); border-radius: 32rpx; padding: 8rpx 28rpx; }
+.org-pill-text { font-size: 24rpx; color: #fff; font-weight: 500; }
+.profile-body { flex: 1; background: #fff; border-radius: 36rpx 36rpx 0 0; margin-top: -32rpx; position: relative; z-index: 2; padding: 40rpx 32rpx 60rpx; box-sizing: border-box; min-height: 60vh; }
+.contact-row { display: flex; gap: 24rpx; margin-bottom: 48rpx; }
+.contact-btn { flex: 1; height: 160rpx; border-radius: 24rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16rpx; }
+.contact-btn-green { background: linear-gradient(135deg, #d4f7d4, #9febbf); }
+.contact-btn-blue  { background: linear-gradient(135deg, #dce8ff, #c8d8ff); }
+.contact-icon  { font-size: 56rpx; line-height: 1; }
+.contact-label { font-size: 26rpx; color: #1a3a70; font-weight: 500; }
+.profile-section { margin-bottom: 32rpx; }
+.profile-section-title { font-size: 32rpx; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 16rpx; }
+.profile-section-content { font-size: 28rpx; color: #4a4a5a; line-height: 1.9; display: block; }
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 8rpx; }
+.tag-item { background: #F2F4F8; border-radius: 12rpx; padding: 10rpx 24rpx; }
+.tag-text { font-size: 24rpx; color: #5a6a8a; }
+
+/* ====================================
+   BOOK / CHECKUP / NURSING 公共主体
+   ==================================== */
+.book-body { flex: 1; background: #F5F7FA; border-radius: 32rpx 32rpx 0 0; margin-top: -32rpx; padding: 28rpx 28rpx calc(140rpx + env(safe-area-inset-bottom)); box-sizing: border-box; position: relative; z-index: 2; }
+.book-section { margin-bottom: 24rpx; }
+.book-section-title { font-size: 26rpx; font-weight: 700; color: #6B7A99; margin-bottom: 12rpx; display: block; letter-spacing: 1rpx; }
+.book-card { background: #fff; border-radius: 20rpx; padding: 0 24rpx; box-shadow: 0 2rpx 12rpx rgba(59,126,255,0.06); }
+.book-row { display: flex; align-items: center; min-height: 100rpx; padding: 8rpx 0; gap: 16rpx; }
+.book-row-top { align-items: flex-start; padding-top: 24rpx; }
+.book-label { font-size: 28rpx; color: #9CA3AF; flex-shrink: 0; width: 120rpx; }
+.book-input { flex: 1; font-size: 28rpx; color: #1a1a2e; text-align: right; height: 48rpx; }
+.book-textarea { flex: 1; font-size: 26rpx; color: #1a1a2e; min-height: 80rpx; text-align: right; line-height: 1.6; }
+.book-row-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 8rpx; }
+.book-val { font-size: 28rpx; color: #1a1a2e; }
+.time-val { font-size: 32rpx; font-weight: 600; color: #3B7EFF; }
+.book-arrow { font-size: 36rpx; color: #C0C8D8; }
+.book-divider { height: 1rpx; background: #F2F4F8; }
+.book-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20rpx 40rpx calc(24rpx + env(safe-area-inset-bottom)); border-top: 1rpx solid #F2F4F8; }
+.btn-book { background: linear-gradient(135deg, #3B7EFF, #2060E0); border-radius: 52rpx; height: 96rpx; display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 24rpx rgba(59,126,255,0.35); }
+.btn-book text { font-size: 32rpx; font-weight: 700; color: #fff; letter-spacing: 2rpx; }
+.btn-loading { opacity: 0.7; }
+
+/* ── Book模式：医生简介 ── */
+.doctor-mini-card { background: #fff; border-radius: 20rpx; padding: 24rpx; display: flex; align-items: center; gap: 20rpx; margin-bottom: 24rpx; box-shadow: 0 2rpx 12rpx rgba(59,126,255,0.06); }
+.mini-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(135deg, #1B3A70, #3B7EFF); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mini-avatar-text { font-size: 36rpx; color: #fff; }
+.mini-info { display: flex; flex-direction: column; gap: 6rpx; }
+.mini-name  { font-size: 30rpx; font-weight: 700; color: #1a1a2e; }
+.mini-title { font-size: 24rpx; color: #9CA3AF; }
+
+/* ── Book模式：时间格 ── */
+.slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; }
+.slot-item { background: #fff; border-radius: 16rpx; padding: 20rpx 0; display: flex; flex-direction: column; align-items: center; gap: 6rpx; border: 2rpx solid transparent; box-shadow: 0 2rpx 8rpx rgba(59,126,255,0.05); }
+.slot-active { background: #EBF1FF; border-color: #3B7EFF; }
+.slot-disabled { opacity: 0.35; }
+.slot-date { font-size: 22rpx; color: #9CA3AF; }
+.slot-time { font-size: 28rpx; font-weight: 600; color: #1a1a2e; }
+.slot-active .slot-date { color: #3B7EFF; }
+.slot-active .slot-time { color: #3B7EFF; }
+
+/* ── Checkup/Nursing：项目选择网格 ── */
+.items-grid {
+  display: flex; flex-wrap: wrap; gap: 16rpx;
+  background: #fff; border-radius: 20rpx; padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(59,126,255,0.06);
+  margin-bottom: 12rpx;
 }
-.doctor-card {
-  background: #F8FAFF;
-  border-radius: 20rpx;
-  padding: 32rpx;
-  display: flex;
-  align-items: flex-start;
-  gap: 28rpx;
+
+.item-chip {
+  padding: 16rpx 28rpx;
+  border-radius: 32rpx;
+  background: #F2F4F8;
+  border: 2rpx solid transparent;
 }
-.doctor-avatar {
-  width: 120rpx; height: 120rpx; border-radius: 50%;
-  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+
+.item-chip-active {
+  background: #EBF1FF;
+  border-color: #3B7EFF;
 }
-.doctor-avatar-text { font-size: 48rpx; font-weight: 700; color: #fff; }
-.doctor-info { flex: 1; display: flex; flex-direction: column; gap: 10rpx; }
-.doctor-name { font-size: 34rpx; font-weight: 800; color: #111827; }
-.doctor-title { font-size: 26rpx; color: #3B7EFF; font-weight: 600; }
-.doctor-hospital { font-size: 26rpx; color: #6B7280; }
 
-.doctor-meta {
-  display: flex;
-  background: #F8FAFF;
-  border-radius: 20rpx;
-  padding: 28rpx 0;
-}
-.meta-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8rpx; }
-.meta-num { font-size: 36rpx; font-weight: 800; color: #3B7EFF; }
-.meta-label { font-size: 22rpx; color: #9CA3AF; }
-.meta-sep { width: 1rpx; background: #E8EEF8; align-self: center; height: 60rpx; }
+.item-chip-text { font-size: 26rpx; color: #5a6a8a; }
+.item-chip-active .item-chip-text { color: #3B7EFF; font-weight: 600; }
 
-.section-card { background: #F8FAFF; border-radius: 20rpx; padding: 28rpx 32rpx; }
-.section-title { display: block; font-size: 30rpx; font-weight: 700; color: #374151; margin-bottom: 20rpx; }
-.section-content { font-size: 26rpx; color: #6B7280; line-height: 1.7; }
-
-.slots-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
-.slot-item { padding: 16rpx 32rpx; border-radius: 12rpx; border: 2rpx solid #E5E7EB; font-size: 28rpx; color: #374151; background: #fff; display: flex; flex-direction: column; align-items: center; gap: 4rpx; }
-.slot-active { border-color: #3B7EFF; background: #EEF4FF; color: #3B7EFF; font-weight: 700; }
-.slot-disabled { opacity: 0.4; }
-.slot-date { font-size: 22rpx; }
-.slot-time { font-size: 28rpx; font-weight: 600; }
-
-.form-row { display: flex; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid #F0F4FF; gap: 16rpx; }
-.form-row:last-child { border-bottom: none; }
-.form-label { font-size: 26rpx; color: #9CA3AF; width: 140rpx; flex-shrink: 0; }
-.form-input { flex: 1; font-size: 28rpx; color: #111827; text-align: right; }
-.form-textarea { flex: 1; font-size: 28rpx; color: #111827; height: 120rpx; }
-
-.price-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  background: #F8FAFF; border-radius: 20rpx; padding: 28rpx 32rpx;
-}
-.price-label { font-size: 24rpx; color: #9CA3AF; display: block; }
-.price-val { font-size: 40rpx; font-weight: 800; color: #E63A35; }
-.book-btn {
-  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
-  border-radius: 44rpx; padding: 20rpx 48rpx;
-  font-size: 30rpx; font-weight: 700; color: #fff;
+.items-hint {
+  font-size: 22rpx; color: #9CA3AF;
+  display: block; padding: 0 4rpx 8rpx;
 }

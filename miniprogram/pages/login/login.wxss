@@ -199,6 +199,37 @@ page {
   font-weight: 600;
 }
 
+/* ===== 机构选择 Picker ===== */
+.org-picker-wrap {
+  cursor: pointer;
+}
+
+.org-picker-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.org-selected-text {
+  font-size: 28rpx;
+  color: #1B3A70;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #A0AABF;
+  flex-shrink: 0;
+}
+
+.org-addr-tip {
+  padding: 8rpx 24rpx 0;
+}
+
+.org-addr-text {
+  font-size: 22rpx;
+  color: #8A94A8;
+}
+
 /* ===== Button ===== */
 .btn-primary {
   background: #38B6FF;

@@ -1,39 +1,104 @@
 page { background: #EEF2FF; height: 100vh; overflow: hidden; }
 .page { height: 100vh; display: flex; flex-direction: column; background: #EEF2FF; }
+
+/* 导航栏 */
 .nav-bar { flex-shrink: 0; height: 136rpx; position: relative; overflow: hidden; }
 .header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24rpx; position: relative; z-index: 1; }
 .nav-back { width: 60rpx; height: 60rpx; display: flex; align-items: center; justify-content: center; }
 .back-arrow { font-size: 52rpx; color: #fff; line-height: 1; }
-.nav-title { font-size: 34rpx; font-weight: 700; color: #fff; letter-spacing: 2rpx; }
-.body-area { flex: 1; background: #fff; border-radius: 28rpx 28rpx 0 0; margin-top: -32rpx; position: relative; z-index: 2; overflow-y: auto; box-sizing: border-box; }
+.nav-title { flex: 1; text-align: center; font-size: 34rpx; font-weight: 700; color: #fff; }
 
+/* 白色内容区 */
+.body-area {
+  flex: 1;
+  background: #fff;
+  border-radius: 28rpx 28rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 结果区域 */
 .result-wrap {
-  padding: 60rpx 48rpx 40rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 64rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
-.icon-circle {
-  width: 160rpx; height: 160rpx; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+
+/* 状态圆圈 */
+.status-circle {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+.success-circle { background: #27AE60; }
+.fail-circle { background: #E74C3C; }
+
+.status-icon {
+  font-size: 80rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+/* 标题 */
+.result-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
   margin-bottom: 32rpx;
 }
-.success-circle { background: #ECFDF5; }
-.fail-circle { background: #FEF2F2; }
-.result-icon { font-size: 72rpx; font-weight: 700; line-height: 1; }
-.success-circle .result-icon { color: #10B981; }
-.fail-circle .result-icon { color: #EF4444; }
-.result-title { display: block; font-size: 40rpx; font-weight: 800; color: #111827; margin-bottom: 16rpx; }
-.result-desc { display: block; font-size: 28rpx; color: #6B7280; text-align: center; line-height: 1.6; margin-bottom: 40rpx; }
-.device-info-card { width: 100%; background: #F8FAFF; border-radius: 20rpx; padding: 24rpx 32rpx; margin-bottom: 48rpx; }
-.info-row { display: flex; justify-content: space-between; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #F0F4FF; }
-.info-row:last-child { border-bottom: none; }
-.info-key { font-size: 26rpx; color: #9CA3AF; }
-.info-val { font-size: 26rpx; font-weight: 600; color: #111827; }
-.success-text { color: #10B981; }
-.fail-tips { width: 100%; background: #FEF2F2; border-radius: 16rpx; padding: 24rpx 32rpx; margin-bottom: 48rpx; display: flex; flex-direction: column; gap: 12rpx; }
-.fail-tip { font-size: 26rpx; color: #B91C1C; line-height: 1.5; }
-.btn-group { width: 100%; display: flex; flex-direction: column; gap: 16rpx; }
-.home-btn { height: 96rpx; background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%); border-radius: 48rpx; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; color: #fff; }
-.retry-btn { height: 96rpx; background: #fff; border-radius: 48rpx; border: 2rpx solid #3B7EFF; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; color: #3B7EFF; }
+
+/* 成功：蓝色链接文字 */
+.result-link {
+  font-size: 28rpx;
+  color: #3B7EFF;
+  text-align: center;
+  margin-bottom: 64rpx;
+  line-height: 1.6;
+}
+
+/* 失败：红色提示文字 */
+.result-error {
+  font-size: 28rpx;
+  color: #E74C3C;
+  text-align: center;
+  margin-bottom: 64rpx;
+  line-height: 1.6;
+}
+
+/* 主按钮 */
+.primary-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(59, 110, 240, 0.35);
+}
+.btn-plus {
+  font-size: 36rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+.btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 2rpx;
+}

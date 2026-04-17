@@ -9,19 +9,24 @@
   <scroll-view class="body-area" scroll-y>
     <!-- 三大服务卡片 -->
     <view class="main-cards">
+
+      <!-- 家庭医生：有绑定时显示真实数据 -->
       <view class="card-doctor" bindtap="goDoctor">
-        <view class="bound-badge">已绑定</view>
         <image class="card-doctor-img" src="/images/家庭医生卡.png" mode="widthFix" />
-        <view class="card-doctor-info">
+        <view wx:if="{{doctor}}" class="card-doctor-info">
+          <view class="bound-badge">已绑定</view>
           <text class="card-doctor-role">家庭医生</text>
-          <text class="card-doctor-name">王医生</text>
-          <text class="card-doctor-org">市第一人民医院</text>
-          <view class="rating-row">
-            <text class="rating-star">★★★★★</text>
-            <text class="rating-num">4.9</text>
-          </view>
+          <text class="card-doctor-name">{{doctor.name}}</text>
+          <text class="card-doctor-org">{{doctor.institution || doctor.hospital || ''}}</text>
+          <text wx:if="{{doctor.title}}" class="card-doctor-title">{{doctor.title}}</text>
+        </view>
+        <view wx:else class="card-doctor-info card-doctor-empty">
+          <text class="card-doctor-role">家庭医生</text>
+          <text class="card-doctor-name">暂未绑定</text>
+          <text class="card-doctor-org">联系服务中心进行绑定</text>
         </view>
       </view>
+
       <view class="cards-right">
         <view class="card-small" bindtap="goCommunity">
           <image class="card-small-img" src="/images/小区物业.png" mode="widthFix" />
@@ -69,16 +74,29 @@
     <view class="section-header">
       <text class="section-title">健康动态</text>
     </view>
-    <view class="news-list">
+
+    <!-- 新闻加载中 -->
+    <view wx:if="{{loadingNews}}" class="news-loading">
+      <text class="news-loading-text">加载中...</text>
+    </view>
+
+    <!-- 新闻列表 -->
+    <view wx:elif="{{news.length}}" class="news-list">
       <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="goNews" data-id="{{item.id}}">
         <view class="news-dot"></view>
         <view class="news-body">
           <text class="news-title">{{item.title}}</text>
-          <text class="news-meta">{{item.date}} · {{item.author}}</text>
+          <text class="news-meta">{{item.createdAt || item.date || ''}}{{item.author ? ' · ' + item.author : ''}}</text>
         </view>
         <text class="news-arrow">›</text>
       </view>
     </view>
+
+    <!-- 暂无新闻 -->
+    <view wx:else class="news-empty">
+      <text class="news-empty-text">暂无健康动态</text>
+    </view>
+
   </scroll-view>
 
   <guardian-tabbar active="appt"></guardian-tabbar>

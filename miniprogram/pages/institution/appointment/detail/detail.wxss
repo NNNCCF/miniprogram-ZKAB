@@ -1,0 +1,276 @@
+page {
+  background: #F2F5FC;
+  min-height: 100vh;
+}
+
+.page-body {
+  padding: 0 0 calc(140rpx + env(safe-area-inset-bottom));
+}
+
+/* ===== Status Banner ===== */
+.status-banner {
+  padding: 20rpx 32rpx;
+  text-align: center;
+}
+
+.status-banner.status-pending   { background: #FFF3E8; }
+.status-banner.status-accepted  { background: #EDF3FF; }
+.status-banner.status-completed { background: #F0F8F0; }
+.status-banner.status-cancelled { background: #F5F5F5; }
+
+.status-banner-text {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.status-banner.status-pending   .status-banner-text { color: #FF8C00; }
+.status-banner.status-accepted  .status-banner-text { color: #3B7EFF; }
+.status-banner.status-completed .status-banner-text { color: #28A745; }
+.status-banner.status-cancelled .status-banner-text { color: #999; }
+
+/* ===== Section ===== */
+.section-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #8A94A8;
+  padding: 28rpx 32rpx 12rpx;
+  letter-spacing: 1rpx;
+}
+
+.info-card {
+  background: #fff;
+  margin: 0 24rpx 16rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 16rpx rgba(43, 107, 224, 0.06);
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 32rpx;
+  gap: 20rpx;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #9CA3AF;
+  flex-shrink: 0;
+  min-width: 112rpx;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #0F1C38;
+  flex: 1;
+}
+
+.info-notes {
+  color: #666;
+}
+
+.info-pending {
+  color: #FF8C00;
+}
+
+.divider {
+  height: 1rpx;
+  background: #F0F4FC;
+  margin: 0 32rpx;
+}
+
+/* ===== Loading ===== */
+.center-wrap {
+  padding: 100rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.hint-text {
+  font-size: 28rpx;
+  color: #ccc;
+}
+
+/* ===== Bottom Bar ===== */
+.bottom-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1rpx solid #F0F0F0;
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-primary {
+  flex: 1;
+  height: 88rpx;
+  background: #3B7EFF;
+  border-radius: 44rpx;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  line-height: 88rpx;
+}
+
+.btn-secondary {
+  flex: 1;
+  height: 88rpx;
+  background: #F2F5FC;
+  border-radius: 44rpx;
+  color: #3B7EFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  line-height: 88rpx;
+}
+
+.btn-full {
+  flex: 1;
+}
+
+/* ===== Dispatch Modal ===== */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modal-panel {
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  width: 100%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #0F1C38;
+  padding: 36rpx 32rpx 20rpx;
+  text-align: center;
+}
+
+.nurse-list {
+  flex: 1;
+  overflow: hidden;
+  max-height: 50vh;
+  padding: 0 24rpx;
+}
+
+.nurse-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 16rpx;
+  border-radius: 16rpx;
+  margin-bottom: 8rpx;
+  background: #F7F9FF;
+}
+
+.nurse-item-selected {
+  background: #EBF1FF;
+  border: 2rpx solid #3B7EFF;
+}
+
+.nurse-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1B3A70 0%, #3B7EFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nurse-avatar-text {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.nurse-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.nurse-name {
+  font-size: 28rpx;
+  color: #0F1C38;
+  font-weight: 600;
+}
+
+.nurse-phone {
+  font-size: 22rpx;
+  color: #9CA3AF;
+}
+
+.nurse-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #3B7EFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-icon {
+  font-size: 24rpx;
+  color: #fff;
+}
+
+.nurse-empty {
+  padding: 40rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.nurse-empty-text {
+  font-size: 26rpx;
+  color: #ccc;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 32rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.btn-cancel {
+  flex: 1;
+  height: 80rpx;
+  background: #F2F5FC;
+  border-radius: 40rpx;
+  color: #666;
+  font-size: 28rpx;
+  border: none;
+  line-height: 80rpx;
+}
+
+.btn-confirm {
+  flex: 2;
+  height: 80rpx;
+  background: #3B7EFF;
+  border-radius: 40rpx;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+  line-height: 80rpx;
+}
+
+.btn-confirm[disabled] {
+  opacity: 0.6;
+}

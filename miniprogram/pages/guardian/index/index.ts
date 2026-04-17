@@ -1,5 +1,4 @@
-import { getMemberList } from '../../../utils/api'
-import { get } from '../../../utils/request'
+import { getMemberList, getMonitorRealtime, getMonitorHistory } from '../../../utils/api'
 
 const app = getApp<any>()
 
@@ -55,9 +54,9 @@ Page({
       // 并行拉取实时数据 + 今日历史
       const today = new Date().toISOString().slice(0, 10)
       const [vitalsRes, breathRes, heartRes] = await Promise.allSettled([
-        get('/mini/monitor/realtime', { memberId: member.id }),
-        get('/mini/monitor/history', { memberId: member.id, type: 'breathRate', startDate: today, endDate: today }),
-        get('/mini/monitor/history', { memberId: member.id, type: 'heartRate', startDate: today, endDate: today })
+        getMonitorRealtime(member.id),
+        getMonitorHistory({ memberId: member.id, type: 'breathRate', startDate: today, endDate: today }),
+        getMonitorHistory({ memberId: member.id, type: 'heartRate', startDate: today, endDate: today })
       ])
 
       const vitals: any = vitalsRes.status === 'fulfilled' ? (vitalsRes.value || {}) : {}

@@ -105,12 +105,31 @@
         </view>
       </view>
 
-      <!-- 机构码（医护专属）-->
-      <view class="input-wrap" wx:if="{{regForm.role==='staff'}}">
-        <image class="input-icon" src="/images/icon_building.png" mode="aspectFit" />
-        <input class="ipt" value="{{regForm.orgCode}}" bindinput="onRegInput" data-field="orgCode"
-          placeholder="请输入所属机构码" placeholder-class="ph" />
-      </view>
+      <!-- 机构选择（医护专属）-->
+      <block wx:if="{{regForm.role==='staff'}}">
+        <picker
+          mode="selector"
+          range="{{orgNames}}"
+          value="{{orgIndex}}"
+          bindchange="onOrgPickerChange"
+          disabled="{{orgLoading || orgList.length === 0}}"
+        >
+          <view class="input-wrap org-picker-wrap">
+            <image class="input-icon" src="/images/icon_building.png" mode="aspectFit" />
+            <view class="org-picker-content">
+              <text wx:if="{{orgLoading}}" class="ph">机构列表加载中...</text>
+              <text wx:elif="{{orgList.length === 0}}" class="ph">暂无可用机构</text>
+              <text wx:elif="{{orgIndex >= 0}}" class="org-selected-text">{{orgNames[orgIndex]}}</text>
+              <text wx:else class="ph">请选择所属医疗机构</text>
+            </view>
+            <text class="picker-arrow">▾</text>
+          </view>
+        </picker>
+        <!-- 选中机构显示地址 -->
+        <view wx:if="{{orgIndex >= 0 && orgList[orgIndex].address}}" class="org-addr-tip">
+          <text class="org-addr-text">📍 {{orgList[orgIndex].address}}</text>
+        </view>
+      </block>
 
       <view class="btn-primary {{submitting?'btn-loading':''}}" bindtap="handleRegister">
         {{submitting ? '注册中...' : '立即注册'}}

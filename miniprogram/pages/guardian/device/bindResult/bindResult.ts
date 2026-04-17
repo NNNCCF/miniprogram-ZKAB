@@ -4,8 +4,6 @@ Page({
   data: {
     statusH: 0,
     isSuccess: false,
-    device: null as any,
-    deviceId: '',
     errorMsg: ''
   },
 
@@ -15,15 +13,17 @@ Page({
     const result = wx.getStorageSync('bindResult') || {}
     this.setData({
       isSuccess: status === 'success',
-      device: result.device || null,
-      deviceId: result.deviceId || '',
-      errorMsg: result.error || ''
+      errorMsg: result.error || '未找到该设备，请确认设备号！'
     })
     wx.removeStorageSync('bindResult')
   },
 
-  goHome() {
-    wx.reLaunch({ url: '/pages/guardian/index/index/index' })
+  goBack() {
+    wx.navigateBack()
+  },
+
+  onCreateMember() {
+    wx.navigateTo({ url: '/pages/guardian/member/create/create' })
   },
 
   goRetry() {

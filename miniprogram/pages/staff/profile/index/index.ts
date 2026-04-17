@@ -34,7 +34,7 @@ Page({
       })
     }
 
-    get<StaffProfile>('/staff/profile')
+    get<StaffProfile>('/mini/staff/profile')
       .then(res => {
         const name = res.name || '医护人员'
         this.setData({

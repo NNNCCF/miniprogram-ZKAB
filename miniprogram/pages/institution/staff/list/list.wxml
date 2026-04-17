@@ -1,0 +1,52 @@
+<staff-navbar title="医护人员" show-back="{{false}}" />
+
+<view class="page-body">
+
+  <view class="search-bar">
+    <view class="search-wrap">
+      <image class="search-icon" src="/images/tab_home.png" mode="aspectFit" />
+      <input
+        class="search-input"
+        placeholder="搜索姓名/手机号"
+        placeholder-style="color:#bbb;font-size:26rpx"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+      />
+      <view class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">
+        <text class="clear-icon">×</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-count" wx:if="{{!loading}}">
+    <text class="count-text">共 {{filteredList.length}} 名医护人员</text>
+  </view>
+
+  <view class="nurse-list" wx:if="{{filteredList.length > 0}}">
+    <view
+      class="nurse-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+    >
+      <view class="nurse-avatar">
+        <text class="nurse-avatar-text">{{item.name.slice(-2)}}</text>
+      </view>
+      <view class="nurse-info">
+        <text class="nurse-name">{{item.name}}</text>
+        <text class="nurse-role">{{item.role || '医护人员'}}</text>
+        <text class="nurse-phone" wx:if="{{item.phone}}">{{item.phone}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">暂无医护人员</text>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+</view>
+
+<institution-tabbar active="staff" />

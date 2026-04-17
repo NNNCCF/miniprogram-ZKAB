@@ -1,0 +1,107 @@
+<staff-navbar title="预约详情" show-back="{{true}}" />
+
+<view class="page-body" wx:if="{{!loading && appt}}">
+
+  <!-- Status Banner -->
+  <view class="status-banner status-{{appt.status}}">
+    <text class="status-banner-text">{{appt.statusLabel}}</text>
+  </view>
+
+  <!-- Appointment Info -->
+  <view class="section-title">预约信息</view>
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">预约类型</text>
+      <text class="info-value">{{appt.type}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">预约时间</text>
+      <text class="info-value">{{appt.appointmentTime}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">备注需求</text>
+      <text class="info-value info-notes">{{appt.requirement || '无'}}</text>
+    </view>
+  </view>
+
+  <!-- Member Info -->
+  <view class="section-title">成员信息</view>
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">成员姓名</text>
+      <text class="info-value">{{appt.memberName || '—'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">家属姓名</text>
+      <text class="info-value">{{appt.guardianName || '—'}}</text>
+    </view>
+  </view>
+
+  <!-- Nurse Info -->
+  <view class="section-title">负责医护</view>
+  <view class="info-card">
+    <view class="info-row" wx:if="{{appt.nurseName}}">
+      <text class="info-label">医护姓名</text>
+      <text class="info-value">{{appt.nurseName}}</text>
+    </view>
+    <view class="info-row" wx:else>
+      <text class="info-label">派单状态</text>
+      <text class="info-value info-pending">尚未派单</text>
+    </view>
+  </view>
+
+</view>
+
+<view class="center-wrap" wx:if="{{loading}}">
+  <text class="hint-text">加载中...</text>
+</view>
+
+<!-- Bottom Action -->
+<view class="bottom-bar" wx:if="{{!loading && appt}}">
+  <button class="btn-primary" wx:if="{{appt.status === 'pending'}}" bindtap="openDispatchModal">
+    选择医护并派单
+  </button>
+  <button class="btn-secondary btn-full" wx:else bindtap="goBack">返回列表</button>
+</view>
+
+<!-- Dispatch Modal -->
+<view class="modal-mask" wx:if="{{showDispatchModal}}" bindtap="closeDispatchModal">
+  <view class="modal-panel" catchtap="noop">
+    <view class="modal-title">选择医护人员</view>
+
+    <scroll-view class="nurse-list" scroll-y>
+      <view
+        wx:for="{{nurses}}"
+        wx:key="id"
+        class="nurse-item {{selectedNurseId == item.id ? 'nurse-item-selected' : ''}}"
+        bindtap="selectNurse"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+      >
+        <view class="nurse-avatar">
+          <text class="nurse-avatar-text">{{item.name.slice(-2)}}</text>
+        </view>
+        <view class="nurse-info">
+          <text class="nurse-name">{{item.name}}</text>
+          <text class="nurse-phone" wx:if="{{item.phone}}">{{item.phone}}</text>
+        </view>
+        <view class="nurse-check" wx:if="{{selectedNurseId == item.id}}">
+          <text class="check-icon">✓</text>
+        </view>
+      </view>
+      <view class="nurse-empty" wx:if="{{nurses.length === 0}}">
+        <text class="nurse-empty-text">暂无可用医护人员</text>
+      </view>
+    </scroll-view>
+
+    <view class="modal-actions">
+      <button class="btn-cancel" bindtap="closeDispatchModal">取消</button>
+      <button class="btn-confirm" bindtap="confirmDispatch" disabled="{{dispatching}}">
+        确认派单
+      </button>
+    </view>
+  </view>
+</view>

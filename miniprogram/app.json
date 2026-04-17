@@ -39,7 +39,13 @@
     "pages/guardian/profile/alarmSettings/alarmSettings",
     "pages/guardian/profile/feedback/feedback",
     "pages/guardian/profile/serviceCenter/serviceCenter",
-    "pages/guardian/profile/settings/settings"
+    "pages/guardian/profile/settings/settings",
+    "pages/institution/index/index",
+    "pages/institution/appointment/list/list",
+    "pages/institution/appointment/detail/detail",
+    "pages/institution/staff/list/list",
+    "pages/institution/family/list/list",
+    "pages/institution/profile/index/index"
   ],
   "window": {
     "navigationStyle": "custom",

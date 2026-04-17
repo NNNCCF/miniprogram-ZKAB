@@ -14,9 +14,8 @@ page {
 /* ===== 导航栏 ===== */
 .nav-bar {
   position: relative;
-  overflow: hidden;
-  height: 136rpx;
   flex-shrink: 0;
+  height: 50px;
 }
 .header-bg {
   position: absolute;
@@ -24,17 +23,14 @@ page {
   width: 100%; height: 100%;
 }
 .nav-inner {
-  height: 100%;
+  height: 88rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24rpx;
   position: relative;
   z-index: 1;
-}
-/* 以下为原有样式兼容占位 */
-.nav-bar-old {
-  flex-shrink: 0;
+  margin-top: -15px;
 }
 
 .nav-back {
@@ -44,19 +40,51 @@ page {
   align-items: center;
   justify-content: center;
 }
-
 .back-arrow {
   font-size: 52rpx;
   color: #fff;
   line-height: 1;
 }
-
 .nav-title {
   flex: 1;
   text-align: center;
   font-size: 34rpx;
   font-weight: 700;
   color: #fff;
+}
+
+/* 右侧胶囊按钮 */
+.nav-right-capsule {
+  display: flex;
+  align-items: center;
+  height: 56rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.5);
+  border-radius: 28rpx;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+.nav-capsule-btn {
+  width: 64rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-capsule-dot {
+  font-size: 26rpx;
+  color: #fff;
+  letter-spacing: -2rpx;
+  line-height: 1;
+}
+.nav-capsule-scan {
+  font-size: 30rpx;
+  color: #fff;
+  line-height: 1;
+}
+.nav-capsule-divider {
+  width: 1rpx;
+  height: 32rpx;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* ===== 白色内容区 ===== */
@@ -77,32 +105,21 @@ page {
 
 /* ===== 链接图标 ===== */
 .icon-wrap {
+  margin-top: 40rpx;
   margin-bottom: 60rpx;
-}
-
-.icon-outer {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  background: rgba(91, 127, 255, 0.12);
   display: flex;
-  align-items: center;
   justify-content: center;
 }
-
-.icon-inner {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5B7FFF 0%, #3B6EF0 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.link-icon-img {
+  width: 220rpx;
+  height: 220rpx;
+  animation: breathe 2.4s ease-in-out infinite;
 }
 
-.chain-icon {
-  font-size: 56rpx;
-  filter: grayscale(1) brightness(10);
+@keyframes breathe {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1);    }
 }
 
 /* ===== 表单 ===== */
@@ -115,22 +132,18 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 32rpx 0;
-  min-height: 96rpx;
+  height: 64px;
 }
-
 .field-label {
   font-size: 28rpx;
   color: #111827;
   flex-shrink: 0;
   min-width: 140rpx;
 }
-
 .required {
   color: #E63A35;
   font-size: 28rpx;
 }
-
 .field-input {
   flex: 1;
   text-align: right;
@@ -138,26 +151,39 @@ page {
   color: #111827;
   height: 60rpx;
 }
-
 .field-ph {
   color: #B0B8CC;
   font-size: 28rpx;
 }
-
-.location-val {
+/* 住所位置：中间文字 + 右侧按钮 */
+.location-text {
+  flex: 1;
+  font-size: 26rpx;
+  text-align: right;
+  margin-right: 16rpx;
+  color: #E63A35;
+  overflow: hidden;
+}
+.location-mid {
   flex: 1;
   text-align: right;
+  margin-right: 16rpx;
 }
-
 .field-val-text {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #E63A35;
 }
-
-.pin {
-  font-size: 24rpx;
+.pin { font-size: 24rpx; }
+.relocate-btn {
+  flex-shrink: 0;
+  padding: 6rpx 20rpx;
+  border: 1rpx solid #3B7EFF;
+  border-radius: 24rpx;
 }
-
+.relocate-text {
+  font-size: 22rpx;
+  color: #3B7EFF;
+}
 .field-divider {
   height: 1rpx;
   background: #F0F2F8;
@@ -174,12 +200,10 @@ page {
   justify-content: center;
   box-shadow: 0 8rpx 24rpx rgba(59, 110, 240, 0.35);
 }
-
 .btn-disabled {
   background: #B0C4FF;
   box-shadow: none;
 }
-
 .confirm-text {
   font-size: 32rpx;
   font-weight: 600;

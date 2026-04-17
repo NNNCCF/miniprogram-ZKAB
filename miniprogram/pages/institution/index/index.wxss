@@ -1,0 +1,217 @@
+page {
+  background: #3B7EFF;
+  min-height: 100vh;
+}
+
+.page-body {
+  background: #F2F5FC;
+  border-radius: 32rpx 32rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 180rpx);
+  padding: 0 0 calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  transform: translateY(32rpx);
+}
+
+/* ===== Profile Header ===== */
+.profile-header {
+  background: #fff;
+  border-radius: 0 0 28rpx 28rpx;
+  padding: 32rpx 40rpx 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 6rpx 28rpx rgba(43, 107, 224, 0.10);
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1B3A70 0%, #3B7EFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 28rpx rgba(59, 126, 255, 0.42);
+}
+
+.avatar-text {
+  font-size: 36rpx;
+  color: #fff;
+  font-weight: 700;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.admin-name {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #0F1C38;
+}
+
+.org-name {
+  font-size: 24rpx;
+  color: #8A94A8;
+}
+
+/* ===== Stats Grid ===== */
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  padding: 0 28rpx 24rpx;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: calc(50% - 10rpx);
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+  box-sizing: border-box;
+  box-shadow: 0 2rpx 16rpx rgba(43, 107, 224, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #3B7EFF;
+  line-height: 1.15;
+}
+
+.stat-pending .stat-num {
+  color: #FF8C00;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #9CA3B4;
+  margin-top: 8rpx;
+}
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #0F1C38;
+  padding: 0 28rpx 16rpx;
+}
+
+/* ===== Quick Actions ===== */
+.quick-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 0 28rpx;
+}
+
+.action-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 2rpx 16rpx rgba(43, 107, 224, 0.06);
+}
+
+.action-item:active {
+  opacity: 0.8;
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon-blue   { background: #EBF1FF; }
+.action-icon-green  { background: #EDFAF3; }
+.action-icon-orange { background: #FFF5E8; }
+
+.action-icon-char {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.action-label {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* ===== News List ===== */
+.news-list {
+  padding: 0 28rpx;
+}
+
+.news-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(43, 107, 224, 0.04);
+}
+
+.news-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #3B7EFF;
+  flex-shrink: 0;
+}
+
+.news-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  overflow: hidden;
+}
+
+.news-title {
+  font-size: 26rpx;
+  color: #1a1a1a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-meta {
+  font-size: 20rpx;
+  color: #bbb;
+}
+
+.news-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.news-empty {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.news-empty-text {
+  font-size: 24rpx;
+  color: #ccc;
+}

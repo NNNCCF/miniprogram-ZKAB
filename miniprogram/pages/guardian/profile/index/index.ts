@@ -1,10 +1,12 @@
+import { get } from '../../../../utils/request'
+
 const app = getApp<any>()
 
 Page({
   data: {
     statusH: 0,
     userInfo: {} as any,
-    stats: { memberCount: 1, alarmCount: 0, serviceCount: 3 }
+    stats: { memberCount: 0, alarmCount: 0, serviceCount: 0 }
   },
 
   onLoad() {
@@ -12,8 +14,21 @@ Page({
   },
 
   onShow() {
-    const userInfo = wx.getStorageSync('userInfo') || {}
-    this.setData({ userInfo })
+    // Show cached data immediately
+    const cached = wx.getStorageSync('userInfo') || {}
+    if (cached.name) {
+      this.setData({ userInfo: cached })
+    }
+    // Fetch fresh data from server
+    get<any>('/mini/guardian/profile')
+      .then((res: any) => {
+        const info = { name: res.name || '', phone: res.phone || '' }
+        this.setData({ userInfo: info })
+        wx.setStorageSync('userInfo', info)
+      })
+      .catch(() => {
+        // Keep cached values
+      })
   },
 
   goEdit() {

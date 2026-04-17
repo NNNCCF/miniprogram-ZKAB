@@ -1,4 +1,4 @@
-import { post } from '../../../../../utils/request'
+import { createMember } from '../../../../utils/api'
 
 const app = getApp<any>()
 
@@ -50,12 +50,21 @@ Page({
       wx.showToast({ title: '请填写必填项', icon: 'none' })
       return
     }
+
+    // 根据年龄估算出生年份
+    const birthYear = new Date().getFullYear() - parseInt(form.age)
+    const birthday = `${birthYear}-01-01`
+
     this.setData({ loading: true })
     wx.showLoading({ title: '提交中...' })
     try {
-      await post('/guardian/member/create', {
-        ...form,
-        age: parseInt(form.age)
+      await createMember({
+        name: form.name.trim(),
+        gender: form.gender.toUpperCase(),
+        birthday,
+        mobile: form.phone.trim() || undefined,
+        chronicDisease: form.medicalHistory.trim() || undefined,
+        remark: form.relationship
       })
       wx.hideLoading()
       wx.showToast({ title: '添加成功', icon: 'success' })

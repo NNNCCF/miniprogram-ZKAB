@@ -1,4 +1,5 @@
-import { getFamilyMapList, getAlarms, getAppointments, getMemberList, getNurseList } from '../../../utils/api'
+import { getFamilyMapList, getAlarms, getAppointments, getMemberList, getNurseList, getDeviceList, getNewsList } from '../../../utils/api'
+import { get } from '../../../utils/request'
 
 interface FamilyMapItem {
   id: string | number
@@ -52,6 +53,7 @@ const CARE_LEVEL_MAP: Record<string, string> = {
 Page({
   data: {
     panelOpen: true,
+    news: [] as any[],
     mapLat: 37.8706,
     mapLng: 112.5498,
     mapScale: 13,
@@ -81,12 +83,36 @@ Page({
 
   onShow() {
     this.loadStats()
+    this.loadNews()
   },
+
+  async loadNews() {
+    try {
+      const list = await getNewsList() as any[]
+      this.setData({ news: (list || []).slice(0, 3) })
+    } catch {}
+  },
+
+  goToNews(e: any) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/guardian/service/newsDetail/newsDetail?id=${id}` })
+  },
+
+  allDevices: [] as any[],
+  serviceCenter: null as any,
 
   async loadMapData() {
     try {
-      const list: any = await getFamilyMapList()
-      const families: FamilyMapItem[] = list || []
+      const [familyList, deviceList, centerInfo] = await Promise.allSettled([
+        getFamilyMapList(),
+        getDeviceList(),
+        get('/service/center')
+      ])
+      const families: FamilyMapItem[] = familyList.status === 'fulfilled' ? (familyList.value as any[] || []) : []
+      const devices: any[] = deviceList.status === 'fulfilled' ? (deviceList.value as any[] || []) : []
+      const center: any = centerInfo.status === 'fulfilled' ? centerInfo.value : null
+      this.allDevices = devices
+      this.serviceCenter = center
       this.setData({ allFamilies: families })
       this.buildMarkers(families)
     } catch {
@@ -96,31 +122,94 @@ Page({
 
   buildMarkers(families: FamilyMapItem[]) {
     const { filters } = this.data
-    const showFamily = filters.find(f => f.key === 'family')?.active
-    const showAlarm  = filters.find(f => f.key === 'alarm')?.active
+    const showCenter  = filters.find(f => f.key === 'center')?.active
+    const showHospital = filters.find(f => f.key === 'hospital')?.active
+    const showFamily  = filters.find(f => f.key === 'family')?.active
+    const showAlarm   = filters.find(f => f.key === 'alarm')?.active
 
     const markers: MapMarker[] = []
-    families.forEach((item, idx) => {
-      const coords = parseLocation(item.location)
-      if (!coords) return
+    let markerId = 0
+
+    // ── 服务中心标记 ──
+    if (showCenter) {
+      markers.push({
+        id: markerId++,
+        latitude: 37.8706,
+        longitude: 112.5498,
+        title: '卓凯安伴服务中心',
+        iconPath: '/images/marker_center.png',
+        width: 44,
+        height: 44,
+        callout: {
+          content: `卓凯安伴服务中心\n${this.serviceCenter?.address || '山西太原'}\n${this.serviceCenter?.phone || ''}`,
+          color: '#1a1a1a',
+          fontSize: 13,
+          borderRadius: 10,
+          bgColor: '#ffffff',
+          padding: 12,
+          display: 'BYCLICK',
+          borderWidth: 1,
+          borderColor: '#3B7EFF'
+        }
+      })
+    }
+
+    // ── 设备标记（作为医疗机构/设备图标）──
+    if (showHospital && this.allDevices) {
+      this.allDevices.forEach((device: any) => {
+        const lat = device.latitude
+        const lng = device.longitude
+        if (!lat || !lng) return
+        const wardNames = (device.members || device.wards || []).map((w: any) => w.name).join('、') || '未绑定'
+        markers.push({
+          id: markerId++,
+          latitude: lat,
+          longitude: lng,
+          title: device.deviceCode || device.id || '设备',
+          iconPath: '/images/marker_hospital.png',
+          width: 36,
+          height: 36,
+          callout: {
+            content: `设备：${device.deviceCode || device.id || '-'}\n地址：${device.address || '-'}\n成员：${wardNames}\n状态：${device.status === 'ONLINE' ? '在线' : '离线'}`,
+            color: '#1a1a1a',
+            fontSize: 13,
+            borderRadius: 10,
+            bgColor: '#ffffff',
+            padding: 12,
+            display: 'BYCLICK',
+            borderWidth: 1,
+            borderColor: '#E0E6F5'
+          }
+        })
+      })
+    }
+
+    // ── 家庭/报警标记 ──
+    families.forEach((item: any) => {
+      // 后端 FamilyVo 返回独立的 latitude/longitude 字段
+      const lat = item.latitude ?? (item.location ? parseLocation(item.location)?.lat : null)
+      const lng = item.longitude ?? (item.location ? parseLocation(item.location)?.lng : null)
+      if (!lat || !lng) return
 
       const isAlarm = item.hasAlarm === true
       if (isAlarm && !showAlarm) return
       if (!isAlarm && !showFamily) return
 
-      const careLabel = CARE_LEVEL_MAP[item.careLevel || ''] || '一般监护'
+      const careLabel = CARE_LEVEL_MAP[item.careLevel || item.level || ''] || '一般监护'
       const statusLabel = item.status === 'alarm' ? '报警' : '正常'
+      const familyName = item.shortName || item.familyName || item.address || '未命名'
+      const memberCount = item.memberCount ?? (item.members?.length ?? '--')
 
       markers.push({
-        id: idx,
-        latitude: coords.lat,
-        longitude: coords.lng,
-        title: item.familyName,
+        id: markerId++,
+        latitude: lat,
+        longitude: lng,
+        title: familyName,
         iconPath: isAlarm ? '/images/marker_alarm.png' : '/images/marker_family.png',
         width: 40,
         height: 40,
         callout: {
-          content: `${item.familyName}\n监护成员数：${item.memberCount || '--'}\n监护等级：${careLabel}\n当前状态：${statusLabel}`,
+          content: `${familyName}\n监护成员数：${memberCount}\n监护等级：${careLabel}\n当前状态：${statusLabel}`,
           color: '#1a1a1a',
           fontSize: 13,
           borderRadius: 10,

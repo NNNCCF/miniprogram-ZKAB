@@ -33,10 +33,16 @@ Page({
     this.setData({ loading: true })
     getFamilyList()
       .then((list: any) => {
-        const mapped = (list || []).map((item: any) => ({
-          ...item,
-          familyInitial: getFamilyInitial(item.familyName)
-        }))
+        const mapped = (list || []).map((item: any) => {
+          const name = item.shortName || item.familyName || item.name || item.address || '未命名'
+          return {
+            ...item,
+            familyName: name,
+            memberCount: item.memberCount ?? (item.members?.length ?? 0),
+            lastUpdateTime: item.lastUpdateTime || item.createdAt?.slice(0, 10) || '--',
+            familyInitial: getFamilyInitial(name)
+          }
+        })
         this.setData({ allList: mapped, loading: false })
         this.applyFilter()
       })

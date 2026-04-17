@@ -1,95 +1,187 @@
 <view class="page">
-  <view class="nav-bar" style="padding-top:{{statusH}}px;">
-    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
-    <view class="nav-inner">
-      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
-      <text class="nav-title">预约医生</text>
-      <view style="width:60rpx;"></view>
+
+  <!-- ===== PROFILE 模式：家庭医生展示（PSD风格）===== -->
+  <block wx:if="{{mode === 'profile'}}">
+    <view class="hero" style="padding-top:{{statusH}}px;">
+      <view class="nav-row">
+        <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+        <text class="nav-title">家庭医生</text>
+        <view style="width:60rpx;"></view>
+      </view>
+      <view class="avatar-wrap">
+        <view class="avatar-circle"><text class="avatar-emoji">👨‍⚕️</text></view>
+        <view class="rating-badge"><text class="rating-star">★</text><text class="rating-num">9.9</text></view>
+      </view>
+      <text class="doctor-name">{{doctor.name || '暂无绑定'}}</text>
+      <view class="org-pill">
+        <text class="org-pill-text">{{doctor.institution || doctor.title || '护理人员'}}</text>
+      </view>
     </view>
-  </view>
-
-  <scroll-view class="body-area" scroll-y>
-    <view class="content-wrap">
-      <!-- Doctor Info -->
-      <view class="doctor-card">
-        <view class="doctor-avatar">
-          <text class="doctor-avatar-text">医</text>
+    <scroll-view scroll-y class="profile-body">
+      <view class="contact-row">
+        <view class="contact-btn contact-btn-green" bindtap="callDoctor">
+          <text class="contact-icon">📞</text>
+          <text class="contact-label">联系大夫</text>
         </view>
-        <view class="doctor-info">
-          <text class="doctor-name">{{doctor.name || '王医生'}}</text>
-          <text class="doctor-title">{{doctor.title || '主任医师 · 内科'}}</text>
-          <text class="doctor-hospital">{{doctor.hospital || '北京协和医院'}}</text>
+        <view class="contact-btn contact-btn-blue" bindtap="callOrg">
+          <text class="contact-icon">🎧</text>
+          <text class="contact-label">联系所在医疗机构</text>
         </view>
       </view>
-
-      <view class="doctor-meta">
-        <view class="meta-item">
-          <text class="meta-num">{{doctor.experience || '20'}}年</text>
-          <text class="meta-label">从医经验</text>
-        </view>
-        <view class="meta-sep"></view>
-        <view class="meta-item">
-          <text class="meta-num">{{doctor.patients || '5000'}}+</text>
-          <text class="meta-label">服务患者</text>
-        </view>
-        <view class="meta-sep"></view>
-        <view class="meta-item">
-          <text class="meta-num">{{doctor.rating || '4.9'}}</text>
-          <text class="meta-label">评分</text>
+      <view class="profile-section">
+        <text class="profile-section-title">专业擅长</text>
+        <text class="profile-section-content">{{doctor.specialty || '提供专业家庭护理服务，包括日常健康监测、上门探诊、护理指导等。'}}</text>
+      </view>
+      <view class="tags-wrap">
+        <view class="tag-item" wx:for="{{doctor.tags || ['健康监护','上门探诊','护理服务','健康咨询']}}" wx:key="*this">
+          <text class="tag-text">{{item}}</text>
         </view>
       </view>
+    </scroll-view>
+  </block>
 
-      <!-- Specialty -->
-      <view class="section-card">
-        <text class="section-title">擅长领域</text>
-        <text class="section-content">{{doctor.specialty || '高血压、冠心病、心力衰竭、心脏康复，擅长老年慢性病综合管理'}}</text>
+  <!-- ===== BOOK 模式：上门探诊预约 ===== -->
+  <block wx:elif="{{mode === 'book'}}">
+    <view class="nav-bar" style="padding-top:{{statusH}}px;">
+      <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+      <view class="nav-inner">
+        <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+        <text class="nav-title">{{apptType}}</text>
+        <view style="width:60rpx;"></view>
       </view>
-
-      <!-- Time Slots -->
-      <view class="section-card">
-        <text class="section-title">选择预约时间</text>
+    </view>
+    <scroll-view class="book-body" scroll-y>
+      <view class="doctor-mini-card">
+        <view class="mini-avatar"><text class="mini-avatar-text">医</text></view>
+        <view class="mini-info">
+          <text class="mini-name">{{doctor.name || '—'}}</text>
+          <text class="mini-title">{{doctor.institution || doctor.title || ''}}</text>
+        </view>
+      </view>
+      <view class="book-section">
+        <text class="book-section-title">选择时间</text>
         <view class="slots-grid">
           <view
             class="slot-item {{selectedSlot === item.id ? 'slot-active' : ''}} {{item.available ? '' : 'slot-disabled'}}"
-            wx:for="{{timeSlots}}"
-            wx:key="id"
-            bindtap="selectSlot"
-            data-id="{{item.id}}"
-            data-available="{{item.available}}"
+            wx:for="{{timeSlots}}" wx:key="id"
+            bindtap="selectSlot" data-id="{{item.id}}" data-available="{{item.available}}"
           >
             <text class="slot-date">{{item.date}}</text>
             <text class="slot-time">{{item.time}}</text>
           </view>
         </view>
       </view>
-
-      <!-- Patient Info Form -->
-      <view class="section-card">
-        <text class="section-title">患者信息</text>
-        <view class="form-row">
-          <text class="form-label">患者姓名</text>
-          <input class="form-input" placeholder="请输入患者姓名" value="{{form.patientName}}" bindinput="onInput" data-field="patientName"/>
-        </view>
-        <view class="form-row">
-          <text class="form-label">联系电话</text>
-          <input class="form-input" type="number" placeholder="请输入联系电话" value="{{form.phone}}" bindinput="onInput" data-field="phone"/>
-        </view>
-        <view class="form-row">
-          <text class="form-label">主诉症状</text>
-          <textarea class="form-textarea" placeholder="请简述症状（选填）" value="{{form.symptoms}}" bindinput="onInput" data-field="symptoms"/>
+      <view class="book-section">
+        <text class="book-section-title">患者信息</text>
+        <view class="book-card">
+          <view class="book-row">
+            <text class="book-label">患者姓名</text>
+            <input class="book-input" placeholder="请填写" value="{{form.patientName}}" bindinput="onInput" data-field="form.patientName" />
+          </view>
+          <view class="book-divider"></view>
+          <view class="book-row">
+            <text class="book-label">联系电话</text>
+            <input class="book-input" type="number" placeholder="请填写" value="{{form.phone}}" bindinput="onInput" data-field="form.phone" />
+          </view>
+          <view class="book-divider"></view>
+          <view class="book-row book-row-top">
+            <text class="book-label">主诉症状</text>
+            <textarea class="book-textarea" placeholder="请简述症状（选填）" value="{{form.symptoms}}" bindinput="onInput" data-field="form.symptoms" auto-height />
+          </view>
         </view>
       </view>
-
-      <!-- Price Info -->
-      <view class="price-bar">
-        <view>
-          <text class="price-label">预约费用</text>
-          <text class="price-val">¥{{doctor.price || '99'}}</text>
-        </view>
-        <view class="book-btn" bindtap="onBook">
-          <text>{{loading ? '提交中...' : '立即预约'}}</text>
-        </view>
+      <view style="height:160rpx;"></view>
+    </scroll-view>
+    <view class="book-bottom">
+      <view class="btn-book {{loading ? 'btn-loading' : ''}}" bindtap="onBook">
+        <text>{{loading ? '提交中...' : '立即预约'}}</text>
       </view>
     </view>
-  </scroll-view>
+  </block>
+
+  <!-- ===== CHECKUP / NURSING 模式：服务项目选择 ===== -->
+  <block wx:elif="{{mode === 'checkup' || mode === 'nursing'}}">
+    <view class="nav-bar" style="padding-top:{{statusH}}px;">
+      <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+      <view class="nav-inner">
+        <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+        <text class="nav-title">{{apptType}}</text>
+        <view style="width:60rpx;"></view>
+      </view>
+    </view>
+
+    <scroll-view class="book-body" scroll-y>
+
+      <!-- 服务项目 -->
+      <view class="book-section">
+        <text class="book-section-title">{{mode === 'checkup' ? '选择体检项目' : '选择护理项目'}}</text>
+        <view class="items-grid">
+          <view
+            class="item-chip {{selectedItems.indexOf(item.key) >= 0 ? 'item-chip-active' : ''}}"
+            wx:for="{{itemList}}" wx:key="key"
+            bindtap="toggleItem" data-key="{{item.key}}"
+          >
+            <text class="item-chip-text">{{item.label}}</text>
+          </view>
+        </view>
+        <text class="items-hint">已选 {{selectedItems.length}} 项，点击选择/取消</text>
+      </view>
+
+      <!-- 预约时间 -->
+      <view class="book-section">
+        <text class="book-section-title">预约时间</text>
+        <view class="book-card">
+          <picker mode="date" value="{{apptDate}}" start="{{minDate}}" bindchange="onDateChange">
+            <view class="book-row">
+              <text class="book-label">预约日期</text>
+              <view class="book-row-right">
+                <text class="book-val">{{apptDate}}</text>
+                <text class="book-arrow">›</text>
+              </view>
+            </view>
+          </picker>
+          <view class="book-divider"></view>
+          <picker mode="time" value="{{apptTime}}" start="08:00" end="20:00" bindchange="onTimeChange">
+            <view class="book-row">
+              <text class="book-label">预约时间</text>
+              <view class="book-row-right">
+                <text class="book-val time-val">{{apptTime}}</text>
+                <text class="book-arrow">›</text>
+              </view>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 患者信息 -->
+      <view class="book-section">
+        <text class="book-section-title">患者信息</text>
+        <view class="book-card">
+          <view class="book-row">
+            <text class="book-label">患者姓名</text>
+            <input class="book-input" placeholder="请填写" value="{{patientName}}" bindinput="onInput" data-field="patientName" />
+          </view>
+          <view class="book-divider"></view>
+          <view class="book-row">
+            <text class="book-label">联系电话</text>
+            <input class="book-input" type="number" placeholder="请填写" value="{{patientPhone}}" bindinput="onInput" data-field="patientPhone" />
+          </view>
+          <view class="book-divider"></view>
+          <view class="book-row book-row-top">
+            <text class="book-label">备注说明</text>
+            <textarea class="book-textarea" placeholder="其他需求（选填）" value="{{extraNote}}" bindinput="onInput" data-field="extraNote" auto-height />
+          </view>
+        </view>
+      </view>
+
+      <view style="height:160rpx;"></view>
+    </scroll-view>
+
+    <view class="book-bottom">
+      <view class="btn-book {{loading ? 'btn-loading' : ''}}" bindtap="submitService">
+        <text>{{loading ? '提交中...' : '提交预约'}}</text>
+      </view>
+    </view>
+  </block>
+
 </view>

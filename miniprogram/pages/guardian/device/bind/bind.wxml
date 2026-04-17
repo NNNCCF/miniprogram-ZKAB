@@ -11,15 +11,11 @@
   </view>
 
   <!-- 白色内容区 -->
-  <scroll-view class="body-area" scroll-y>
+  <scroll-view class="body-area" scroll-y show-scrollbar="{{false}}" enhanced="{{true}}">
 
     <!-- 链接图标 -->
     <view class="icon-wrap">
-      <view class="icon-outer">
-        <view class="icon-inner">
-          <text class="chain-icon">⛓</text>
-        </view>
-      </view>
+      <image class="link-icon-img" src="/images/icon_device_link.png" mode="aspectFit" />
     </view>
 
     <!-- 表单字段 -->
@@ -32,13 +28,18 @@
       </view>
       <view class="field-divider"></view>
 
-      <view class="field-row" bindtap="getLocation">
-        <text class="field-label">住所位置 <text class="required">*</text></text>
-        <view class="location-val">
-          <text wx:if="{{location}}" class="field-val-text">
-            <text class="pin">📍</text>{{locationText}}
-          </text>
-          <text wx:else class="field-ph">点击获取位置</text>
+      <view class="field-row">
+        <text class="field-label">住所位置</text>
+        <view wx:if="{{locating}}" class="location-mid">
+          <text class="field-ph">定位中...</text>
+        </view>
+        <text wx:elif="{{location}}" class="location-text field-val-text">
+          <text class="pin">📍</text>{{locationText}}
+        </text>
+        <text wx:elif="{{locationFailed}}" class="location-text" style="color:#bbb;font-size:24rpx;">定位失败（可选）</text>
+        <text wx:else class="location-text field-ph">点击定位（可选）</text>
+        <view class="relocate-btn" catchtap="getLocation">
+          <text class="relocate-text">{{locating ? '' : (location ? '重定位' : '定位')}}</text>
         </view>
       </view>
       <view class="field-divider"></view>

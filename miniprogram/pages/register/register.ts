@@ -1,4 +1,4 @@
-import { post } from '../../utils/request'
+import { guardianRegister, nurseRegister } from '../../utils/api'
 
 Page({
   data: {
@@ -49,20 +49,26 @@ Page({
     wx.showLoading({ title: '注册中...' })
 
     try {
-      const payload: Record<string, string> = {
-        phone: form.phone,
-        password: form.password,
-        name: form.name.trim(),
-        role: form.role
+      if (form.role === 'guardian') {
+        await guardianRegister({
+          name: form.name.trim(),
+          phone: form.phone,
+          password: form.password,
+          smsCode: ''
+        })
+      } else {
+        await nurseRegister({
+          name: form.name.trim(),
+          phone: form.phone,
+          password: form.password,
+          smsCode: '',
+          role: 'NURSE',
+          institutionName: form.orgCode.trim()
+        })
       }
-      if (form.role === 'staff') payload.orgCode = form.orgCode.trim()
-
-      await post('/auth/register', payload)
       wx.hideLoading()
       wx.showToast({ title: '注册成功', icon: 'success' })
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1500)
+      setTimeout(() => wx.navigateBack(), 1500)
     } catch (err: any) {
       wx.hideLoading()
       wx.showToast({ title: err.message || '注册失败', icon: 'none' })

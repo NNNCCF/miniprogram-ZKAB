@@ -3,7 +3,7 @@ interface AppOption {
   globalData: {
     token: string
     userInfo: any
-    role: 'staff' | 'guardian' | ''
+    role: 'staff' | 'guardian' | 'institution' | ''
     statusBarHeight: number
   }
 }

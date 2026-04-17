@@ -72,6 +72,16 @@
       </view>
     </view>
 
+    <!-- 健康动态（简要） -->
+    <view wx:if="{{news.length}}" class="news-section">
+      <view class="news-section-title">健康动态</view>
+      <view class="news-row" wx:for="{{news}}" wx:key="id" bindtap="goToNews" data-id="{{item.id}}">
+        <view class="news-dot-sm"></view>
+        <text class="news-text-sm">{{item.title}}</text>
+        <text class="news-arrow-sm">›</text>
+      </view>
+    </view>
+
     </view><!-- /panel-body -->
   </view>
 

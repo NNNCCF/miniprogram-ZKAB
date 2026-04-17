@@ -1,21 +1,56 @@
+import { getServiceDoctor, getNewsList } from '../../../../utils/api'
+
 const app = getApp<any>()
 
 Page({
   data: {
     statusH: 0,
-    news: [
-      { id: 1, title: '老年人高血压管理指南2024版', date: '2024-03-15', author: '健康中国' },
-      { id: 2, title: '如何预防老年人跌倒意外', date: '2024-03-10', author: '安全健康' },
-      { id: 3, title: '冬季老年人心脑血管疾病防护要点', date: '2024-03-05', author: '医学科普' }
-    ] as any[]
+    doctor: null as any,   // null 表示未绑定家庭医生
+    news: [] as any[],
+    loadingDoctor: true,
+    loadingNews: true
   },
 
   onLoad() {
     this.setData({ statusH: app.globalData.statusBarHeight || 0 })
   },
 
+  onShow() {
+    this.loadDoctor()
+    this.loadNews()
+  },
+
+  async loadDoctor() {
+    this.setData({ loadingDoctor: true })
+    try {
+      const doctor = await getServiceDoctor() as any
+      this.setData({ doctor: doctor || null })
+    } catch {
+      this.setData({ doctor: null })
+    } finally {
+      this.setData({ loadingDoctor: false })
+    }
+  },
+
+  async loadNews() {
+    this.setData({ loadingNews: true })
+    try {
+      const list = await getNewsList() as any[]
+      this.setData({ news: (list || []).slice(0, 5) })
+    } catch {
+      this.setData({ news: [] })
+    } finally {
+      this.setData({ loadingNews: false })
+    }
+  },
+
   goDoctor() {
-    wx.navigateTo({ url: '/pages/guardian/service/doctorDetail/doctorDetail' })
+    const { doctor } = this.data
+    if (!doctor) {
+      wx.showToast({ title: '暂未绑定家庭医生', icon: 'none' })
+      return
+    }
+    wx.navigateTo({ url: `/pages/guardian/service/doctorDetail/doctorDetail?id=${doctor.id}` })
   },
 
   goCommunity() {

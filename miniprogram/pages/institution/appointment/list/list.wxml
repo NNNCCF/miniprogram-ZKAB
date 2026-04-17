@@ -1,0 +1,112 @@
+<staff-navbar title="预约管理" show-back="{{false}}" />
+
+<view class="page-body">
+
+  <!-- Filter Bar -->
+  <view class="filter-bar">
+    <picker mode="date" fields="month" value="{{currentMonth}}" bindchange="onMonthChange">
+      <view class="month-picker">
+        <text class="month-text">{{currentMonth}}</text>
+        <text class="picker-arrow">▾</text>
+      </view>
+    </picker>
+
+    <view class="search-wrap">
+      <image class="search-icon" src="/images/tab_home.png" mode="aspectFit" />
+      <input
+        class="search-input"
+        placeholder="搜索姓名/备注"
+        placeholder-style="color:#bbb;font-size:24rpx"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+      />
+    </view>
+  </view>
+
+  <!-- Type Filter -->
+  <scroll-view class="type-scroll" scroll-x enhanced>
+    <view class="type-list">
+      <view
+        wx:for="{{typeFilters}}"
+        wx:key="value"
+        class="type-tag {{activeType === item.value ? 'type-tag-active' : ''}}"
+        bindtap="onTypeFilter"
+        data-value="{{item.value}}"
+      >
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Status Filter -->
+  <view class="status-filter-row">
+    <view
+      wx:for="{{statusFilters}}"
+      wx:key="value"
+      class="status-filter {{activeStatus === item.value ? 'status-filter-active' : ''}}"
+      bindtap="onStatusFilter"
+      data-value="{{item.value}}"
+    >
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- List -->
+  <view class="appt-list" wx:if="{{filteredList.length > 0}}">
+    <view
+      class="appt-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-header">
+        <view class="card-type-wrap">
+          <text class="card-type">{{item.type}}</text>
+        </view>
+        <view class="status-badge status-{{item.status}}">
+          <text class="status-text">{{item.statusLabel}}</text>
+        </view>
+      </view>
+
+      <view class="card-row">
+        <text class="card-label">预约时间</text>
+        <text class="card-value">{{item.appointmentTime}}</text>
+      </view>
+      <view class="card-row" wx:if="{{item.memberName}}">
+        <text class="card-label">成员姓名</text>
+        <text class="card-value">{{item.memberName}}</text>
+      </view>
+      <view class="card-row" wx:if="{{item.nurseName}}">
+        <text class="card-label">负责医护</text>
+        <text class="card-value">{{item.nurseName}}</text>
+      </view>
+      <view class="card-row" wx:if="{{item.requirement}}">
+        <text class="card-label">备注</text>
+        <text class="card-value card-notes">{{item.requirement}}</text>
+      </view>
+
+      <!-- Pending badge hint -->
+      <view class="dispatch-hint" wx:if="{{item.status === 'pending'}}">
+        <text class="dispatch-hint-text">点击进入派单</text>
+      </view>
+
+      <view class="card-arrow">
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty -->
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">暂无预约记录</text>
+  </view>
+
+  <!-- Loading -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+</view>
+
+<institution-tabbar active="appt" appt-count="{{0}}" />

@@ -1,0 +1,50 @@
+<staff-navbar title="绑定家庭" show-back="{{true}}" />
+
+<view class="page-body">
+
+  <view class="search-bar">
+    <view class="search-wrap">
+      <image class="search-icon" src="/images/tab_home.png" mode="aspectFit" />
+      <input
+        class="search-input"
+        placeholder="搜索家庭名称"
+        placeholder-style="color:#bbb;font-size:26rpx"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+      />
+      <view class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">
+        <text class="clear-icon">×</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-count" wx:if="{{!loading}}">
+    <text class="count-text">共 {{filteredList.length}} 个家庭</text>
+  </view>
+
+  <view class="family-list" wx:if="{{filteredList.length > 0}}">
+    <view
+      class="family-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+    >
+      <view class="family-avatar">
+        <text class="family-avatar-text">{{item.familyInitial}}</text>
+      </view>
+      <view class="family-info">
+        <text class="family-name">{{item.familyName}}</text>
+        <text class="family-meta">成员 {{item.memberCount || 0}} 人</text>
+        <text class="family-addr" wx:if="{{item.address}}">{{item.address}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">暂无绑定家庭</text>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中…</text>
+  </view>
+
+</view>

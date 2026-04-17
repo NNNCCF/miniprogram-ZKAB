@@ -226,3 +226,44 @@ page {
   color: #D1D5DB;
   flex-shrink: 0;
 }
+
+/* 医生标题 */
+.card-doctor-title {
+  display: block;
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2rpx;
+}
+
+/* 已绑定徽章（移入 info 内部） */
+.card-doctor-info .bound-badge {
+  position: static;
+  display: inline-block;
+  background: #3B7EFF;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 3rpx 14rpx;
+  border-radius: 20rpx;
+  margin-bottom: 8rpx;
+}
+
+/* 未绑定时文字颜色稍微淡一些 */
+.card-doctor-empty .card-doctor-name {
+  color: rgba(255, 255, 255, 0.6);
+}
+.card-doctor-empty .card-doctor-org {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* 新闻加载中/暂无 */
+.news-loading, .news-empty {
+  background: #fff;
+  margin: 0 24rpx;
+  border-radius: 20rpx;
+  padding: 48rpx;
+  text-align: center;
+}
+.news-loading-text, .news-empty-text {
+  font-size: 26rpx;
+  color: #9CA3AF;
+}

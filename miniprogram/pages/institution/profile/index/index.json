@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "staff-navbar": "/components/staff-navbar/staff-navbar",
+    "institution-tabbar": "/components/institution-tabbar/institution-tabbar"
+  }
+}

@@ -1,0 +1,77 @@
+<staff-navbar title="机构管理" show-back="{{false}}" />
+
+<view class="page-body">
+
+  <!-- Profile Header -->
+  <view class="profile-header">
+    <view class="avatar">
+      <text class="avatar-text">{{avatarText}}</text>
+    </view>
+    <view class="header-info">
+      <text class="admin-name">{{adminName}}</text>
+      <text class="org-name">{{orgName}}</text>
+    </view>
+  </view>
+
+  <!-- Stats Grid -->
+  <view class="stats-grid">
+    <view class="stat-card stat-pending" bindtap="goToApptList">
+      <text class="stat-num">{{stats.pendingAppts}}</text>
+      <text class="stat-label">待处理预约</text>
+    </view>
+    <view class="stat-card" bindtap="goToApptList">
+      <text class="stat-num">{{stats.totalAppts}}</text>
+      <text class="stat-label">预约总数</text>
+    </view>
+    <view class="stat-card" bindtap="goToStaffList">
+      <text class="stat-num">{{stats.nurses}}</text>
+      <text class="stat-label">医护人员</text>
+    </view>
+    <view class="stat-card" bindtap="goToFamilyList">
+      <text class="stat-num">{{stats.families}}</text>
+      <text class="stat-label">绑定家庭</text>
+    </view>
+  </view>
+
+  <!-- Quick Actions -->
+  <view class="section-title">快捷入口</view>
+  <view class="quick-actions">
+    <view class="action-item" bindtap="goToApptList">
+      <view class="action-icon action-icon-blue">
+        <text class="action-icon-char">📋</text>
+      </view>
+      <text class="action-label">预约管理</text>
+    </view>
+    <view class="action-item" bindtap="goToStaffList">
+      <view class="action-icon action-icon-green">
+        <text class="action-icon-char">👨‍⚕️</text>
+      </view>
+      <text class="action-label">医护人员</text>
+    </view>
+    <view class="action-item" bindtap="goToFamilyList">
+      <view class="action-icon action-icon-orange">
+        <text class="action-icon-char">🏠</text>
+      </view>
+      <text class="action-label">家庭档案</text>
+    </view>
+  </view>
+
+  <!-- 健康动态 -->
+  <view class="section-title" style="margin-top:24rpx;">健康动态</view>
+  <view class="news-list" wx:if="{{news.length}}">
+    <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="goToNews" data-id="{{item.id}}">
+      <view class="news-dot"></view>
+      <view class="news-body">
+        <text class="news-title">{{item.title}}</text>
+        <text class="news-meta">{{item.publisherName || ''}} · {{item.publishTime || item.createdAt || ''}}</text>
+      </view>
+      <text class="news-arrow">›</text>
+    </view>
+  </view>
+  <view wx:else class="news-empty">
+    <text class="news-empty-text">暂无健康动态</text>
+  </view>
+
+</view>
+
+<institution-tabbar active="home" appt-count="{{stats.pendingAppts}}" />
