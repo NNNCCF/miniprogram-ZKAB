@@ -37,6 +37,12 @@ function formatYearMonth(date: Date): string {
   return `${y}-${m}`
 }
 
+function lastDayOfMonth(yearMonth: string): string {
+  const [y, m] = yearMonth.split('-').map(Number)
+  const last = new Date(y, m, 0).getDate()
+  return `${yearMonth}-${String(last).padStart(2, '0')}`
+}
+
 Page({
   data: {
     loading: false,
@@ -61,7 +67,7 @@ Page({
   loadList() {
     this.setData({ loading: true })
     const { currentMonth } = this.data
-    getAppointments({ startDate: currentMonth + '-01', endDate: currentMonth + '-31' })
+    getAppointments({ startDate: currentMonth + '-01', endDate: lastDayOfMonth(currentMonth) })
       .then((list: any) => {
         const mapped = (list || []).map((item: any) => ({
           ...item,
