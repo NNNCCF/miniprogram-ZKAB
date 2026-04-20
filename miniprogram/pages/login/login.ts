@@ -43,13 +43,17 @@ Page({
   },
 
   onLoginInput(e: any) {
-    const field = e.currentTarget.dataset.field
-    this.setData({ [`loginForm.${field}`]: e.detail.value })
+    const field: string = e.currentTarget.dataset.field
+    const update: any = {}
+    update['loginForm.' + field] = e.detail.value
+    this.setData(update)
   },
 
   onRegInput(e: any) {
-    const field = e.currentTarget.dataset.field
-    this.setData({ [`regForm.${field}`]: e.detail.value })
+    const field: string = e.currentTarget.dataset.field
+    const update: any = {}
+    update['regForm.' + field] = e.detail.value
+    this.setData(update)
   },
 
   togglePwd() { this.setData({ showPwd: !this.data.showPwd }) },

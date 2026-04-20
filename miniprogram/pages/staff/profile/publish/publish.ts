@@ -19,7 +19,9 @@ Page({
 
   onInput(e: WechatMiniprogram.Input) {
     const field = e.currentTarget.dataset.field as string
-    this.setData({ [`form.${field}`]: e.detail.value })
+    const update: any = {}
+    update['form.' + field] = e.detail.value
+    this.setData(update)
   },
 
   onTypeChange(e: WechatMiniprogram.RadioGroupChange) {

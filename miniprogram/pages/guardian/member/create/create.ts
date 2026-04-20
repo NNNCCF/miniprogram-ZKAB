@@ -27,8 +27,10 @@ Page({
   },
 
   onInput(e: any) {
-    const field = e.currentTarget.dataset.field
-    this.setData({ [`form.${field}`]: e.detail.value })
+    const field: string = e.currentTarget.dataset.field
+    const update: any = {}
+    update['form.' + field] = e.detail.value
+    this.setData(update)
   },
 
   setGender(e: any) {

@@ -37,8 +37,10 @@ Page({
   },
 
   onInput(e: WechatMiniprogram.Input) {
-    const field = e.currentTarget.dataset.field as keyof ProfileForm
-    this.setData({ [`form.${field}`]: e.detail.value })
+    const field = e.currentTarget.dataset.field as string
+    const update: any = {}
+    update['form.' + field] = e.detail.value
+    this.setData(update)
   },
 
   async onSave() {

@@ -18,10 +18,12 @@ Page({
   },
 
   onNotifyChange(e: WechatMiniprogram.SwitchChange) {
-    const key = e.currentTarget.dataset.key as 'appointment' | 'alarm'
+    const key = e.currentTarget.dataset.key as string
     const value = e.detail.value
-    this.setData({ [`notify.${key}`]: value })
-    wx.setStorageSync(`notify_${key}`, value)
+    const update: any = {}
+    update['notify.' + key] = value
+    this.setData(update)
+    wx.setStorageSync('notify_' + key, value)
   },
 
   onClearCache() {
