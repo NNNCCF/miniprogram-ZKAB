@@ -12,10 +12,10 @@ interface Appointment {
 
 const TYPE_FILTERS = [
   { label: '全部', value: '' },
-  { label: '送药', value: '送药' },
-  { label: '上门探诊', value: '上门探诊' },
+  { label: '送药', value: '送药服务' },
+  { label: '上门探访', value: '上门探访' },
   { label: '预约体检', value: '预约体检' },
-  { label: '护理', value: '护理' }
+  { label: '护理', value: '护理服务' }
 ]
 
 const STATUS_FILTERS = [

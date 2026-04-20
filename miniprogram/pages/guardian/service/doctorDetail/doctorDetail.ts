@@ -183,14 +183,11 @@ Page({
     const currentMember = this.data.members[this.data.selectedMemberIndex]
     const lines = [] as string[]
     if (currentMember?.name) lines.push(`服务对象：${currentMember.name}`)
-    lines.push(`联系人：${this.data.patientName}`)
-    lines.push(`联系电话：${this.data.patientPhone}`)
-    if (this.data.doctor?.name) lines.push(`服务人员：${this.data.doctor.name}`)
     if (this.data.serviceMode === 'visit') {
       lines.push(`需求说明：${this.data.symptoms.trim() || '上门探访'}`)
     } else {
       const labels = this.data.selectedItems.map((key) => this.data.itemList.find((item) => item.key === key)?.label || key).join('、')
-      lines.push(`服务项目：${labels}`)
+      if (labels) lines.push(`服务项目：${labels}`)
     }
     if (this.data.extraNote.trim()) lines.push(`补充说明：${this.data.extraNote.trim()}`)
     return lines.join('\n')
@@ -218,6 +215,8 @@ Page({
         type: this.data.apptType,
         memberId: this.data.selectedMemberId || undefined,
         appointTime: `${this.data.apptDate} ${this.data.apptTime}`,
+        contactName: this.data.patientName.trim(),
+        contactPhone: this.data.patientPhone.trim(),
         requirement: this.buildRequirement()
       })
       wx.hideLoading()

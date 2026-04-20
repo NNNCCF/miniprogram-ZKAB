@@ -72,6 +72,8 @@ export const createAppointment = (data: {
   familyId?: number
   guardianId?: number
   appointTime?: string
+  contactName?: string
+  contactPhone?: string
   requirement?: string
 }) => post('/mini/appointments', data)
 
