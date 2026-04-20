@@ -154,6 +154,9 @@ export const getMiniDoctorDetail = (id: string | number) =>
 export const createMedicineOrder = (data: {
   medicines: { name: string; spec: string; qty: number }[]
   address: string
+  contactName?: string
+  contactPhone?: string
+  deliverAt?: string
   notes?: string
 }) => post('/mini/medicine/order', data)
 

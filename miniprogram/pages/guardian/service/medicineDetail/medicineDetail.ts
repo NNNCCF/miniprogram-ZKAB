@@ -78,19 +78,16 @@ Page({
     }
 
     const fullAddress = [this.data.selectedAddress, this.data.addressDetail.trim()].filter(Boolean).join(' ')
-    const addressDesc = [
-      `地址：${fullAddress}`,
-      `联系人：${this.data.contactName.trim()}`,
-      `电话：${this.data.contactPhone.trim()}`,
-      `送达时间：${this.data.deliveryDate} ${this.data.deliveryTime}`
-    ].join('；')
 
     this.setData({ submitting: true })
     wx.showLoading({ title: '提交中...' })
     try {
       await createMedicineOrder({
         medicines: medicineList.map((name) => ({ name, spec: '', qty: 1 })),
-        address: addressDesc,
+        address: fullAddress,
+        contactName: this.data.contactName.trim(),
+        contactPhone: this.data.contactPhone.trim(),
+        deliverAt: `${this.data.deliveryDate} ${this.data.deliveryTime}`,
         notes: this.data.notes.trim()
       })
       wx.hideLoading()

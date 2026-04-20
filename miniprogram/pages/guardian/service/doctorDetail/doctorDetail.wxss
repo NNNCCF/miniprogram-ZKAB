@@ -54,7 +54,7 @@ page { background: #3B7EFF; min-height: 100vh; }
 .time-val { font-size: 32rpx; font-weight: 600; color: #3B7EFF; }
 .book-arrow { font-size: 36rpx; color: #C0C8D8; }
 .book-divider { height: 1rpx; background: #F2F4F8; }
-.book-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20rpx 40rpx calc(24rpx + env(safe-area-inset-bottom)); border-top: 1rpx solid #F2F4F8; }
+.book-bottom { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; background: #fff; padding: 20rpx 40rpx calc(24rpx + env(safe-area-inset-bottom)); border-top: 1rpx solid #F2F4F8; }
 .btn-book { background: linear-gradient(135deg, #3B7EFF, #2060E0); border-radius: 52rpx; height: 96rpx; display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 24rpx rgba(59,126,255,0.35); }
 .btn-book text { font-size: 32rpx; font-weight: 700; color: #fff; letter-spacing: 2rpx; }
 .btn-loading { opacity: 0.7; }

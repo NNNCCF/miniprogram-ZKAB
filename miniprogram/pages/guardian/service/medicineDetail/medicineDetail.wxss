@@ -64,7 +64,7 @@ page { background: #3B7EFF; min-height: 100vh; }
 .add-icon { font-size: 64rpx; color: #C0C8D8; font-weight: 300; line-height: 1; }
 
 /* 底部 */
-.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20rpx 40rpx calc(24rpx + env(safe-area-inset-bottom)); }
+.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; background: #fff; padding: 20rpx 40rpx calc(24rpx + env(safe-area-inset-bottom)); }
 .btn-confirm { background: #4C6EF5; border-radius: 52rpx; height: 100rpx; display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 28rpx rgba(76,110,245,0.40); }
 .btn-confirm text { font-size: 32rpx; font-weight: 600; color: #fff; letter-spacing: 4rpx; }
 .btn-loading { opacity: 0.7; }
