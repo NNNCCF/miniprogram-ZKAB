@@ -1,47 +1,81 @@
 <staff-navbar title="服务中心" show-back="{{true}}" />
 
 <view class="page-body">
-
-  <!-- FAQ Section -->
-  <view class="section-title">常见问题</view>
-  <view class="card faq-card">
-    <block wx:for="{{faqs}}" wx:key="id">
-      <view class="faq-item" bindtap="toggleFaq" data-id="{{item.id}}">
-        <view class="faq-header">
-          <text class="faq-q">{{item.question}}</text>
-          <text class="faq-arrow {{item.expanded ? 'faq-arrow--open' : ''}}">›</text>
-        </view>
-        <view class="faq-body {{item.expanded ? 'faq-body--open' : ''}}">
-          <text class="faq-a">{{item.answer}}</text>
-        </view>
-      </view>
-      <view class="divider" wx:if="{{index < faqs.length - 1}}"></view>
-    </block>
+  <view class="hero-card">
+    <text class="hero-title">{{center.name}}</text>
+    <text class="hero-text">{{center.address || '暂无地址信息'}}</text>
+    <text class="hero-text">联系电话：{{center.phone || '暂无'}}</text>
   </view>
 
-  <!-- Contact Section -->
-  <view class="section-title">联系我们</view>
-  <view class="card">
-    <view class="contact-row" bindtap="onCallPhone">
-      <view class="contact-icon-wrap contact-icon-blue">
-        <text class="contact-icon-char">📞</text>
+  <view class="action-grid">
+    <view class="action-item" bindtap="showCenterInfo">
+      <view class="action-icon action-icon-blue">
+        <text class="action-icon-text">服</text>
       </view>
-      <view class="contact-info">
-        <text class="contact-label">客服电话</text>
-        <text class="contact-value contact-value--blue">400-888-9999</text>
-      </view>
-      <text class="contact-arrow">›</text>
+      <text class="action-label">中心信息</text>
     </view>
-    <view class="divider"></view>
-    <view class="contact-row">
-      <view class="contact-icon-wrap contact-icon-green">
-        <text class="contact-icon-char">✉</text>
+    <view class="action-item" bindtap="onCallPhone">
+      <view class="action-icon action-icon-green">
+        <text class="action-icon-text">电</text>
       </view>
-      <view class="contact-info">
-        <text class="contact-label">电子邮箱</text>
-        <text class="contact-value">support@zhuokai.com</text>
+      <text class="action-label">客服电话</text>
+    </view>
+    <view class="action-item" bindtap="expandFaqs">
+      <view class="action-icon action-icon-orange">
+        <text class="action-icon-text">答</text>
       </view>
+      <text class="action-label">常见问题</text>
+    </view>
+    <view class="action-item" bindtap="goFeedback">
+      <view class="action-icon action-icon-purple">
+        <text class="action-icon-text">评</text>
+      </view>
+      <text class="action-label">意见反馈</text>
     </view>
   </view>
 
+  <view class="section">
+    <text class="section-title">常见问题</text>
+    <view class="card">
+      <block wx:for="{{faqs}}" wx:key="id">
+        <view class="faq-item" bindtap="toggleFaq" data-id="{{item.id}}">
+          <view class="faq-header">
+            <text class="faq-question">{{item.question}}</text>
+            <text class="faq-arrow {{item.expanded ? 'faq-arrow-open' : ''}}">></text>
+          </view>
+          <view class="faq-answer-wrap {{item.expanded ? 'faq-answer-wrap-open' : ''}}">
+            <text class="faq-answer">{{item.answer}}</text>
+          </view>
+        </view>
+        <view class="divider" wx:if="{{index < faqs.length - 1}}"></view>
+      </block>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最新公告</text>
+      <text class="section-tip">实时同步服务中心资讯</text>
+    </view>
+    <view class="card">
+      <view wx:if="{{loading}}" class="notice-empty">
+        <text class="notice-empty-text">加载中...</text>
+      </view>
+      <view wx:if="{{!loading && notices.length === 0}}" class="notice-empty">
+        <text class="notice-empty-text">暂无公告</text>
+      </view>
+      <block wx:if="{{!loading && notices.length > 0}}">
+        <block wx:for="{{notices}}" wx:key="id">
+          <view class="notice-item" bindtap="goNotice" data-id="{{item.id}}">
+            <view class="notice-content">
+              <text class="notice-title">{{item.title}}</text>
+              <text class="notice-date">{{item.date || '暂无时间'}}</text>
+            </view>
+            <text class="notice-arrow">></text>
+          </view>
+          <view class="divider" wx:if="{{index < notices.length - 1}}"></view>
+        </block>
+      </block>
+    </view>
+  </view>
 </view>

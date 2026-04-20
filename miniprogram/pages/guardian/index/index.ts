@@ -11,6 +11,12 @@ interface HistoryStat {
   values: number[]
 }
 
+const HOME_CHART_POINT_LIMIT = 24
+
+function formatLocalDate(input: Date) {
+  return `${input.getFullYear()}-${String(input.getMonth() + 1).padStart(2, '0')}-${String(input.getDate()).padStart(2, '0')}`
+}
+
 Page({
   data: {
     statusH: 0,
@@ -47,11 +53,15 @@ Page({
       wx.setStorageSync('currentMemberId', member.id)
       this.setData({ hasMember: true, member })
 
-      const today = new Date().toISOString().slice(0, 10)
+      const end = new Date()
+      const start = new Date(end)
+      start.setDate(end.getDate() - 1)
+      const startDate = formatLocalDate(start)
+      const endDate = formatLocalDate(end)
       const [vitalsRes, breathRes, heartRes, alarmRes] = await Promise.allSettled([
         getMonitorRealtime(member.id),
-        getMonitorHistory({ memberId: member.id, type: 'breathRate', startDate: today, endDate: today }),
-        getMonitorHistory({ memberId: member.id, type: 'heartRate', startDate: today, endDate: today }),
+        getMonitorHistory({ memberId: member.id, type: 'breathRate', startDate, endDate }),
+        getMonitorHistory({ memberId: member.id, type: 'heartRate', startDate, endDate }),
         getAlarms({ memberId: String(member.id), status: 'unhandled' })
       ])
 
@@ -84,8 +94,16 @@ Page({
   },
 
   buildHistoryStat(data: any, rawStatus?: string): HistoryStat {
-    const values: number[] = (data.values || []).map(Number).filter((value: number) => !Number.isNaN(value))
-    const hours: string[] = data.hours || []
+    const hours: string[] = Array.isArray(data?.hours) ? data.hours : []
+    const points = (Array.isArray(data?.values) ? data.values : [])
+      .map((rawValue: any, index: number) => ({
+        value: Number(rawValue),
+        time: hours[index] || ''
+      }))
+      .filter((item: { value: number }) => !Number.isNaN(item.value))
+      .slice(-HOME_CHART_POINT_LIMIT)
+    const values = points.map((item: { value: number }) => item.value)
+    const displayHours = points.map((item: { time: string }) => item.time)
     if (!values.length) {
       const status = rawStatus || '正常'
       return { avg: '--', max: '--', min: '--', startTime: '--', endTime: '--', status, isWarn: status === '异常', values: [] }
@@ -101,8 +119,8 @@ Page({
       avg: (sum / values.length).toFixed(1),
       max: Math.max(...values).toFixed(1),
       min: Math.min(...values).toFixed(1),
-      startTime: fmt(hours[0]),
-      endTime: fmt(hours[hours.length - 1]),
+      startTime: fmt(displayHours[0]),
+      endTime: fmt(displayHours[displayHours.length - 1]),
       status,
       isWarn: status === '异常',
       values

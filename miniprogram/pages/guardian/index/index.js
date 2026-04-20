@@ -62,6 +62,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("../../../utils/api");
+var HOME_CHART_POINT_LIMIT = 24;
+function formatLocalDate(input) {
+    return "".concat(input.getFullYear(), "-").concat(String(input.getMonth() + 1).padStart(2, '0'), "-").concat(String(input.getDate()).padStart(2, '0'));
+}
 Page({
     data: {
         statusH: 0,
@@ -83,7 +87,7 @@ Page({
     },
     loadData: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var members, savedId_1, member, today, _a, vitalsRes, breathRes, heartRes, alarmRes, vitals, isWarn, breathHistory_1, heartHistory_1, err_1;
+            var members, savedId_1, member, end, start, startDate, endDate, _a, vitalsRes, breathRes, heartRes, alarmRes, vitals, isWarn, breathHistory_1, heartHistory_1, err_1;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -103,11 +107,15 @@ Page({
                         member = members.find(function (item) { return String(item.id) === String(savedId_1); }) || members[0];
                         wx.setStorageSync('currentMemberId', member.id);
                         this.setData({ hasMember: true, member: member });
-                        today = new Date().toISOString().slice(0, 10);
+                        end = new Date();
+                        start = new Date(end);
+                        start.setDate(end.getDate() - 1);
+                        startDate = formatLocalDate(start);
+                        endDate = formatLocalDate(end);
                         return [4 /*yield*/, Promise.allSettled([
                                 (0, api_1.getMonitorRealtime)(member.id),
-                                (0, api_1.getMonitorHistory)({ memberId: member.id, type: 'breathRate', startDate: today, endDate: today }),
-                                (0, api_1.getMonitorHistory)({ memberId: member.id, type: 'heartRate', startDate: today, endDate: today }),
+                                (0, api_1.getMonitorHistory)({ memberId: member.id, type: 'breathRate', startDate: startDate, endDate: endDate }),
+                                (0, api_1.getMonitorHistory)({ memberId: member.id, type: 'heartRate', startDate: startDate, endDate: endDate }),
                                 (0, api_1.getAlarms)({ memberId: String(member.id), status: 'unhandled' })
                             ])];
                     case 3:
@@ -146,8 +154,16 @@ Page({
         });
     },
     buildHistoryStat: function (data, rawStatus) {
-        var values = (data.values || []).map(Number).filter(function (value) { return !Number.isNaN(value); });
-        var hours = data.hours || [];
+        var hours = Array.isArray(data === null || data === void 0 ? void 0 : data.hours) ? data.hours : [];
+        var points = (Array.isArray(data === null || data === void 0 ? void 0 : data.values) ? data.values : [])
+            .map(function (rawValue, index) { return ({
+            value: Number(rawValue),
+            time: hours[index] || ''
+        }); })
+            .filter(function (item) { return !Number.isNaN(item.value); })
+            .slice(-HOME_CHART_POINT_LIMIT);
+        var values = points.map(function (item) { return item.value; });
+        var displayHours = points.map(function (item) { return item.time; });
         if (!values.length) {
             var status_1 = rawStatus || '正常';
             return { avg: '--', max: '--', min: '--', startTime: '--', endTime: '--', status: status_1, isWarn: status_1 === '异常', values: [] };
@@ -164,8 +180,8 @@ Page({
             avg: (sum / values.length).toFixed(1),
             max: Math.max.apply(Math, __spreadArray([], __read(values), false)).toFixed(1),
             min: Math.min.apply(Math, __spreadArray([], __read(values), false)).toFixed(1),
-            startTime: fmt(hours[0]),
-            endTime: fmt(hours[hours.length - 1]),
+            startTime: fmt(displayHours[0]),
+            endTime: fmt(displayHours[displayHours.length - 1]),
             status: status,
             isWarn: status === '异常',
             values: values
