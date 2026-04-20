@@ -1,4 +1,4 @@
-import { BASE_URL } from './config'
+import { getBaseUrl } from './config'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -12,7 +12,7 @@ export function request<T = any>(
 
   return new Promise((resolve, reject) => {
     wx.request({
-      url: BASE_URL + url,
+      url: getBaseUrl() + url,
       method,
       data,
       header: {

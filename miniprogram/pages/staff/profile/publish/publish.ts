@@ -1,4 +1,5 @@
-import { post } from '../../../../utils/request'
+import { createNewsPost } from '../../../../utils/api'
+import { getStoredUserInfo } from '../../../../utils/session'
 
 Page({
   data: {
@@ -54,12 +55,15 @@ Page({
 
     this.setData({ submitting: true })
     try {
-      await post('/staff/publish', {
+      const userInfo = getStoredUserInfo<any>()
+      await createNewsPost({
         title: form.title.trim(),
-        type: form.type,
         content: form.content.trim(),
-        target: form.target,
-        familyName: form.target === 'specific' ? form.familyName.trim() : undefined
+        category: form.type,
+        targetScope: form.target === 'specific' ? 'FAMILY' : 'ALL',
+        targetFamilyName: form.target === 'specific' ? form.familyName.trim() : undefined,
+        publisherId: userInfo.id,
+        publisherName: userInfo.name
       })
       wx.showToast({ title: '发布成功', icon: 'success' })
       setTimeout(() => {

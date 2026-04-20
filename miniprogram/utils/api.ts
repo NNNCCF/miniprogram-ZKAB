@@ -1,12 +1,21 @@
-/**
- * 所有后端接口封装（路径以后端 MiniAppController / MiniAppAuthController 为准）
- */
 import { get, post, put } from './request'
+import {
+  normalizeAlarm,
+  normalizeAppointment,
+  normalizeFamily,
+  normalizeMember,
+  normalizeServiceCenter,
+  normalizeSummary,
+  normalizeUserInfo
+} from './normalizers'
 
 // ─── 认证 ────────────────────────────────────────────────
 /** 统一登录：后端自动识别角色，返回 { token, role, userInfo } */
 export const unifiedLogin = (data: { phone: string; password: string }) =>
-  post('/auth/login', data)
+  post('/auth/login', data).then((res: any) => ({
+    ...res,
+    userInfo: normalizeUserInfo(res?.userInfo)
+  }))
 
 export const nurseLogin    = (data: { phone: string; password: string }) =>
   post('/auth/nurse/login', data)
@@ -31,10 +40,10 @@ export const getAlarms = (params?: {
   startDate?: string
   endDate?: string
   memberId?: string
-}) => get('/mini/alarms', params)
+}) => get('/mini/alarms', params).then((list: any) => (list || []).map(normalizeAlarm))
 
 export const getAlarmDetail = (id: string | number) =>
-  get(`/mini/alarms/${id}`)
+  get(`/mini/alarms/${id}`).then(normalizeAlarm)
 
 export const handleAlarm = (id: string | number, data: {
   calledGuardian: boolean
@@ -52,10 +61,10 @@ export const getAppointments = (params?: {
   keyword?: string
   startDate?: string
   endDate?: string
-}) => get('/mini/appointments', params)
+}) => get('/mini/appointments', params).then((list: any) => (list || []).map(normalizeAppointment))
 
 export const getAppointmentDetail = (id: string | number) =>
-  get(`/mini/appointments/${id}`)
+  get(`/mini/appointments/${id}`).then(normalizeAppointment)
 
 export const createAppointment = (data: {
   type: string
@@ -84,13 +93,13 @@ export const submitVisitRecord = (id: string | number, data: {
 
 // ─── 家庭档案 /mini/family ───────────────────────────────
 export const getFamilyList = (params?: { keyword?: string }) =>
-  get('/mini/family/list', params)
+  get('/mini/family/list', params).then((list: any) => (list || []).map(normalizeFamily))
 
 export const getFamilyDetail = (id: string | number) =>
-  get(`/mini/family/${id}`)
+  get(`/mini/family/${id}`).then(normalizeFamily)
 
 export const getFamilyMapList = () =>
-  get('/mini/family/map-list')
+  get('/mini/family/map-list').then((list: any) => (list || []).map(normalizeFamily))
 
 // ─── 成员健康历史 ─────────────────────────────────────────
 export const getMemberHistory = (familyId: string | number, memberId: string | number, params?: {
@@ -101,7 +110,7 @@ export const getMemberHistory = (familyId: string | number, memberId: string | n
 
 // ─── 成员列表 ─────────────────────────────────────────────
 export const getMemberList = () =>
-  get('/mini/member/list')
+  get('/mini/member/list').then((list: any) => (list || []).map(normalizeMember))
 
 // ─── 设备 /mini/device ───────────────────────────────────
 export const bindDevice = (data: {
@@ -167,7 +176,56 @@ export const getInstitutionNurses = () =>
 
 /** 获取本机构绑定家庭列表 */
 export const getInstitutionFamilies = () =>
-  get('/mini/institution/families')
+  get('/mini/institution/families').then((list: any) => (list || []).map(normalizeFamily))
+
+export const getServiceCenterInfo = () =>
+  get('/mini/service/center').then(normalizeServiceCenter)
+
+export const getGuardianProfile = () =>
+  get('/mini/guardian/profile').then(normalizeUserInfo)
+
+export const updateGuardianProfile = (data: { name?: string; phone?: string }) =>
+  put('/mini/guardian/profile', data).then(normalizeUserInfo)
+
+export const getGuardianAlarmSettings = () =>
+  get('/mini/guardian/alarm-settings')
+
+export const updateGuardianAlarmSettings = (data: {
+  hrAlert?: boolean
+  bpAlert?: boolean
+  fallAlert?: boolean
+  bedAlert?: boolean
+}) => put('/mini/guardian/alarm-settings', data)
+
+export const createEmergencyCall = (data?: { memberId?: number; note?: string }) =>
+  post('/mini/guardian/emergency/call', data || {})
+
+export const submitMiniFeedback = (data: { type: string; content: string }) =>
+  post('/mini/feedback', data)
+
+export const getStaffProfile = () =>
+  get('/mini/staff/profile').then(normalizeUserInfo)
+
+export const updateStaffProfile = (data: { name?: string; department?: string; title?: string; idCard?: string }) =>
+  put('/mini/staff/profile', data).then(normalizeUserInfo)
+
+export const getStaffOrgInfo = () =>
+  get('/mini/staff/org-info')
+
+export const getStaffSummary = () =>
+  get('/mini/summary/nurse').then(normalizeSummary)
+
+export const createNewsPost = (data: {
+  title: string
+  content: string
+  category?: string
+  targetScope?: 'ALL' | 'FAMILY'
+  targetFamilyId?: number
+  targetFamilyName?: string
+  publisherId?: number
+  publisherName?: string
+  attachments?: string[]
+}) => post('/news', data)
 
 // ─── 新闻动态 /api/news ───────────────────────────────────
 export const getNewsList = () =>

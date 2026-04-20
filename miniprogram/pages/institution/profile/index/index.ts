@@ -1,10 +1,5 @@
-import { get } from '../../../../utils/request'
-
-interface InstitutionProfile {
-  name: string
-  orgName: string
-  role: string
-}
+import { getStaffProfile } from '../../../../utils/api'
+import { clearSession, getStoredUserInfo, setStoredUserInfo } from '../../../../utils/session'
 
 Page({
   data: {
@@ -22,29 +17,28 @@ Page({
     this.loadProfile()
   },
 
-  loadProfile() {
-    const cached = wx.getStorageSync('userInfo') || {}
+  async loadProfile() {
+    const cached: any = getStoredUserInfo() || {}
     if (cached.name) {
       this.setData({
         adminName: cached.name,
         orgName: cached.orgName || '',
         roleName: '机构管理员',
-        avatarText: (cached.name as string).slice(-2)
+        avatarText: cached.name.slice(-2)
       })
     }
 
-    get<InstitutionProfile>('/mini/staff/profile')
-      .then(res => {
-        const name = res.name || '机构管理员'
-        this.setData({
-          adminName: name,
-          orgName: res.orgName || '',
-          roleName: '机构管理员',
-          avatarText: name.slice(-2)
-        })
-        wx.setStorageSync('userInfo', res)
+    try {
+      const profile: any = await getStaffProfile()
+      const merged = setStoredUserInfo({ ...cached, ...profile })
+      const name = merged.name || '机构管理员'
+      this.setData({
+        adminName: name,
+        orgName: merged.orgName || '',
+        roleName: '机构管理员',
+        avatarText: name.slice(-2)
       })
-      .catch(() => {})
+    } catch {}
   },
 
   goToFamilyList() {
@@ -58,12 +52,9 @@ Page({
       confirmText: '退出',
       confirmColor: '#FF4D4F',
       success: (res) => {
-        if (res.confirm) {
-          wx.removeStorageSync('token')
-          wx.removeStorageSync('role')
-          wx.removeStorageSync('userInfo')
-          wx.reLaunch({ url: '/pages/login/login' })
-        }
+        if (!res.confirm) return
+        clearSession()
+        wx.reLaunch({ url: '/pages/login/login' })
       }
     })
   }

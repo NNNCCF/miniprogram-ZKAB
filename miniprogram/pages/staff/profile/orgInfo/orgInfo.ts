@@ -1,4 +1,4 @@
-import { get } from '../../../../utils/request'
+import { getStaffOrgInfo } from '../../../../utils/api'
 
 interface OrgInfo {
   name: string
@@ -22,7 +22,7 @@ Page({
   async loadOrgInfo() {
     this.setData({ loading: true })
     try {
-      const data = await get<OrgInfo>('/staff/org-info')
+      const data = await getStaffOrgInfo() as OrgInfo
       this.setData({ orgInfo: data })
     } catch (err: any) {
       wx.showToast({

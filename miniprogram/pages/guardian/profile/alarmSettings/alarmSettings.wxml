@@ -2,7 +2,7 @@
   <view class="nav-bar" style="padding-top:{{statusH}}px;">
     <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
     <view class="nav-inner">
-      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">←</text></view>
       <text class="nav-title">报警设置</text>
       <view style="width:60rpx;"></view>
     </view>

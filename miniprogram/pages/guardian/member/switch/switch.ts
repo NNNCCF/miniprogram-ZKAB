@@ -2,6 +2,14 @@ import { getMemberList } from '../../../../utils/api'
 
 const app = getApp<any>()
 
+function calcAge(birthday?: string) {
+  if (!birthday) return '--'
+  const year = Number(String(birthday).slice(0, 4))
+  const currentYear = new Date().getFullYear()
+  if (!Number.isFinite(year) || year <= 1900 || year > currentYear) return '--'
+  return currentYear - year
+}
+
 Page({
   data: {
     statusH: 0,
@@ -19,10 +27,25 @@ Page({
 
   async loadMembers() {
     try {
-      const members: any[] = (await getMemberList()) || []
+      const rawMembers: any[] = (await getMemberList()) || []
+      const members = rawMembers.map((item: any) => ({
+        ...item,
+        name: item.name || '未命名成员',
+        age: item.age ?? calcAge(item.birthday),
+        relationship: item.relationship || item.remark || '家庭成员',
+        status: item.status || 'normal'
+      }))
+
       const savedId = wx.getStorageSync('currentMemberId')
-      const currentId = savedId || (members[0]?.id ?? null)
-      if (!savedId && currentId) wx.setStorageSync('currentMemberId', currentId)
+      const hasSaved = members.some((item: any) => String(item.id) === String(savedId))
+      const currentId = hasSaved ? savedId : (members[0]?.id ?? null)
+
+      if (currentId) {
+        wx.setStorageSync('currentMemberId', currentId)
+      } else {
+        wx.removeStorageSync('currentMemberId')
+      }
+
       this.setData({ members, currentId })
     } catch (e: any) {
       wx.showToast({ title: e.message || '加载失败', icon: 'none' })
@@ -38,7 +61,9 @@ Page({
   },
 
   goBack() {
-    wx.navigateBack()
+    wx.navigateBack({
+      fail: () => wx.reLaunch({ url: '/pages/guardian/index/index' })
+    })
   },
 
   goCreate() {

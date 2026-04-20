@@ -1,4 +1,5 @@
-import { get } from '../../../../utils/request'
+import { getAlarms, getAppointments, getGuardianProfile, getMemberList } from '../../../../utils/api'
+import { clearSession, getStoredUserInfo, setStoredUserInfo } from '../../../../utils/session'
 
 const app = getApp<any>()
 
@@ -14,25 +15,41 @@ Page({
   },
 
   onShow() {
-    // Show cached data immediately
-    const cached = wx.getStorageSync('userInfo') || {}
-    if (cached.name) {
+    const cached = getStoredUserInfo()
+    if (cached?.name) {
       this.setData({ userInfo: cached })
     }
-    // Fetch fresh data from server
-    get<any>('/mini/guardian/profile')
-      .then((res: any) => {
-        const info = { name: res.name || '', phone: res.phone || '' }
-        this.setData({ userInfo: info })
-        wx.setStorageSync('userInfo', info)
-      })
-      .catch(() => {
-        // Keep cached values
-      })
+    this.loadPageData()
+  },
+
+  async loadPageData() {
+    const [profileRes, membersRes, alarmsRes, appointmentsRes] = await Promise.allSettled([
+      getGuardianProfile(),
+      getMemberList(),
+      getAlarms({ status: 'unhandled' }),
+      getAppointments()
+    ])
+
+    if (profileRes.status === 'fulfilled') {
+      const merged = setStoredUserInfo({ ...getStoredUserInfo(), ...profileRes.value })
+      this.setData({ userInfo: merged })
+    }
+
+    const memberCount = membersRes.status === 'fulfilled' ? membersRes.value.length : this.data.stats.memberCount
+    const alarmCount = alarmsRes.status === 'fulfilled' ? alarmsRes.value.length : this.data.stats.alarmCount
+    const serviceCount = appointmentsRes.status === 'fulfilled' ? appointmentsRes.value.length : this.data.stats.serviceCount
+
+    this.setData({
+      stats: {
+        memberCount,
+        alarmCount,
+        serviceCount
+      }
+    })
   },
 
   goEdit() {
-    wx.navigateTo({ url: '/pages/guardian/member/create/create?mode=editProfile' })
+    wx.navigateTo({ url: '/pages/guardian/profile/profileEdit/profileEdit' })
   },
 
   goSwitchMember() {
@@ -58,14 +75,12 @@ Page({
   logout() {
     wx.showModal({
       title: '退出登录',
-      content: '确认退出当前账号？',
+      content: '确认退出当前账号吗？',
       confirmColor: '#EF4444',
-      success(res) {
-        if (res.confirm) {
-          wx.removeStorageSync('token')
-          wx.removeStorageSync('userInfo')
-          wx.reLaunch({ url: '/pages/login/login' })
-        }
+      success: (res) => {
+        if (!res.confirm) return
+        clearSession()
+        wx.reLaunch({ url: '/pages/login/login' })
       }
     })
   }

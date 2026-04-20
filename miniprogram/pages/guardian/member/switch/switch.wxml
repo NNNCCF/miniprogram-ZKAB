@@ -2,8 +2,9 @@
   <view class="nav-bar" style="padding-top:{{statusH}}px;">
     <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
     <view class="nav-inner">
-      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">←</text></view>
       <text class="nav-title">切换成员</text>
+      <view style="width:60rpx;"></view>
     </view>
   </view>
 
@@ -12,12 +13,11 @@
       <text class="tip-text">选择要监护的家庭成员</text>
     </view>
 
-    <!-- Member List -->
-    <view class="member-list">
+    <view wx:if="{{members.length}}" class="member-list">
       <view
-        class="member-card {{item.id === currentId ? 'card-active' : ''}}"
         wx:for="{{members}}"
         wx:key="id"
+        class="member-card {{item.id === currentId ? 'card-active' : ''}}"
         bindtap="switchMember"
         data-id="{{item.id}}"
       >
@@ -31,7 +31,7 @@
               <text>当前</text>
             </view>
           </view>
-          <text class="card-meta">{{item.age}}岁 · {{item.relationship}}</text>
+          <text class="card-meta">{{item.age}} 岁 · {{item.relationship}}</text>
           <text class="card-status {{item.status === 'normal' ? 'status-normal' : 'status-warn'}}">
             {{item.status === 'normal' ? '健康正常' : '需要关注'}}
           </text>
@@ -42,6 +42,14 @@
       </view>
     </view>
 
-    
+    <view wx:else class="empty-state">
+      <text class="empty-title">还没有家庭成员</text>
+      <text class="empty-desc">先添加成员，再切换查看监测和服务数据</text>
+    </view>
+
+    <view class="add-member-btn" bindtap="goCreate">
+      <text class="add-member-icon">+</text>
+      <text class="add-member-text">添加成员</text>
+    </view>
   </scroll-view>
 </view>

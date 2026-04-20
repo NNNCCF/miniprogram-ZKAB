@@ -1,4 +1,4 @@
-import { getAlarmDetail, ignoreAlarm } from '../../../../../utils/api'
+import { getAlarmDetail, getAlarms, getMemberList, ignoreAlarm } from '../../../../utils/api'
 
 const app = getApp<any>()
 
@@ -11,10 +11,34 @@ Page({
 
   onLoad(options: any) {
     this.setData({ statusH: app.globalData.statusBarHeight || 0 })
-    const id = options.id
-    if (id && id !== 'latest') {
-      this.loadAlarm(id)
-    } else {
+    if (options?.id && options.id !== 'latest') {
+      this.loadAlarm(options.id)
+      return
+    }
+    this.loadLatestAlarm(options?.memberId)
+  },
+
+  async loadLatestAlarm(memberId?: string) {
+    this.setData({ loading: true })
+    try {
+      let targetMemberId = memberId || wx.getStorageSync('currentMemberId')
+      if (!targetMemberId) {
+        const members = await getMemberList()
+        targetMemberId = members[0]?.id
+      }
+      if (!targetMemberId) {
+        this.setData({ alarm: null })
+        return
+      }
+
+      let alarms = await getAlarms({ memberId: String(targetMemberId), status: 'unhandled' })
+      if (!alarms.length) {
+        alarms = await getAlarms({ memberId: String(targetMemberId) })
+      }
+      this.setData({ alarm: alarms[0] || null })
+    } catch {
+      this.setData({ alarm: null })
+    } finally {
       this.setData({ loading: false })
     }
   },
@@ -24,42 +48,32 @@ Page({
     try {
       const alarm = await getAlarmDetail(id)
       this.setData({ alarm })
-    } catch {
-      this.setData({
-        alarm: {
-          id,
-          alarmType: '心率异常',
-          status: 'unhandled',
-          alarmTime: new Date().toLocaleString(),
-          location: '客厅',
-          description: '检测到异常状态，请及时关注被监护人。'
-        }
-      })
+    } catch (err: any) {
+      wx.showToast({ title: err.message || '加载失败', icon: 'none' })
+      this.setData({ alarm: null })
     } finally {
       this.setData({ loading: false })
     }
   },
 
   async markIgnored() {
-    const { alarm } = this.data
+    const alarm = this.data.alarm
     if (!alarm) return
     wx.showLoading({ title: '处理中...' })
     try {
       await ignoreAlarm(alarm.id)
-      this.setData({ 'alarm.status': 'ignored' })
+      this.setData({ alarm: { ...alarm, status: 'ignored', handleResultLabel: '已忽略' } })
       wx.hideLoading()
       wx.showToast({ title: '已忽略', icon: 'success' })
-    } catch {
+    } catch (err: any) {
       wx.hideLoading()
-      wx.showToast({ title: '操作失败', icon: 'none' })
+      wx.showToast({ title: err.message || '操作失败', icon: 'none' })
     }
   },
 
   callEmergency() {
-    wx.makePhoneCall({ phoneNumber: '120' })
+    wx.navigateTo({ url: '/pages/guardian/emergency/emergency' })
   },
 
-  goBack() {
-    wx.navigateBack()
-  }
+  goBack() { wx.navigateBack() }
 })

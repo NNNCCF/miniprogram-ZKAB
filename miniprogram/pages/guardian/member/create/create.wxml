@@ -2,7 +2,7 @@
   <view class="nav-bar" style="padding-top:{{statusH}}px;">
     <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
     <view class="nav-inner">
-      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">←</text></view>
       <text class="nav-title">添加家庭成员</text>
       <view style="width:60rpx;"></view>
     </view>
@@ -10,24 +10,20 @@
 
   <scroll-view class="body-area" scroll-y>
     <view class="form-content">
-
-      <!-- Name -->
       <view class="form-group">
         <text class="form-label">姓名 <text class="required">*</text></text>
         <view class="input-wrap">
-          <input class="form-input" placeholder="请输入姓名" value="{{form.name}}" bindinput="onInput" data-field="name"/>
+          <input class="form-input" placeholder="请输入姓名" value="{{form.name}}" bindinput="onInput" data-field="name" maxlength="20" />
         </view>
       </view>
 
-      <!-- Age -->
       <view class="form-group">
         <text class="form-label">年龄 <text class="required">*</text></text>
         <view class="input-wrap">
-          <input class="form-input" type="number" placeholder="请输入年龄" value="{{form.age}}" bindinput="onInput" data-field="age"/>
+          <input class="form-input" type="number" placeholder="请输入年龄" value="{{form.age}}" bindinput="onInput" data-field="age" maxlength="3" />
         </view>
       </view>
 
-      <!-- Gender -->
       <view class="form-group">
         <text class="form-label">性别 <text class="required">*</text></text>
         <view class="radio-group">
@@ -40,7 +36,6 @@
         </view>
       </view>
 
-      <!-- Relationship -->
       <view class="form-group">
         <text class="form-label">与我的关系 <text class="required">*</text></text>
         <view class="input-wrap">
@@ -53,31 +48,29 @@
         </view>
       </view>
 
-      <!-- Medical History -->
       <view class="form-group">
         <text class="form-label">既往病史</text>
         <view class="textarea-wrap">
           <textarea
             class="form-textarea"
-            placeholder="请输入既往病史（选填）"
+            placeholder="请输入既往病史，可选填"
             value="{{form.medicalHistory}}"
             bindinput="onInput"
             data-field="medicalHistory"
             maxlength="200"
+            auto-height
           />
         </view>
         <text class="char-count">{{form.medicalHistory.length || 0}}/200</text>
       </view>
 
-      <!-- Phone -->
       <view class="form-group">
         <text class="form-label">联系电话</text>
         <view class="input-wrap">
-          <input class="form-input" type="number" placeholder="请输入联系电话（选填）" value="{{form.phone}}" bindinput="onInput" data-field="phone"/>
+          <input class="form-input" type="number" placeholder="请输入联系电话，可选填" value="{{form.phone}}" bindinput="onInput" data-field="phone" maxlength="11" />
         </view>
       </view>
 
-      <!-- Submit -->
       <view class="submit-btn" bindtap="onSubmit">
         <text class="submit-text">{{loading ? '提交中...' : '确认添加'}}</text>
       </view>

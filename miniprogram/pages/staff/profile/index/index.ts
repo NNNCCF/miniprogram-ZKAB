@@ -1,10 +1,5 @@
-import { get } from '../../../../utils/request'
-
-interface StaffProfile {
-  name: string
-  orgName: string
-  role: string
-}
+import { getStaffProfile } from '../../../../utils/api'
+import { getStoredUserInfo, setStoredUserInfo } from '../../../../utils/session'
 
 Page({
   data: {
@@ -24,7 +19,7 @@ Page({
 
   loadProfile() {
     // Try from cache first for fast render
-    const cached = wx.getStorageSync('userInfo') || {}
+    const cached = getStoredUserInfo<any>() || {}
     if (cached.name) {
       this.setData({
         doctorName: cached.name,
@@ -34,7 +29,7 @@ Page({
       })
     }
 
-    get<StaffProfile>('/mini/staff/profile')
+    getStaffProfile()
       .then(res => {
         const name = res.name || '医护人员'
         this.setData({
@@ -43,7 +38,7 @@ Page({
           roleName: res.role || '医护人员',
           avatarText: name.slice(-2)
         })
-        wx.setStorageSync('userInfo', res)
+        setStoredUserInfo(res)
       })
       .catch(() => {
         // Keep cached values, no-op
@@ -91,6 +86,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.removeStorageSync('token')
+          wx.removeStorageSync('role')
           wx.removeStorageSync('userInfo')
           wx.reLaunch({ url: '/pages/login/login' })
         }

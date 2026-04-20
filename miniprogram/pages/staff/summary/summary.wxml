@@ -1,8 +1,6 @@
 <staff-navbar title="数据汇总" show-back="{{true}}" />
 
 <view class="page-body">
-
-  <!-- Stats Grid 2×2 -->
   <view class="section-title">本月概况</view>
   <view class="stats-grid">
     <view class="stat-card">
@@ -15,7 +13,7 @@
     </view>
     <view class="stat-card stat-card-orange">
       <text class="stat-number stat-number-white">{{handledAlarms}}</text>
-      <text class="stat-label stat-label-white">处理报警数</text>
+      <text class="stat-label stat-label-white">已处理报警</text>
     </view>
     <view class="stat-card">
       <text class="stat-number">{{familyCount}}</text>
@@ -23,9 +21,7 @@
     </view>
   </view>
 
-  <!-- Alarm Type Bar Chart -->
   <view class="section-title section-title-mt">报警类型 TOP 5</view>
-
   <view class="chart-wrap" wx:if="{{alarmTypeBars.length > 0}}">
     <view class="chart-row" wx:for="{{alarmTypeBars}}" wx:key="type">
       <text class="chart-label">{{item.type}}</text>
@@ -39,5 +35,4 @@
   <view class="empty-chart" wx:else>
     <text class="hint-text">{{loading ? '加载中...' : '暂无报警数据'}}</text>
   </view>
-
 </view>

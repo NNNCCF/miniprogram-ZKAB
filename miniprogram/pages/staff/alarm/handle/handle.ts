@@ -30,10 +30,12 @@ Page({
   async handleSubmit() {
     const { form, id } = this.data
     if (!form.remark.trim()) {
-      return wx.showToast({ title: '请填写处理备注', icon: 'none' })
+      wx.showToast({ title: '请填写处理备注', icon: 'none' })
+      return
     }
     if (!id) {
-      return wx.showToast({ title: '报警ID缺失', icon: 'none' })
+      wx.showToast({ title: '报警ID缺失', icon: 'none' })
+      return
     }
 
     this.setData({ submitting: true })

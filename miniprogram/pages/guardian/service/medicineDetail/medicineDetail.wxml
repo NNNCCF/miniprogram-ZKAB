@@ -2,124 +2,93 @@
   <view class="nav-bar" style="padding-top:{{statusH}}px;">
     <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
     <view class="nav-inner">
-      <view class="nav-back" bindtap="goBack"><text class="back-arrow">‹</text></view>
-      <text class="nav-title">送药</text>
+      <view class="nav-back" bindtap="goBack"><text class="back-arrow">←</text></view>
+      <text class="nav-title">送药上门</text>
       <view style="width:60rpx;"></view>
     </view>
   </view>
 
   <scroll-view scroll-y class="body-area">
     <view class="form-card">
-
-      <!-- 地址：GPS大致位置 -->
       <view class="form-row loc-row">
-        <text class="label">位置 <text class="required">*</text></text>
+        <text class="label">服务地址 <text class="required">*</text></text>
         <view class="loc-right">
-          <view wx:if="{{locating}}" class="loc-status">
-            <text class="loc-dot"></text>
-            <text class="loc-hint">定位中...</text>
-          </view>
-          <view wx:elif="{{approxAddress}}" class="loc-addr-wrap">
-            <text class="loc-addr">📍 {{approxAddress}}</text>
-            <text class="reloc-btn" bindtap="reLocate">重新定位</text>
+          <view wx:if="{{selectedAddress}}" class="loc-addr-wrap">
+            <text class="loc-addr">{{selectedAddress}}</text>
+            <text class="reloc-btn" bindtap="chooseLocation">重新选择</text>
           </view>
           <view wx:else class="loc-addr-wrap">
-            <text class="loc-fail">定位失败</text>
-            <text class="reloc-btn" bindtap="reLocate">点击定位</text>
+            <text class="loc-fail">暂未选择位置</text>
+            <text class="reloc-btn" bindtap="chooseLocation">选择地址</text>
           </view>
         </view>
       </view>
       <view class="divider"></view>
 
-      <!-- 详细地址：手动补充 -->
       <view class="form-row">
         <text class="label">门牌号 <text class="required">*</text></text>
-        <input class="input right-input" value="{{addressDetail}}" bindinput="onInput" data-field="addressDetail"
-          placeholder="楼栋/单元/房间号" placeholder-class="ph" />
+        <input class="input right-input" value="{{addressDetail}}" bindinput="onInput" data-field="addressDetail" placeholder="楼栋 / 单元 / 房间号" placeholder-class="ph" />
       </view>
       <view class="divider"></view>
 
-      <!-- 联系人 -->
       <view class="form-row">
         <text class="label">联系人 <text class="required">*</text></text>
-        <input class="input right-input" value="{{contactName}}" bindinput="onInput" data-field="contactName"
-          placeholder="请填写" placeholder-class="ph" />
+        <input class="input right-input" value="{{contactName}}" bindinput="onInput" data-field="contactName" placeholder="请填写联系人" placeholder-class="ph" />
       </view>
       <view class="divider"></view>
 
-      <!-- 联系电话 -->
       <view class="form-row">
         <text class="label">联系电话 <text class="required">*</text></text>
-        <input class="input right-input" value="{{contactPhone}}" bindinput="onInput" data-field="contactPhone"
-          type="number" maxlength="11" placeholder="请填写" placeholder-class="ph" />
+        <input class="input right-input" value="{{contactPhone}}" bindinput="onInput" data-field="contactPhone" type="number" maxlength="11" placeholder="请填写联系电话" placeholder-class="ph" />
       </view>
       <view class="divider"></view>
 
-      <!-- 送药日期 -->
       <picker mode="date" value="{{deliveryDate}}" start="{{minDate}}" bindchange="onDateChange">
         <view class="form-row">
-          <text class="label">送药日期 <text class="required">*</text></text>
+          <text class="label">送达日期 <text class="required">*</text></text>
           <view class="value-wrap">
             <text class="value">{{deliveryDate}}</text>
-            <text class="arrow">›</text>
+            <text class="arrow">></text>
           </view>
         </view>
       </picker>
       <view class="divider"></view>
 
-      <!-- 送药时间（精确到分钟）-->
       <picker mode="time" value="{{deliveryTime}}" start="00:00" end="23:59" bindchange="onTimeChange">
         <view class="form-row">
-          <text class="label">送药时间 <text class="required">*</text></text>
+          <text class="label">送达时间 <text class="required">*</text></text>
           <view class="value-wrap">
             <text class="value time-value">{{deliveryTime}}</text>
-            <text class="arrow">›</text>
+            <text class="arrow">></text>
           </view>
         </view>
       </picker>
       <view class="divider"></view>
 
-      <!-- 付款方式 -->
       <view class="form-row">
-        <text class="label">付款方式 <text class="required">*</text></text>
+        <text class="label">支付方式 <text class="required">*</text></text>
         <view class="value-wrap"><view class="pay-tag">{{payMethod}}</view></view>
       </view>
       <view class="divider"></view>
 
-      <!-- 所需药物 -->
       <view class="form-row">
-        <text class="label">所需药物 <text class="required">*</text></text>
-        <input class="input right-input" value="{{medicines}}" bindinput="onInput" data-field="medicines"
-          placeholder="多种药物用逗号隔开" placeholder-class="ph" />
+        <text class="label">所需药品 <text class="required">*</text></text>
+        <input class="input right-input" value="{{medicines}}" bindinput="onInput" data-field="medicines" placeholder="多个药品可用逗号分隔" placeholder-class="ph" />
       </view>
       <view class="divider"></view>
 
-      <!-- 备注 -->
       <view class="form-col">
-        <text class="label-top">其他备注（数量、厂家、药盒图片等）</text>
-        <textarea class="textarea" value="{{notes}}" bindinput="onInput" data-field="notes"
-          placeholder="请填写详细说明，数量默认1盒..." placeholder-class="ph"
-          maxlength="500" auto-height />
-      </view>
-
-    </view>
-
-    <!-- 图片上传 -->
-    <view class="image-section">
-      <view class="img-thumb" wx:for="{{images}}" wx:key="index">
-        <image src="{{item}}" class="thumb-img" mode="aspectFill" />
-        <view class="img-remove" catchtap="removeImage" data-index="{{index}}">×</view>
-      </view>
-      <view class="img-add" bindtap="chooseImage" wx:if="{{images.length < 4}}">
-        <text class="add-icon">+</text>
+        <text class="label-top">补充说明</text>
+        <textarea class="textarea" value="{{notes}}" bindinput="onInput" data-field="notes" placeholder="可填写数量、品牌或其他备注" placeholder-class="ph" maxlength="500" auto-height />
       </view>
     </view>
+
     <view style="height:160rpx;"></view>
   </scroll-view>
 
   <view class="bottom-bar">
     <view class="btn-confirm {{submitting ? 'btn-loading' : ''}}" bindtap="submit">
-      <text>{{submitting ? '提交中...' : '确定'}}</text>
+      <text>{{submitting ? '提交中...' : '提交送药订单'}}</text>
     </view>
   </view>
 </view>

@@ -97,7 +97,8 @@ Page({
   async confirmDispatch() {
     const { id, selectedNurseId, selectedNurseName, dispatching } = this.data
     if (!selectedNurseId) {
-      return wx.showToast({ title: '请选择医护人员', icon: 'none' })
+      wx.showToast({ title: '请选择医护人员', icon: 'none' })
+      return
     }
     if (dispatching) return
     this.setData({ dispatching: true })

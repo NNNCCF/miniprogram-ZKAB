@@ -23,14 +23,14 @@ Page({
   },
 
   goBack() {
-    wx.navigateBack()
+    wx.navigateBack({
+      fail: () => wx.navigateTo({ url: '/pages/guardian/member/switch/switch' })
+    })
   },
 
   onInput(e: any) {
-    const field: string = e.currentTarget.dataset.field
-    const update: any = {}
-    update['form.' + field] = e.detail.value
-    this.setData(update)
+    const field = e.currentTarget.dataset.field
+    this.setData({ ['form.' + field]: e.detail.value })
   },
 
   setGender(e: any) {
@@ -38,7 +38,7 @@ Page({
   },
 
   onRelChange(e: any) {
-    const idx = parseInt(e.detail.value)
+    const idx = Number(e.detail.value)
     this.setData({
       relIndex: idx,
       'form.relationship': this.data.relationships[idx]
@@ -48,19 +48,25 @@ Page({
   async onSubmit() {
     const { form, loading } = this.data
     if (loading) return
-    if (!form.name || !form.age || !form.gender || !form.relationship) {
+
+    const age = Number(form.age)
+    if (!form.name.trim() || !form.relationship || !form.gender || !Number.isFinite(age)) {
       wx.showToast({ title: '请填写必填项', icon: 'none' })
       return
     }
 
-    // 根据年龄估算出生年份
-    const birthYear = new Date().getFullYear() - parseInt(form.age)
-    const birthday = `${birthYear}-01-01`
+    if (age <= 0 || age > 130) {
+      wx.showToast({ title: '请输入正确年龄', icon: 'none' })
+      return
+    }
+
+    const currentYear = new Date().getFullYear()
+    const birthday = `${currentYear - age}-01-01`
 
     this.setData({ loading: true })
     wx.showLoading({ title: '提交中...' })
     try {
-      await createMember({
+      const result: any = await createMember({
         name: form.name.trim(),
         gender: form.gender.toUpperCase(),
         birthday,
@@ -68,9 +74,14 @@ Page({
         chronicDisease: form.medicalHistory.trim() || undefined,
         remark: form.relationship
       })
+
+      if (result?.id) {
+        wx.setStorageSync('currentMemberId', result.id)
+      }
+
       wx.hideLoading()
       wx.showToast({ title: '添加成功', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1500)
+      setTimeout(() => wx.navigateBack(), 1200)
     } catch (e: any) {
       wx.hideLoading()
       wx.showToast({ title: e.message || '提交失败', icon: 'none' })

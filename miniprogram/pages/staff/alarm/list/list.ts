@@ -10,7 +10,7 @@ interface Alarm {
 }
 
 const STATUS_LABEL_MAP: Record<string, string> = {
-  unhandled: '未处理',
+  unhandled: '待处理',
   handled: '已处理',
   ignored: '已忽略'
 }
@@ -40,7 +40,7 @@ Page({
           ...item,
           statusLabel: STATUS_LABEL_MAP[item.status] || item.status
         }))
-        const unhandledCount = mapped.filter((a: any) => a.status === 'unhandled').length
+        const unhandledCount = mapped.filter((item: any) => item.status === 'unhandled').length
         this.setData({ allList: mapped, unhandledCount, loading: false })
         this.applyFilter()
       })
@@ -50,8 +50,7 @@ Page({
   },
 
   applyFilter() {
-    const { allList, activeStatus } = this.data
-    const filtered = allList.filter(item => item.status === activeStatus)
+    const filtered = this.data.allList.filter((item) => item.status === this.data.activeStatus)
     this.setData({ filteredList: filtered })
   },
 
@@ -64,6 +63,10 @@ Page({
 
   goToDetail(e: WechatMiniprogram.TouchEvent) {
     const id = e.currentTarget.dataset.id
-    wx.navigateTo({ url: `/pages/staff/alarm/detail/detail?id=${id}` })
+    const status = e.currentTarget.dataset.status
+    const url = status === 'unhandled'
+      ? `/pages/staff/alarm/detail/detail?id=${id}`
+      : `/pages/staff/alarm/handled/handled?id=${id}`
+    wx.navigateTo({ url })
   }
 })

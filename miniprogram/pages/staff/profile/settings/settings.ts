@@ -1,3 +1,5 @@
+import { clearSession } from '../../../../utils/session'
+
 Page({
   data: {
     notify: {
@@ -33,10 +35,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           try {
-            // Preserve auth token before clearing
-            const token = wx.getStorageSync('token')
-            wx.clearStorageSync()
-            if (token) wx.setStorageSync('token', token)
+            clearSession(['token', 'role', 'userInfo'])
             wx.showToast({ title: '缓存已清除', icon: 'success' })
           } catch {
             wx.showToast({ title: '清除失败', icon: 'none' })
@@ -60,7 +59,7 @@ Page({
       content: '确认退出登录？',
       success: (res) => {
         if (res.confirm) {
-          wx.clearStorageSync()
+          clearSession()
           wx.reLaunch({ url: '/pages/login/login' })
         }
       }

@@ -1,4 +1,4 @@
-import { post } from '../../../../utils/request'
+import { submitMiniFeedback } from '../../../../utils/api'
 
 Page({
   data: {
@@ -31,7 +31,7 @@ Page({
     }
     this.setData({ submitting: true })
     try {
-      await post('/feedback', {
+      await submitMiniFeedback({
         type: form.type,
         content: form.content.trim()
       })

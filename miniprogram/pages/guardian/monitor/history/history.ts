@@ -1,24 +1,27 @@
-import { getMemberHistory } from '../../../../utils/api'
+import { getMemberList, getMonitorHistory } from '../../../../utils/api'
 
 const app = getApp<any>()
 
-function genMockPoints(base: number, spread: number, count = 10) {
-  return Array.from({ length: count }, (_, i) => {
-    const d = new Date()
-    d.setDate(d.getDate() - (count - 1 - i))
-    return {
-      date: `${d.getMonth() + 1}/${d.getDate()}`,
-      value: base + Math.round((Math.random() - 0.5) * spread * 2)
-    }
-  })
+function formatDate(input: Date) {
+  return `${input.getFullYear()}-${String(input.getMonth() + 1).padStart(2, '0')}-${String(input.getDate()).padStart(2, '0')}`
+}
+
+function warnHeart(value: number) {
+  return value < 60 || value > 100
+}
+
+function warnBreath(value: number) {
+  return value < 12 || value > 20
 }
 
 Page({
   data: {
     statusH: 0,
-    currentHeartRate: 78,
+    memberId: null as number | null,
+    memberName: '',
+    currentHeartRate: '--',
     heartRateWarn: false,
-    currentBreath: 17,
+    currentBreath: '--',
     breathWarn: false,
     chartType: 'heartRate',
     yLabels: [] as string[],
@@ -27,126 +30,191 @@ Page({
     canvasH: 160,
     loading: false,
     historyList: [] as any[],
-    heartRatePoints: [] as { date: string; value: number }[],
-    breathPoints: [] as { date: string; value: number }[],
+    heartRatePoints: [] as any[],
+    breathPoints: [] as any[]
   },
 
-  onLoad() {
+  async onLoad(options: any) {
     const info = wx.getSystemInfoSync()
-    const canvasW = Math.floor(info.windowWidth - 56)
-    const canvasH = 160
-    this.setData({ statusH: app.globalData.statusBarHeight || 0, canvasW, canvasH })
-
-    const heartRatePoints = genMockPoints(75, 12)
-    const breathPoints = genMockPoints(17, 4)
-    const last = heartRatePoints[heartRatePoints.length - 1]
-    const lastBreath = breathPoints[breathPoints.length - 1]
     this.setData({
-      heartRatePoints,
-      breathPoints,
-      currentHeartRate: last.value,
-      heartRateWarn: last.value > 85 || last.value < 60,
-      currentBreath: lastBreath.value,
-      breathWarn: lastBreath.value > 20 || lastBreath.value < 12,
+      statusH: app.globalData.statusBarHeight || 0,
+      canvasW: Math.floor(info.windowWidth - 56),
+      canvasH: 160,
+      chartType: options?.type === 'breathRate' ? 'breathRate' : 'heartRate'
     })
-    this.buildChart('heartRate')
-    this.buildHistoryList()
+    await this.resolveMember(options?.memberId)
+    this.loadData()
   },
 
-  onReady() {
-    this.drawChart()
+  async resolveMember(memberId?: string) {
+    try {
+      const members = await getMemberList()
+      if (!members.length) return
+      const savedId = memberId || wx.getStorageSync('currentMemberId')
+      const current = members.find((item: any) => String(item.id) === String(savedId)) || members[0]
+      wx.setStorageSync('currentMemberId', current.id)
+      this.setData({ memberId: current.id, memberName: current.name || '' })
+    } catch {}
+  },
+
+  async loadData() {
+    if (!this.data.memberId) {
+      this.setData({ loading: false, historyList: [], heartRatePoints: [], breathPoints: [] })
+      return
+    }
+
+    const end = new Date()
+    const start = new Date()
+    start.setDate(end.getDate() - 6)
+
+    this.setData({ loading: true })
+    try {
+      const [heartRaw, breathRaw] = await Promise.all([
+        getMonitorHistory({ memberId: this.data.memberId, type: 'heartRate', startDate: formatDate(start), endDate: formatDate(end) }),
+        getMonitorHistory({ memberId: this.data.memberId, type: 'breathRate', startDate: formatDate(start), endDate: formatDate(end) })
+      ])
+
+      const heartRatePoints = this.buildPoints(heartRaw)
+      const breathPoints = this.buildPoints(breathRaw)
+      const latestHeart = heartRatePoints[heartRatePoints.length - 1]
+      const latestBreath = breathPoints[breathPoints.length - 1]
+
+      this.setData({
+        heartRatePoints,
+        breathPoints,
+        currentHeartRate: latestHeart ? latestHeart.value : '--',
+        heartRateWarn: latestHeart ? warnHeart(latestHeart.value) : false,
+        currentBreath: latestBreath ? latestBreath.value : '--',
+        breathWarn: latestBreath ? warnBreath(latestBreath.value) : false
+      })
+
+      this.buildChart(this.data.chartType)
+      this.buildHistoryList()
+      setTimeout(() => this.drawChart(), 80)
+    } catch (err: any) {
+      wx.showToast({ title: err.message || '加载失败', icon: 'none' })
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  buildPoints(data: any) {
+    const hours = data?.hours || []
+    const values = data?.values || []
+    const startIndex = Math.max(values.length - 24, 0)
+    return values.slice(startIndex).map((value: any, offset: number) => {
+      const index = startIndex + offset
+      const raw = hours[index]
+      const time = raw ? new Date(raw) : null
+      return {
+        id: index,
+        raw,
+        date: time ? `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}` : '--',
+        time: time ? `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}` : '--',
+        label: time ? `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}` : '--',
+        value: Number(value) || 0
+      }
+    })
   },
 
   buildChart(type: string) {
-    const pts = type === 'heartRate' ? this.data.heartRatePoints : this.data.breathPoints
-    const values = pts.map(p => p.value)
-    const minV = Math.min(...values)
-    const maxV = Math.max(...values)
-    const pad = Math.max(3, Math.ceil((maxV - minV) * 0.2))
-    const yMax = maxV + pad
-    const yMin = minV - pad
-    const step = Math.ceil((yMax - yMin) / 3)
-    const yLabels = [yMax, yMax - step, yMax - 2 * step, yMin].map(v => String(Math.round(v)))
-    // Show every other date label to avoid crowding
-    const xLabels = pts
-      .filter((_, i) => i === 0 || i === 4 || i === pts.length - 1)
-      .map(p => p.date)
-    this.setData({ yLabels, xLabels, chartType: type })
+    const points = type === 'heartRate' ? this.data.heartRatePoints : this.data.breathPoints
+    if (!points.length) {
+      this.setData({ yLabels: [], xLabels: [], chartType: type })
+      return
+    }
+
+    const values = points.map((item: any) => item.value)
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+    const pad = Math.max(3, Math.ceil((max - min) * 0.2) || 3)
+    const yMax = max + pad
+    const yMin = min - pad
+    const step = Math.max(1, Math.ceil((yMax - yMin) / 3))
+    const xLabels = [points[0]?.label, points[Math.floor(points.length / 2)]?.label, points[points.length - 1]?.label].filter(Boolean)
+
+    this.setData({
+      chartType: type,
+      yLabels: [yMax, yMax - step, yMax - step * 2, yMin].map((item) => String(Math.round(item))),
+      xLabels
+    })
   },
 
   drawChart() {
-    const { chartType, heartRatePoints, breathPoints, canvasW, canvasH } = this.data
-    const pts = chartType === 'heartRate' ? heartRatePoints : breathPoints
-    if (!pts || pts.length === 0) return
+    const points = this.data.chartType === 'heartRate' ? this.data.heartRatePoints : this.data.breathPoints
+    if (!points.length) return
 
-    const values = pts.map(p => p.value)
-    const minV = Math.min(...values)
-    const maxV = Math.max(...values)
-    const pad = Math.max(3, Math.ceil((maxV - minV) * 0.2))
-    const dataMin = minV - pad
-    const dataMax = maxV + pad
+    const values = points.map((item: any) => item.value)
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+    const pad = Math.max(3, Math.ceil((max - min) * 0.2) || 3)
+    const dataMin = min - pad
+    const dataMax = max + pad
     const range = dataMax - dataMin || 1
 
-    const W = canvasW, H = canvasH
-    const pL = 8, pR = 12, pT = 16, pB = 8
-    const cW = W - pL - pR
-    const cH = H - pT - pB
+    const width = this.data.canvasW
+    const height = this.data.canvasH
+    const paddingLeft = 8
+    const paddingRight = 12
+    const paddingTop = 16
+    const paddingBottom = 8
+    const chartWidth = width - paddingLeft - paddingRight
+    const chartHeight = height - paddingTop - paddingBottom
 
-    const toX = (i: number) => pL + (i / (pts.length - 1)) * cW
-    const toY = (v: number) => pT + (1 - (v - dataMin) / range) * cH
-
-    const color = chartType === 'heartRate' ? '#3B7EFF' : '#10B981'
-    const fillColor = chartType === 'heartRate' ? 'rgba(59,126,255,0.10)' : 'rgba(16,185,129,0.10)'
-
+    const toX = (index: number) => paddingLeft + (index / Math.max(points.length - 1, 1)) * chartWidth
+    const toY = (value: number) => paddingTop + (1 - (value - dataMin) / range) * chartHeight
+    const color = this.data.chartType === 'heartRate' ? '#3B7EFF' : '#10B981'
+    const fillColor = this.data.chartType === 'heartRate' ? 'rgba(59,126,255,0.10)' : 'rgba(16,185,129,0.10)'
     const ctx = wx.createCanvasContext('lineChart', this)
-    ctx.clearRect(0, 0, W, H)
+    const coordPoints = values.map((value: number, index: number) => ({ x: toX(index), y: toY(value) }))
 
-    // Grid lines
+    ctx.clearRect(0, 0, width, height)
     ctx.setStrokeStyle('rgba(200,215,240,0.5)')
     ctx.setLineWidth(0.5)
-    for (let i = 0; i <= 3; i++) {
-      const y = pT + (i / 3) * cH
-      ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke()
+    for (let index = 0; index <= 3; index += 1) {
+      const y = paddingTop + (index / 3) * chartHeight
+      ctx.beginPath(); ctx.moveTo(paddingLeft, y); ctx.lineTo(width - paddingRight, y); ctx.stroke()
     }
 
-    const coordPts = values.map((v, i) => ({ x: toX(i), y: toY(v) }))
-
-    // Fill area
     ctx.setFillStyle(fillColor)
-    ctx.beginPath()
-    ctx.moveTo(coordPts[0].x, pT + cH)
-    coordPts.forEach(p => ctx.lineTo(p.x, p.y))
-    ctx.lineTo(coordPts[coordPts.length - 1].x, pT + cH)
-    ctx.closePath()
-    ctx.fill()
+    ctx.beginPath(); ctx.moveTo(coordPoints[0].x, paddingTop + chartHeight)
+    coordPoints.forEach((point: any) => ctx.lineTo(point.x, point.y))
+    ctx.lineTo(coordPoints[coordPoints.length - 1].x, paddingTop + chartHeight)
+    ctx.closePath(); ctx.fill()
 
-    // Line
     ctx.setStrokeStyle(color)
     ctx.setLineWidth(2)
     ctx.setLineCap('round')
     ctx.setLineJoin('round')
     ctx.beginPath()
-    coordPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-    ctx.stroke()
+    coordPoints.forEach((point: any, index: number) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y))
+    ctx.stroke(); ctx.draw()
+  },
 
-    // Dots + value labels at peak/ends
-    const peakIdx = values.indexOf(Math.max(...values))
-    const troughIdx = values.indexOf(Math.min(...values))
-    coordPts.forEach((p, i) => {
-      ctx.setFillStyle('#fff')
-      ctx.setStrokeStyle(color)
-      ctx.setLineWidth(2)
-      ctx.beginPath(); ctx.arc(p.x, p.y, 3.5, 0, 2 * Math.PI)
-      ctx.fill(); ctx.stroke()
+  buildHistoryList() {
+    const heartPoints = this.data.heartRatePoints
+    const breathPoints = this.data.breathPoints
+    const total = Math.max(heartPoints.length, breathPoints.length)
+    const historyList = [] as any[]
 
-      if (i === 0 || i === pts.length - 1 || i === peakIdx || i === troughIdx) {
-        ctx.setFontSize(10)
-        ctx.setFillStyle(color)
-        ctx.fillText(String(values[i]), p.x - 8, p.y - 8)
-      }
-    })
+    for (let index = total - 1; index >= 0; index -= 1) {
+      const heart = heartPoints[index]
+      const breath = breathPoints[index]
+      if (!heart && !breath) continue
+      const heartValue = heart?.value
+      const breathValue = breath?.value
+      historyList.push({
+        id: index,
+        date: heart?.date || breath?.date || '--',
+        time: heart?.time || breath?.time || '--',
+        heartRate: heartValue ?? '--',
+        breath: breathValue ?? '--',
+        heartRateWarn: typeof heartValue === 'number' ? warnHeart(heartValue) : false,
+        warn: (typeof heartValue === 'number' && warnHeart(heartValue)) || (typeof breathValue === 'number' && warnBreath(breathValue))
+      })
+    }
 
-    ctx.draw()
+    this.setData({ historyList })
   },
 
   switchChart(e: any) {
@@ -155,22 +223,6 @@ Page({
     setTimeout(() => this.drawChart(), 50)
   },
 
-  buildHistoryList() {
-    const { heartRatePoints, breathPoints } = this.data
-    const list = heartRatePoints.map((h, i) => ({
-      id: i,
-      date: h.date,
-      time: '08:00',
-      heartRate: h.value,
-      breath: breathPoints[i]?.value ?? '--',
-      heartRateWarn: h.value > 85 || h.value < 60,
-      warn: h.value > 85 || h.value < 60 ||
-            (breathPoints[i]?.value > 20 || breathPoints[i]?.value < 12)
-    })).reverse()
-    this.setData({ historyList: list })
-  },
-
-  goBack() {
-    wx.navigateBack()
-  }
+  goBack() { wx.navigateBack() },
+  onPullDownRefresh() { this.loadData().then(() => wx.stopPullDownRefresh()) }
 })

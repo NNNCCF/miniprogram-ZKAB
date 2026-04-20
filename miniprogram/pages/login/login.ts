@@ -1,4 +1,5 @@
 import { unifiedLogin, nurseRegister, guardianRegister, getPublicInstitutionList } from '../../utils/api'
+import { setStoredUserInfo } from '../../utils/session'
 
 Page({
   data: {
@@ -15,7 +16,10 @@ Page({
     orgLoading: false
   },
 
-  onLoad() {
+  onLoad(options: Record<string, string>) {
+    if (options.tab === 'register') {
+      this.setData({ activeTab: 'register' })
+    }
     this.loadOrgList()
   },
 
@@ -73,33 +77,13 @@ Page({
     const { loginForm } = this.data
 
     if (!loginForm.phone || loginForm.phone.length !== 11) {
-      return wx.showToast({ title: '请输入正确手机号', icon: 'none' })
-    }
-    if (!loginForm.password) {
-      return wx.showToast({ title: '请输入密码', icon: 'none' })
-    }
-
-    // ── 虚拟账户（仅供前端开发调试使用）──────────────────────────────
-    const MOCK_ACCOUNTS: Record<string, { role: 'guardian' | 'staff'; name: string }> = {
-      '13333333333': { role: 'guardian', name: '测试家属' },
-      '15555555555': { role: 'staff',    name: '测试医护' },
-    }
-    const mockAccount = MOCK_ACCOUNTS[loginForm.phone]
-    if (mockAccount && loginForm.password === '123456') {
-      const app = getApp<any>()
-      const mockToken = `mock_${mockAccount.role}_token`
-      app.globalData.token = mockToken
-      app.globalData.role  = mockAccount.role
-      wx.setStorageSync('token', mockToken)
-      wx.setStorageSync('role',  mockAccount.role)
-      wx.setStorageSync('userInfo', JSON.stringify({ name: mockAccount.name, phone: loginForm.phone }))
-      const url = mockAccount.role === 'staff'
-        ? '/pages/staff/home/home'
-        : '/pages/guardian/index/index'
-      wx.reLaunch({ url })
+      wx.showToast({ title: '请输入正确手机号', icon: 'none' })
       return
     }
-    // ──────────────────────────────────────────────────────────────────
+    if (!loginForm.password) {
+      wx.showToast({ title: '请输入密码', icon: 'none' })
+      return
+    }
 
     this.setData({ submitting: true })
     wx.showLoading({ title: '登录中...' })
@@ -119,9 +103,10 @@ Page({
         const role = roleMap[(res.role || '').toLowerCase()] || 'guardian'
         app.globalData.token = res.token
         app.globalData.role = role
+        app.globalData.userInfo = res.userInfo || {}
         wx.setStorageSync('token', res.token)
         wx.setStorageSync('role', role)
-        wx.setStorageSync('userInfo', JSON.stringify(res.userInfo || {}))
+        setStoredUserInfo(res.userInfo || {})
 
         const urlMap: Record<string, string> = {
           staff: '/pages/staff/home/home',
@@ -145,19 +130,24 @@ Page({
     const { regForm } = this.data
 
     if (!regForm.phone || regForm.phone.length !== 11) {
-      return wx.showToast({ title: '请输入正确手机号', icon: 'none' })
+      wx.showToast({ title: '请输入正确手机号', icon: 'none' })
+      return
     }
     if (!regForm.name.trim()) {
-      return wx.showToast({ title: '请输入真实姓名', icon: 'none' })
+      wx.showToast({ title: '请输入真实姓名', icon: 'none' })
+      return
     }
     if (!regForm.password || regForm.password.length < 6) {
-      return wx.showToast({ title: '密码不能少于6位', icon: 'none' })
+      wx.showToast({ title: '密码不能少于6位', icon: 'none' })
+      return
     }
     if (regForm.password !== regForm.confirmPassword) {
-      return wx.showToast({ title: '两次密码不一致', icon: 'none' })
+      wx.showToast({ title: '两次密码不一致', icon: 'none' })
+      return
     }
     if (regForm.role === 'staff' && this.data.orgIndex < 0) {
-      return wx.showToast({ title: '请选择所属医疗机构', icon: 'none' })
+      wx.showToast({ title: '请选择所属医疗机构', icon: 'none' })
+      return
     }
 
     const selectedOrg = this.data.orgList[this.data.orgIndex]

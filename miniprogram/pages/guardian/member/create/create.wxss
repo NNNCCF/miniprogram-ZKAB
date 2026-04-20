@@ -9,11 +9,20 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
 .nav-bar {
   position: relative;
   overflow: hidden;
-  height: 136rpx;
+  height: 100rpx;
   flex-shrink: 0;
 }
 .header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24rpx; position: relative; z-index: 1; }
+.nav-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24rpx;
+  position: relative;
+  z-index: 1;
+  transform: translateY(-12rpx);
+}
 .nav-back {
   width: 60rpx;
   height: 60rpx;
@@ -121,7 +130,7 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
 }
 .form-textarea {
   width: 100%;
-  height: 160rpx;
+  min-height: 160rpx;
   font-size: 28rpx;
   color: #111827;
   line-height: 1.6;
@@ -148,40 +157,3 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
   font-weight: 700;
   color: #fff;
 }
-
-/* ===== 顶部 nav-bar（返回款）===== */
-.nav-bar {
-  position: relative;
-  overflow: hidden;
-  height: 88rpx;
-  flex-shrink: 0;
-}
-.header-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-}
-.nav-inner {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24rpx;
-  position: relative;
-  z-index: 1;
-}
-.nav-back {
-  width: 60rpx; height: 60rpx;
-  display: flex; align-items: center; justify-content: center;
-}
-.back-arrow {
-  font-size: 52rpx;
-  color: #fff;
-  line-height: 1;
-}
-.nav-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #fff;
-}
-

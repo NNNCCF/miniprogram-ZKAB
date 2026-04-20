@@ -1,4 +1,4 @@
-import { post } from '../../../utils/request'
+import { createEmergencyCall } from '../../../utils/api'
 
 const app = getApp<any>()
 
@@ -14,10 +14,10 @@ Page({
   async onCall() {
     wx.showLoading({ title: '正在连接...' })
     try {
-      await post('/guardian/emergency/call', { timestamp: Date.now() })
+      await createEmergencyCall()
       wx.hideLoading()
       wx.showToast({ title: '求救信号已发送', icon: 'success' })
-    } catch {
+    } catch (_) {
       wx.hideLoading()
     }
     wx.makePhoneCall({ phoneNumber: '03511234567' })

@@ -1,3 +1,5 @@
+import { getStoredUserInfo } from './utils/session'
+
 // app.ts
 interface AppOption {
   globalData: {
@@ -25,6 +27,7 @@ App<AppOption>({
       this.globalData.token = token
       this.globalData.role = role
     }
+    this.globalData.userInfo = getStoredUserInfo()
 
     // 全局加载鸿蒙字体（Regular + Black 字重）
     const base = 'https://cdn.bootcdn.net/ajax/libs/HarmonyOS-Sans/2.0.0'

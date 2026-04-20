@@ -1,6 +1,4 @@
-import { getMemberList, getMonitorRealtime, getMonitorHistory } from '../../../utils/api'
-
-const app = getApp<any>()
+import { getAlarms, getMemberList, getMonitorHistory, getMonitorRealtime } from '../../../utils/api'
 
 interface HistoryStat {
   avg: string
@@ -22,14 +20,13 @@ Page({
     breathHistory: {} as Partial<HistoryStat>,
     heartHistory: {} as Partial<HistoryStat>,
     chartW: 300,
-    loading: false
+    loading: false,
+    latestAlarmId: null as number | null
   },
 
   onLoad() {
     const { statusBarHeight, windowWidth } = wx.getSystemInfoSync()
-    // 卡片内容宽度 = 屏幕宽 - 页面左右各24px内边距 - 卡片左右各24px内边距
-    const chartW = windowWidth - 96
-    this.setData({ statusH: statusBarHeight || 0, chartW })
+    this.setData({ statusH: statusBarHeight || 0, chartW: windowWidth - 96 })
   },
 
   onShow() {
@@ -39,24 +36,23 @@ Page({
   async loadData() {
     this.setData({ loading: true })
     try {
-      const members: any[] = (await getMemberList()) || []
+      const members = await getMemberList()
       if (members.length === 0) {
-        this.setData({ hasMember: false, member: {}, vitals: {} })
+        this.setData({ hasMember: false, member: {}, vitals: {}, latestAlarmId: null })
         return
       }
 
       const savedId = wx.getStorageSync('currentMemberId')
-      const member = members.find((m: any) => String(m.id) === String(savedId)) || members[0]
-      if (!savedId) wx.setStorageSync('currentMemberId', member.id)
-
+      const member = members.find((item: any) => String(item.id) === String(savedId)) || members[0]
+      wx.setStorageSync('currentMemberId', member.id)
       this.setData({ hasMember: true, member })
 
-      // 并行拉取实时数据 + 今日历史
       const today = new Date().toISOString().slice(0, 10)
-      const [vitalsRes, breathRes, heartRes] = await Promise.allSettled([
+      const [vitalsRes, breathRes, heartRes, alarmRes] = await Promise.allSettled([
         getMonitorRealtime(member.id),
         getMonitorHistory({ memberId: member.id, type: 'breathRate', startDate: today, endDate: today }),
-        getMonitorHistory({ memberId: member.id, type: 'heartRate', startDate: today, endDate: today })
+        getMonitorHistory({ memberId: member.id, type: 'heartRate', startDate: today, endDate: today }),
+        getAlarms({ memberId: String(member.id), status: 'unhandled' })
       ])
 
       const vitals: any = vitalsRes.status === 'fulfilled' ? (vitalsRes.value || {}) : {}
@@ -65,111 +61,112 @@ Page({
       this.setData({ vitals, member })
 
       if (breathRes.status === 'fulfilled' && breathRes.value) {
-        const bh = this.buildHistoryStat(breathRes.value as any, vitals.breathStatus)
-        this.setData({ breathHistory: bh })
-        setTimeout(() => this.drawChart('breathChart', bh.values, '#7B68EE'), 200)
+        const breathHistory = this.buildHistoryStat(breathRes.value as any, vitals.breathStatus)
+        this.setData({ breathHistory })
+        setTimeout(() => this.drawChart('breathChart', breathHistory.values, '#7B68EE'), 80)
       }
-
       if (heartRes.status === 'fulfilled' && heartRes.value) {
-        const hh = this.buildHistoryStat(heartRes.value as any, vitals.heartStatus)
-        this.setData({ heartHistory: hh })
-        setTimeout(() => this.drawChart('heartChart', hh.values, '#7B68EE'), 200)
+        const heartHistory = this.buildHistoryStat(heartRes.value as any, vitals.heartStatus)
+        this.setData({ heartHistory })
+        setTimeout(() => this.drawChart('heartChart', heartHistory.values, '#7B68EE'), 80)
       }
 
-    } catch (e: any) {
-      wx.showToast({ title: e.message || '加载失败', icon: 'none' })
+      if (alarmRes.status === 'fulfilled' && alarmRes.value.length > 0) {
+        this.setData({ latestAlarmId: alarmRes.value[0].id || null })
+      } else {
+        this.setData({ latestAlarmId: null })
+      }
+    } catch (err: any) {
+      wx.showToast({ title: err.message || '加载失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }
   },
 
   buildHistoryStat(data: any, rawStatus?: string): HistoryStat {
-    const values: number[] = (data.values || []).map(Number).filter((v: number) => !isNaN(v))
+    const values: number[] = (data.values || []).map(Number).filter((value: number) => !Number.isNaN(value))
     const hours: string[] = data.hours || []
-
     if (!values.length) {
-      return { avg: '--', max: '--', min: '--', startTime: '--', endTime: '--', status: rawStatus || '正常', isWarn: rawStatus === '异常', values: [], }
+      const status = rawStatus || '正常'
+      return { avg: '--', max: '--', min: '--', startTime: '--', endTime: '--', status, isWarn: status === '异常', values: [] }
     }
-
-    const sum = values.reduce((a, b) => a + b, 0)
-    const avg = (sum / values.length).toFixed(1)
-    const max = Math.max(...values).toFixed(1)
-    const min = Math.min(...values).toFixed(1)
-
+    const sum = values.reduce((total, value) => total + value, 0)
     const fmt = (ts: string) => {
       if (!ts) return '--'
       const d = new Date(ts)
       return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
     }
-
     const status = rawStatus || '正常'
-    return { avg, max, min, startTime: fmt(hours[0]), endTime: fmt(hours[hours.length - 1]), status, isWarn: status === '异常', values }
+    return {
+      avg: (sum / values.length).toFixed(1),
+      max: Math.max(...values).toFixed(1),
+      min: Math.min(...values).toFixed(1),
+      startTime: fmt(hours[0]),
+      endTime: fmt(hours[hours.length - 1]),
+      status,
+      isWarn: status === '异常',
+      values
+    }
   },
 
   drawChart(canvasId: string, values: number[], strokeColor: string) {
     if (!values.length) return
-    const { chartW } = this.data
-    const W = chartW
-    const H = 80
-    const pad = { t: 6, r: 2, b: 6, l: 2 }
-    const dW = W - pad.l - pad.r
-    const dH = H - pad.t - pad.b
-
+    const width = this.data.chartW
+    const height = 80
+    const padding = { t: 6, r: 2, b: 6, l: 2 }
+    const drawWidth = width - padding.l - padding.r
+    const drawHeight = height - padding.t - padding.b
     const max = Math.max(...values)
     const min = Math.min(...values)
     const range = max - min || 1
-
     const ctx = wx.createCanvasContext(canvasId, this)
 
-    // 渐变填充
-    const grad = ctx.createLinearGradient(0, pad.t, 0, H)
-    grad.addColorStop(0, 'rgba(123,104,238,0.20)')
-    grad.addColorStop(1, 'rgba(123,104,238,0.00)')
+    const gradient = ctx.createLinearGradient(0, padding.t, 0, height)
+    gradient.addColorStop(0, 'rgba(123,104,238,0.20)')
+    gradient.addColorStop(1, 'rgba(123,104,238,0.00)')
 
-    const pts = values.map((v, i) => ({
-      x: pad.l + (i / Math.max(values.length - 1, 1)) * dW,
-      y: pad.t + dH - ((v - min) / range) * dH
+    const points = values.map((value, index) => ({
+      x: padding.l + (index / Math.max(values.length - 1, 1)) * drawWidth,
+      y: padding.t + drawHeight - ((value - min) / range) * drawHeight
     }))
 
-    // 填充区域
     ctx.beginPath()
-    ctx.setFillStyle(grad)
-    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-    ctx.lineTo(pts[pts.length - 1].x, H)
-    ctx.lineTo(pts[0].x, H)
+    ctx.setFillStyle(gradient)
+    points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y))
+    ctx.lineTo(points[points.length - 1].x, height)
+    ctx.lineTo(points[0].x, height)
     ctx.closePath()
     ctx.fill()
 
-    // 折线
     ctx.beginPath()
     ctx.setStrokeStyle(strokeColor)
     ctx.setLineWidth(1.5)
     ctx.setLineCap('round')
     ctx.setLineJoin('round')
-    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
+    points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y))
     ctx.stroke()
     ctx.draw()
   },
 
   goBreathHistory() {
-    const { member } = this.data
-    wx.navigateTo({ url: `/pages/guardian/monitor/history/history?memberId=${member.id}&type=breathRate` })
+    wx.navigateTo({ url: `/pages/guardian/monitor/history/history?memberId=${this.data.member.id}&type=breathRate` })
   },
 
   goHeartHistory() {
-    const { member } = this.data
-    wx.navigateTo({ url: `/pages/guardian/monitor/history/history?memberId=${member.id}&type=heartRate` })
+    wx.navigateTo({ url: `/pages/guardian/monitor/history/history?memberId=${this.data.member.id}&type=heartRate` })
   },
 
-  goSwitch() {
-    wx.navigateTo({ url: '/pages/guardian/member/switch/switch' })
+  goLatestAlarm() {
+    const memberId = this.data.member?.id
+    if (!memberId) return
+    if (this.data.latestAlarmId) {
+      wx.navigateTo({ url: `/pages/guardian/monitor/alarm/alarm?id=${this.data.latestAlarmId}` })
+      return
+    }
+    wx.navigateTo({ url: `/pages/guardian/monitor/alarm/alarm?id=latest&memberId=${memberId}` })
   },
 
-  goBindDevice() {
-    wx.navigateTo({ url: '/pages/guardian/device/bind/bind' })
-  },
-
-  onPullDownRefresh() {
-    this.loadData().then(() => wx.stopPullDownRefresh())
-  }
+  goSwitch() { wx.navigateTo({ url: '/pages/guardian/member/switch/switch' }) },
+  goBindDevice() { wx.navigateTo({ url: '/pages/guardian/device/bind/bind' }) },
+  onPullDownRefresh() { this.loadData().then(() => wx.stopPullDownRefresh()) }
 })

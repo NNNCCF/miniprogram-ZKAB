@@ -1,39 +1,10 @@
 import { getFamilyDetail } from '../../../../utils/api'
 
-const GENDER_LABEL: Record<string, string> = {
-  male: '男',
-  female: '女'
-}
-
-interface Member {
-  id: string
-  name: string
-  age: number
-  gender: string
-  genderLabel: string
-  deviceStatus: string
-}
-
-interface AlarmRecord {
-  id: string
-  alarmType: string
-  alarmTime: string
-  status: string
-}
-
-interface FamilyDetail {
-  id: string
-  familyName: string
-  address: string
-  members: Member[]
-  recentAlarms: AlarmRecord[]
-}
-
 Page({
   data: {
     loading: false,
     id: '',
-    family: null as FamilyDetail | null
+    archive: null as any
   },
 
   onLoad(options: Record<string, string>) {
@@ -42,23 +13,25 @@ Page({
     this.load(id)
   },
 
-  load(id: string) {
+  async load(id: string) {
     if (!id) return
     this.setData({ loading: true })
-    getFamilyDetail(id)
-      .then((res: any) => {
-        const members = (res.members || []).map((m: any) => ({
-          ...m,
-          genderLabel: GENDER_LABEL[m.gender] || m.gender
-        }))
-        this.setData({
-          family: { ...res, members, recentAlarms: (res.recentAlarms || []).slice(0, 5) },
-          loading: false
-        })
+    try {
+      const archive = await getFamilyDetail(id)
+      this.setData({
+        archive: {
+          ...archive,
+          recentAlarms: (archive as any).recentAlarms || [],
+          members: (archive as any).members || []
+        },
+        loading: false
       })
-      .catch(() => {
-        this.setData({ loading: false })
-        wx.showToast({ title: '加载失败', icon: 'none' })
+    } catch (err: any) {
+      this.setData({ loading: false })
+      wx.showToast({
+        title: err.message || '加载失败',
+        icon: 'none'
       })
+    }
   }
 })

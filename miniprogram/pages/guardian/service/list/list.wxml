@@ -81,7 +81,7 @@
     </view>
 
     <!-- 新闻列表 -->
-    <view wx:elif="{{news.length}}" class="news-list">
+    <view wx:if="{{!loadingNews && news.length > 0}}" class="news-list">
       <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="goNews" data-id="{{item.id}}">
         <view class="news-dot"></view>
         <view class="news-body">
@@ -93,7 +93,7 @@
     </view>
 
     <!-- 暂无新闻 -->
-    <view wx:else class="news-empty">
+    <view wx:if="{{!loadingNews && news.length === 0}}" class="news-empty">
       <text class="news-empty-text">暂无健康动态</text>
     </view>
 

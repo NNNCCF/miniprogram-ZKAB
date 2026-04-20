@@ -1,26 +1,6 @@
-<staff-navbar title="指派护士" show-back="{{true}}" />
-
+<staff-navbar title="预约详情" show-back="{{true}}" />
 <view class="page-body">
-
-  <!-- Nurse Name -->
   <view class="field-group">
-    <text class="field-label required-label">护士姓名</text>
-    <input
-      class="field-input"
-      type="text"
-      placeholder="请输入负责护士姓名"
-      value="{{nurseName}}"
-      bindinput="onNurseNameInput"
-    />
+    <text class="field-label">正在跳转到正式预约流程...</text>
   </view>
-
-  <!-- Submit -->
-  <button
-    class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
-    bindtap="handleSubmit"
-    disabled="{{submitting}}"
-  >
-    {{submitting ? '提交中...' : '确认指派'}}
-  </button>
-
 </view>

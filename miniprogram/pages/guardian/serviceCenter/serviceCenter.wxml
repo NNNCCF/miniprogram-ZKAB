@@ -1,67 +1,54 @@
 <view class="page">
-  <!-- Map fills the upper portion -->
-  <map
-    class="map"
-    longitude="{{longitude}}"
-    latitude="{{latitude}}"
-    scale="{{scale}}"
-    markers="{{markers}}"
-    show-location
-  ></map>
+  <map class="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" show-location></map>
 
-  <!-- Floating header over map -->
   <view class="header-float" style="padding-top:{{statusH}}px;">
     <view class="header-inner">
       <text class="header-title">服务中心</text>
     </view>
   </view>
 
-  <!-- Bottom panel -->
   <view class="bottom-panel">
-    <!-- Quick actions -->
+    <view class="center-card">
+      <text class="center-name">{{center.name}}</text>
+      <text class="center-meta">{{center.address || '暂无地址信息'}}</text>
+      <text class="center-meta">联系电话：{{center.phone || '暂无'}}</text>
+    </view>
+
     <view class="quick-actions">
-      <view class="quick-action" bindtap="goIntro">
-        <view class="quick-icon-wrap">
-          <image class="quick-icon" src="/images/中心介绍.png" mode="aspectFill" />
-        </view>
-        <text class="quick-label">中心介绍</text>
+      <view class="quick-action" bindtap="showIntro">
+        <view class="quick-icon-wrap quick-blue"><text class="quick-symbol">介</text></view>
+        <text class="quick-label">中心信息</text>
       </view>
       <view class="quick-action" bindtap="callService">
-        <view class="quick-icon-wrap">
-          <image class="quick-icon" src="/images/客服电话.png" mode="aspectFill" />
-        </view>
+        <view class="quick-icon-wrap quick-green"><text class="quick-symbol">电</text></view>
         <text class="quick-label">客服电话</text>
       </view>
-      <view class="quick-action" bindtap="goWeChat">
-        <view class="quick-icon-wrap">
-          <image class="quick-icon" src="/images/微信公众号.png" mode="aspectFill" />
-        </view>
-        <text class="quick-label">微信公众号</text>
+      <view class="quick-action" bindtap="showFaq">
+        <view class="quick-icon-wrap quick-orange"><text class="quick-symbol">问</text></view>
+        <text class="quick-label">常见问题</text>
       </view>
       <view class="quick-action" bindtap="goFeedback">
-        <view class="quick-icon-wrap">
-          <image class="quick-icon" src="/images/意见反馈.png" mode="aspectFill" />
-        </view>
+        <view class="quick-icon-wrap quick-purple"><text class="quick-symbol">评</text></view>
         <text class="quick-label">意见反馈</text>
       </view>
     </view>
 
-    <!-- Divider -->
     <view class="panel-divider"></view>
 
-    <!-- Notices section -->
     <view class="notices-header">
-      <image class="horn-icon" src="/images/服务中心喇叭图标.png" mode="aspectFill" />
-      <text class="notices-title">通知公告</text>
+      <text class="notices-title">资讯公告</text>
     </view>
     <scroll-view class="notices-scroll" scroll-y>
-      <view class="notice-item" wx:for="{{notices}}" wx:key="id" bindtap="goNotice" data-id="{{item.id}}">
+      <view wx:if="{{notices.length === 0}}" class="notice-empty">
+        <text class="notice-empty-text">暂无公告</text>
+      </view>
+      <view wx:if="{{notices.length > 0}}" class="notice-item" wx:for="{{notices}}" wx:key="id" bindtap="goNotice" data-id="{{item.id}}">
         <view class="notice-dot"></view>
         <view class="notice-content">
           <text class="notice-title">{{item.title}}</text>
           <text class="notice-date">{{item.date}}</text>
         </view>
-        <text class="notice-arrow">›</text>
+        <text class="notice-arrow">></text>
       </view>
     </scroll-view>
   </view>

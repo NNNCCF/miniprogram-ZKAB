@@ -36,6 +36,7 @@
     "pages/guardian/service/medicineDetail/medicineDetail",
     "pages/guardian/service/newsDetail/newsDetail",
     "pages/guardian/profile/index/index",
+    "pages/guardian/profile/profileEdit/profileEdit",
     "pages/guardian/profile/alarmSettings/alarmSettings",
     "pages/guardian/profile/feedback/feedback",
     "pages/guardian/profile/serviceCenter/serviceCenter",
@@ -55,7 +56,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "用于在地图上显示您的当前位置"
+      "desc": "用于选择服务地址和展示当前位置"
     }
   },
   "style": "v2",

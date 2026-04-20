@@ -1,4 +1,5 @@
-import { getAppointments, getInstitutionNurses, getInstitutionFamilies, getNewsList } from '../../../utils/api'
+import { getAppointments, getInstitutionFamilies, getInstitutionNurses, getNewsList } from '../../../utils/api'
+import { getStoredUserInfo } from '../../../utils/session'
 
 Page({
   data: {
@@ -21,17 +22,18 @@ Page({
   },
 
   onShow() {
+    this.loadProfile()
     this.loadStats()
     this.loadNews()
   },
 
   loadProfile() {
-    const cached = wx.getStorageSync('userInfo') || {}
+    const cached: any = getStoredUserInfo() || {}
     const name = cached.name || '机构管理员'
     this.setData({
       adminName: name,
       orgName: cached.orgName || '',
-      avatarText: (name as string).slice(-2)
+      avatarText: name.slice(-2)
     })
   },
 
@@ -42,11 +44,9 @@ Page({
       getInstitutionFamilies()
     ])
 
-    const safeLen = (r: PromiseSettledResult<any>) =>
-      r.status === 'fulfilled' ? ((r.value as any[])?.length ?? 0) : 0
-
+    const safeLen = (result: PromiseSettledResult<any>) => result.status === 'fulfilled' ? ((result.value as any[])?.length ?? 0) : 0
     const allAppts: any[] = appts.status === 'fulfilled' ? (appts.value as any[] || []) : []
-    const pendingAppts = allAppts.filter((a: any) => a.status === 'pending').length
+    const pendingAppts = allAppts.filter((item: any) => item.status === 'pending').length
 
     this.setData({
       stats: {
@@ -72,15 +72,7 @@ Page({
     wx.navigateTo({ url: `/pages/guardian/service/newsDetail/newsDetail?id=${id}` })
   },
 
-  goToApptList() {
-    wx.reLaunch({ url: '/pages/institution/appointment/list/list' })
-  },
-
-  goToStaffList() {
-    wx.reLaunch({ url: '/pages/institution/staff/list/list' })
-  },
-
-  goToFamilyList() {
-    wx.navigateTo({ url: '/pages/institution/family/list/list' })
-  }
+  goToApptList() { wx.reLaunch({ url: '/pages/institution/appointment/list/list' }) },
+  goToStaffList() { wx.reLaunch({ url: '/pages/institution/staff/list/list' }) },
+  goToFamilyList() { wx.navigateTo({ url: '/pages/institution/family/list/list' }) }
 })

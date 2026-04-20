@@ -35,13 +35,16 @@ Page({
   async handleSubmit() {
     const { form, id } = this.data
     if (!form.visitDate) {
-      return wx.showToast({ title: '请选择实际上门日期', icon: 'none' })
+      wx.showToast({ title: '请选择实际上门日期', icon: 'none' })
+      return
     }
     if (!form.remark.trim()) {
-      return wx.showToast({ title: '请填写服务备注', icon: 'none' })
+      wx.showToast({ title: '请填写服务备注', icon: 'none' })
+      return
     }
     if (!id) {
-      return wx.showToast({ title: '预约ID缺失', icon: 'none' })
+      wx.showToast({ title: '预约ID缺失', icon: 'none' })
+      return
     }
 
     this.setData({ submitting: true })

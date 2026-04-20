@@ -1,4 +1,4 @@
-const app = getApp<any>()
+const appInstance = getApp<any>()
 
 Page({
   data: {
@@ -8,7 +8,7 @@ Page({
   },
 
   onLoad(options: any) {
-    this.setData({ statusH: app.globalData.statusBarHeight || 0 })
+    this.setData({ statusH: appInstance.globalData.statusBarHeight || 0 })
     const status = options.status || 'fail'
     const result = wx.getStorageSync('bindResult') || {}
     this.setData({

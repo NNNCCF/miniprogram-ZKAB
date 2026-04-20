@@ -1,4 +1,4 @@
-import { get, put } from '../../../../utils/request'
+import { getStaffProfile, updateStaffProfile } from '../../../../utils/api'
 
 interface ProfileForm {
   name: string
@@ -26,7 +26,7 @@ Page({
 
   async loadProfile() {
     try {
-      const data = await get<ProfileForm>('/staff/profile')
+      const data = await getStaffProfile() as ProfileForm
       this.setData({ form: data })
     } catch (err: any) {
       wx.showToast({
@@ -51,7 +51,7 @@ Page({
     }
     this.setData({ saving: true })
     try {
-      await put('/staff/profile', {
+      await updateStaffProfile({
         name: form.name,
         department: form.department,
         title: form.title,

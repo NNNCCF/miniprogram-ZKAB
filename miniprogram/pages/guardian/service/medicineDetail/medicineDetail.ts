@@ -1,4 +1,5 @@
 import { createMedicineOrder } from '../../../../utils/api'
+import { getStoredUserInfo } from '../../../../utils/session'
 
 const app = getApp<any>()
 
@@ -9,7 +10,7 @@ function todayStr() {
 
 function nowTimeStr() {
   const d = new Date()
-  d.setMinutes(d.getMinutes() + 30) // 默认30分钟后
+  d.setMinutes(d.getMinutes() + 30)
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
@@ -17,145 +18,87 @@ Page({
   data: {
     statusH: 0,
     submitting: false,
-    // 地址
-    locating: false,
-    approxAddress: '',    // GPS 自动获取的大致位置
-    addressDetail: '',    // 用户手动填写的门牌/楼层等细节
-    latitude: 0,
-    longitude: 0,
-    // 联系信息
+    selectedAddress: '',
+    addressDetail: '',
     contactName: '',
     contactPhone: '',
-    // 时间（date + time 双 picker）
     deliveryDate: todayStr(),
     deliveryTime: nowTimeStr(),
     minDate: todayStr(),
-    // 付款
-    payMethod: '上门送货时支付',
-    // 药物与备注
+    payMethod: '送达后支付',
     medicines: '',
-    notes: '',
-    // 图片
-    images: [] as string[]
+    notes: ''
   },
 
   onLoad() {
     this.setData({ statusH: app.globalData.statusBarHeight || 0 })
-    this.loadUserInfo()
-    this.autoLocate()
+    const info: any = getStoredUserInfo() || {}
+    this.setData({ contactName: info.name || '', contactPhone: info.phone || info.mobile || '' })
   },
 
-  loadUserInfo() {
-    try {
-      let info = wx.getStorageSync('userInfo') || {}
-      if (typeof info === 'string') info = JSON.parse(info)
-      this.setData({
-        contactName: info.name || '',
-        contactPhone: info.mobile || info.phone || ''
-      })
-    } catch {}
-  },
-
-  // ── 自动定位（大致位置）──
-  autoLocate() {
-    this.setData({ locating: true })
-    wx.getSetting({
+  chooseLocation() {
+    wx.chooseLocation({
       success: (res) => {
-        const auth = res.authSetting['scope.userLocation']
-        if (auth === false) {
-          this.setData({ locating: false })
-          return
-        }
-        const doLocate = () => {
-          wx.getLocation({
-            type: 'gcj02',
-            success: (loc) => {
-              this.setData({ latitude: loc.latitude, longitude: loc.longitude })
-              // 用腾讯地图逆地理编码（失败直接用坐标）
-              wx.request({
-                url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${loc.latitude},${loc.longitude}&key=YOUR_KEY&output=json`,
-                success: (r: any) => {
-                  const addr = r.data?.result?.address || `${loc.latitude.toFixed(4)},${loc.longitude.toFixed(4)}`
-                  this.setData({ approxAddress: addr, locating: false })
-                },
-                fail: () => {
-                  this.setData({ approxAddress: `${loc.latitude.toFixed(4)},${loc.longitude.toFixed(4)}`, locating: false })
-                }
-              })
-            },
-            fail: () => { this.setData({ locating: false }) }
-          })
-        }
-        if (!auth) {
-          wx.authorize({ scope: 'scope.userLocation', success: doLocate, fail: () => this.setData({ locating: false }) })
-        } else {
-          doLocate()
-        }
+        const title = [res.name, res.address].filter(Boolean).join(' ')
+        this.setData({ selectedAddress: title })
       }
     })
   },
 
-  // ── 点击重新定位 ──
-  reLocate() { this.autoLocate() },
-
-  // ── 日期选择 ──
-  onDateChange(e: any) {
-    this.setData({ deliveryDate: e.detail.value })
-  },
-
-  // ── 时间选择（精确到分钟）──
-  onTimeChange(e: any) {
-    this.setData({ deliveryTime: e.detail.value })
-  },
-
+  onDateChange(e: any) { this.setData({ deliveryDate: e.detail.value }) },
+  onTimeChange(e: any) { this.setData({ deliveryTime: e.detail.value }) },
   onInput(e: any) {
     const field = e.currentTarget.dataset.field as string
     this.setData({ [field]: e.detail.value })
   },
 
-  chooseImage() {
-    const { images } = this.data
-    if (images.length >= 4) return wx.showToast({ title: '最多4张', icon: 'none' })
-    wx.chooseMedia({
-      count: 4 - images.length,
-      mediaType: ['image'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        this.setData({ images: [...images, ...res.tempFiles.map(f => f.tempFilePath)] })
-      }
-    })
-  },
-
-  removeImage(e: any) {
-    const idx = e.currentTarget.dataset.index as number
-    this.setData({ images: this.data.images.filter((_, i) => i !== idx) })
-  },
-
   async submit() {
-    const { approxAddress, addressDetail, contactName, contactPhone, medicines, deliveryDate, deliveryTime, notes, submitting } = this.data
-    if (!approxAddress && !addressDetail) return wx.showToast({ title: '请完成地址定位或填写地址', icon: 'none' })
-    if (!contactName.trim()) return wx.showToast({ title: '请填写联系人', icon: 'none' })
-    if (!contactPhone.trim()) return wx.showToast({ title: '请填写联系电话', icon: 'none' })
-    if (!medicines.trim()) return wx.showToast({ title: '请填写所需药物', icon: 'none' })
-    if (submitting) return
+    if (this.data.submitting) return
+    if (!this.data.selectedAddress && !this.data.addressDetail.trim()) {
+      wx.showToast({ title: '请先选择地址或补充地址', icon: 'none' })
+      return
+    }
+    if (!this.data.contactName.trim()) {
+      wx.showToast({ title: '请填写联系人', icon: 'none' })
+      return
+    }
+    if (!this.data.contactPhone.trim()) {
+      wx.showToast({ title: '请填写联系电话', icon: 'none' })
+      return
+    }
+    if (!this.data.medicines.trim()) {
+      wx.showToast({ title: '请填写所需药品', icon: 'none' })
+      return
+    }
 
-    const fullAddress = addressDetail ? `${approxAddress} ${addressDetail}` : approxAddress
-    const fullTime = `${deliveryDate} ${deliveryTime}`
+    const medicineList = this.data.medicines.split(/[，,\n]+/).map((item) => item.trim()).filter(Boolean)
+    if (!medicineList.length) {
+      wx.showToast({ title: '请填写有效药品名称', icon: 'none' })
+      return
+    }
+
+    const fullAddress = [this.data.selectedAddress, this.data.addressDetail.trim()].filter(Boolean).join(' ')
+    const addressDesc = [
+      `地址：${fullAddress}`,
+      `联系人：${this.data.contactName.trim()}`,
+      `电话：${this.data.contactPhone.trim()}`,
+      `送达时间：${this.data.deliveryDate} ${this.data.deliveryTime}`
+    ].join('；')
+
     this.setData({ submitting: true })
     wx.showLoading({ title: '提交中...' })
     try {
-      const medicineList = medicines.split(/[,，、\n]+/).map(s => s.trim()).filter(Boolean)
       await createMedicineOrder({
-        medicines: medicineList.map(name => ({ name, spec: '', qty: 1 })),
-        address: `${fullAddress} 联系人：${contactName} 电话：${contactPhone} 送药时间：${fullTime}`,
-        notes: notes || ''
+        medicines: medicineList.map((name) => ({ name, spec: '', qty: 1 })),
+        address: addressDesc,
+        notes: this.data.notes.trim()
       })
       wx.hideLoading()
       wx.showToast({ title: '订单已提交', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1500)
-    } catch (e: any) {
+      setTimeout(() => wx.navigateBack(), 1200)
+    } catch (err: any) {
       wx.hideLoading()
-      wx.showToast({ title: e.message || '提交失败', icon: 'none' })
+      wx.showToast({ title: err.message || '提交失败', icon: 'none' })
     } finally {
       this.setData({ submitting: false })
     }
