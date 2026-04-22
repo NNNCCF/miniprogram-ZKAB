@@ -1,4 +1,4 @@
-const DEFAULT_API_ORIGIN = 'http://223.4.249.209:8080'
+const DEFAULT_API_ORIGIN = 'http://116.204.127.178:8080'
 
 export function getBaseUrl() {
   const customOrigin = wx.getStorageSync('apiBaseUrl')
