@@ -3,18 +3,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.del = exports.put = exports.post = exports.get = void 0;
 exports.request = request;
 var config_1 = require("./config");
+var sign_1 = require("./sign");
 function request(url, method, data) {
     if (method === void 0) { method = 'GET'; }
     var app = getApp();
     var token = app.globalData.token || wx.getStorageSync('token') || '';
+    var baseUrl = (0, config_1.getBaseUrl)();
+    var requestPath = "/api".concat(url);
+    var query = method === 'GET' && data ? (0, sign_1.buildCanonicalQuery)(data) : '';
+    var requestUrl = query ? "".concat(baseUrl).concat(url, "?").concat(query) : "".concat(baseUrl).concat(url);
+    var body = method === 'GET' || data === undefined ? '' : (0, sign_1.stableStringify)(data);
     return new Promise(function (resolve, reject) {
         wx.request({
-            url: (0, config_1.getBaseUrl)() + url,
+            url: requestUrl,
             method: method,
-            data: data,
+            data: body || undefined,
             header: {
                 'Content-Type': 'application/json',
-                Authorization: token ? "Bearer ".concat(token) : ''
+                Authorization: token ? "Bearer ".concat(token) : '',
+                'X-Mini-Client-Id': (0, sign_1.buildMiniAppSignatureHeaders)(method, requestPath, query, body)['X-Mini-Client-Id'],
+                'X-Mini-Timestamp': (0, sign_1.buildMiniAppSignatureHeaders)(method, requestPath, query, body)['X-Mini-Timestamp'],
+                'X-Mini-Nonce': (0, sign_1.buildMiniAppSignatureHeaders)(method, requestPath, query, body)['X-Mini-Nonce'],
+                'X-Mini-Signature': (0, sign_1.buildMiniAppSignatureHeaders)(method, requestPath, query, body)['X-Mini-Signature']
             },
             success: function (res) {
                 if (res.statusCode === 401) {

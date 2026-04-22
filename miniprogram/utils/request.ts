@@ -1,4 +1,5 @@
 import { getBaseUrl } from './config'
+import { buildCanonicalQuery, buildMiniAppSignatureHeaders, stableStringify } from './sign'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -9,15 +10,21 @@ export function request<T = any>(
 ): Promise<T> {
   const app = getApp<{ globalData: { token: string } }>()
   const token = app.globalData.token || wx.getStorageSync('token') || ''
+  const baseUrl = getBaseUrl()
+  const requestPath = `/api${url}`
+  const query = method === 'GET' && data ? buildCanonicalQuery(data) : ''
+  const requestUrl = query ? `${baseUrl}${url}?${query}` : `${baseUrl}${url}`
+  const body = method === 'GET' || data === undefined ? '' : stableStringify(data)
 
   return new Promise((resolve, reject) => {
     wx.request({
-      url: getBaseUrl() + url,
+      url: requestUrl,
       method,
-      data,
+      data: body || undefined,
       header: {
         'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : ''
+        Authorization: token ? `Bearer ${token}` : '',
+        ...buildMiniAppSignatureHeaders(method, requestPath, query, body)
       },
       success(res: any) {
         if (res.statusCode === 401) {
