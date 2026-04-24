@@ -232,6 +232,29 @@ export const createNewsPost = (data: {
   attachments?: string[]
 }) => post('/news', data)
 
+// ─── 文件上传 /mini/upload ────────────────────────────────
+export const uploadPhoto = (filePath: string): Promise<string> => {
+  const app = getApp<{ globalData: { token: string } }>()
+  const token = app.globalData.token || wx.getStorageSync('token') || ''
+  const origin = wx.getStorageSync('apiBaseUrl') || 'https://116.204.127.178'
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url: `${origin}/api/mini/upload`,
+      filePath,
+      name: 'file',
+      header: { Authorization: token ? `Bearer ${token}` : '' },
+      success(res: any) {
+        try {
+          const data = JSON.parse(res.data)
+          if (data.code === 0 && data.data) resolve(data.data)
+          else reject(new Error(data.message || '上传失败'))
+        } catch { reject(new Error('上传响应解析失败')) }
+      },
+      fail(err: any) { reject(new Error(err.errMsg || '上传失败')) }
+    })
+  })
+}
+
 // ─── 新闻动态 /api/news ───────────────────────────────────
 export const getNewsList = () =>
   get('/news')

@@ -30,6 +30,22 @@
         <text class="menu-label">绑定家庭</text>
         <text class="menu-arrow">›</text>
       </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="goToMap">
+        <view class="menu-icon-wrap menu-icon-blue">
+          <text class="menu-icon-char">🗺️</text>
+        </view>
+        <text class="menu-label">家庭地图</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="goToPublish">
+        <view class="menu-icon-wrap menu-icon-green">
+          <text class="menu-icon-char">📢</text>
+        </view>
+        <text class="menu-label">发布动态</text>
+        <text class="menu-arrow">›</text>
+      </view>
     </view>
 
     <!-- Logout -->

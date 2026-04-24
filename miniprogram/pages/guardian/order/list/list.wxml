@@ -1,0 +1,77 @@
+<view class="page">
+  <view class="header" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="header-inner">
+      <view class="back-btn" bindtap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="header-title">我的订单</text>
+    </view>
+  </view>
+
+  <view class="tabs-wrap">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="index"
+      class="tab-item {{activeTab === index ? 'tab-active' : ''}}"
+      data-index="{{index}}"
+      bindtap="onTabChange"
+    >
+      <text class="tab-text">{{item}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="list-area" scroll-y>
+    <view wx:if="{{loading}}" class="state-wrap">
+      <text class="state-text">加载中...</text>
+    </view>
+
+    <view wx:elif="{{displayOrders.length === 0}}" class="state-wrap">
+      <text class="empty-icon">📋</text>
+      <text class="state-text">暂无订单记录</text>
+      <text class="state-sub">下拉可刷新</text>
+    </view>
+
+    <view wx:else class="order-list">
+      <view
+        wx:for="{{displayOrders}}"
+        wx:key="id"
+        class="order-card"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <view class="card-head">
+          <view class="type-badge" style="background:{{item.typeColor}}22; border:1rpx solid {{item.typeColor}}40;">
+            <text class="type-icon" style="color:{{item.typeColor}};">{{item.typeIcon}}</text>
+            <text class="type-label">{{item.type}}</text>
+          </view>
+          <view class="status-tag" style="background:{{item.displayColor}}18;">
+            <text class="status-text" style="color:{{item.displayColor}};">{{item.displayLabel}}</text>
+          </view>
+        </view>
+
+        <view class="card-body">
+          <view class="info-row">
+            <text class="info-icon">👤</text>
+            <text class="info-label">服务成员</text>
+            <text class="info-val">{{item.memberName || '未知'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-icon">🕐</text>
+            <text class="info-label">预约时间</text>
+            <text class="info-val">{{item.appointTime || '-'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.nurseName}}">
+            <text class="info-icon">👨‍⚕️</text>
+            <text class="info-label">护理人员</text>
+            <text class="info-val nurse-text">{{item.nurseName}}</text>
+          </view>
+        </view>
+
+        <view class="card-foot">
+          <text class="detail-link">查看详情 ›</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

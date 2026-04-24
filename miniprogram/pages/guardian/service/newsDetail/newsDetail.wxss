@@ -13,3 +13,6 @@ page { background: #EEF2FF; height: 100vh; overflow: hidden; }
 .divider { height: 1rpx; background: #F0F4FF; margin-bottom: 32rpx; }
 .article-content { font-size: 28rpx; color: #374151; line-height: 1.8; display: block; }
 .loading { display: flex; justify-content: center; padding: 80rpx; color: #9CA3AF; font-size: 28rpx; }
+
+.img-grid { margin-top: 32rpx; display: flex; flex-direction: column; gap: 16rpx; }
+.attach-img { width: 100%; border-radius: 16rpx; display: block; }

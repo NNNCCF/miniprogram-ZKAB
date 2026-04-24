@@ -27,7 +27,6 @@ Page({
         avatarText: cached.name.slice(-2)
       })
     }
-
     try {
       const profile: any = await getStaffProfile()
       const merged = setStoredUserInfo({ ...cached, ...profile })
@@ -43,6 +42,14 @@ Page({
 
   goToFamilyList() {
     wx.navigateTo({ url: '/pages/institution/family/list/list' })
+  },
+
+  goToMap() {
+    wx.navigateTo({ url: '/pages/institution/mapDetail/mapDetail' })
+  },
+
+  goToPublish() {
+    wx.navigateTo({ url: '/pages/institution/publish/publish' })
   },
 
   onLogout() {

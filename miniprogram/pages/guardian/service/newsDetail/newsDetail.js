@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var request_1 = require("../../../../utils/request");
 Page({
-    data: { statusH: 0, loading: true, article: {} },
+    data: { statusH: 0, loading: true, article: {}, attachments: [] },
     onLoad: function (options) {
         var app = getApp();
         this.setData({ statusH: app.globalData.statusBarHeight || 0 });
@@ -46,7 +46,7 @@ Page({
     },
     load: function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var res, _a;
+            var res, attachments, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -54,7 +54,13 @@ Page({
                         return [4 /*yield*/, (0, request_1.get)('/news/' + id)];
                     case 1:
                         res = _b.sent();
-                        this.setData({ article: res, loading: false });
+                        attachments = [];
+                        if (Array.isArray(res.attachments)) {
+                            attachments = res.attachments.filter(Boolean);
+                        } else if (typeof res.attachments === 'string' && res.attachments) {
+                            attachments = [res.attachments];
+                        }
+                        this.setData({ article: res, attachments: attachments, loading: false });
                         return [3 /*break*/, 3];
                     case 2:
                         _a = _b.sent();
@@ -64,6 +70,10 @@ Page({
                 }
             });
         });
+    },
+    previewImg: function (e) {
+        var index = Number(e.currentTarget.dataset.index);
+        wx.previewImage({ current: this.data.attachments[index], urls: this.data.attachments });
     },
     goBack: function () { wx.navigateBack(); }
 });

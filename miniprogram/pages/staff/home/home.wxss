@@ -181,11 +181,31 @@ page {
   border-top: 1rpx solid #EBF0FA;
 }
 
+.news-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
 .news-section-title {
   font-size: 22rpx;
   font-weight: 600;
   color: #8A94A8;
-  margin-bottom: 10rpx;
+}
+
+.news-more-btn {
+  font-size: 20rpx;
+  color: #3B7EFF;
+}
+
+.news-empty-sm {
+  padding: 8rpx 0;
+}
+
+.news-empty-text-sm {
+  font-size: 22rpx;
+  color: #BCC4D6;
 }
 
 .news-row {

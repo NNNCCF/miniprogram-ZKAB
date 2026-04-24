@@ -92,7 +92,7 @@ Page({
       })
       wx.hideLoading()
       wx.showToast({ title: '订单已提交', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1200)
+      setTimeout(() => wx.navigateTo({ url: '/pages/guardian/order/list/list' }), 1200)
     } catch (err: any) {
       wx.hideLoading()
       wx.showToast({ title: err.message || '提交失败', icon: 'none' })

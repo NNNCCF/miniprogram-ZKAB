@@ -73,12 +73,20 @@
     </view>
 
     <!-- 健康动态（简要） -->
-    <view wx:if="{{news.length}}" class="news-section">
-      <view class="news-section-title">健康动态</view>
-      <view class="news-row" wx:for="{{news}}" wx:key="id" bindtap="goToNews" data-id="{{item.id}}">
-        <view class="news-dot-sm"></view>
-        <text class="news-text-sm">{{item.title}}</text>
-        <text class="news-arrow-sm">›</text>
+    <view class="news-section">
+      <view class="news-section-header" bindtap="goToNewsList">
+        <text class="news-section-title">健康动态</text>
+        <text class="news-more-btn">查看全部 ›</text>
+      </view>
+      <view wx:if="{{news.length > 0}}">
+        <view class="news-row" wx:for="{{news}}" wx:key="id" bindtap="goToNews" data-id="{{item.id}}">
+          <view class="news-dot-sm"></view>
+          <text class="news-text-sm">{{item.title}}</text>
+          <text class="news-arrow-sm">›</text>
+        </view>
+      </view>
+      <view wx:else class="news-empty-sm">
+        <text class="news-empty-text-sm">暂无动态，点击查看全部</text>
       </view>
     </view>
 

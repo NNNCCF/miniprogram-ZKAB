@@ -168,6 +168,10 @@ Page({
     wx.navigateTo({ url: `/pages/guardian/service/newsDetail/newsDetail?id=${id}` })
   },
 
+  goToNewsList() {
+    wx.navigateTo({ url: '/pages/staff/news/list/list' })
+  },
+
   async loadMapData() {
     const [families, devices, center] = await Promise.all([
       getFamilyMapList().catch(() => []),

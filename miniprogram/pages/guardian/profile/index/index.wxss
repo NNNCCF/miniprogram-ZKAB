@@ -124,6 +124,17 @@ page {
   font-size: 24rpx;
   color: #9CA3AF;
 }
+.stat-clickable {
+  position: relative;
+}
+.stat-num-blue {
+  color: #3B7EFF;
+}
+.stat-goto {
+  font-size: 20rpx;
+  color: #3B7EFF;
+  margin-top: -4rpx;
+}
 .stat-sep {
   width: 1rpx;
   height: 60rpx;

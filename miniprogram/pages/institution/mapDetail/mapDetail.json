@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "staff-navbar": "/components/staff-navbar/staff-navbar"
+  }
+}

@@ -195,3 +195,33 @@ var getNewsDetail = function (id) {
     return (0, request_1.get)("/news/".concat(id));
 };
 exports.getNewsDetail = getNewsDetail;
+// ─── 文件上传 /mini/upload ────────────────────────────────
+var uploadPhoto = function (filePath) {
+    var app = getApp();
+    var token = app.globalData.token || wx.getStorageSync('token') || '';
+    var origin = wx.getStorageSync('apiBaseUrl') || 'https://116.204.127.178';
+    return new Promise(function (resolve, reject) {
+        wx.uploadFile({
+            url: origin + '/api/mini/upload',
+            filePath: filePath,
+            name: 'file',
+            header: { Authorization: token ? 'Bearer ' + token : '' },
+            success: function (res) {
+                try {
+                    var data = JSON.parse(res.data);
+                    if (data.code === 0 && data.data) {
+                        resolve(data.data);
+                    } else {
+                        reject(new Error(data.message || '\u4E0A\u4F20\u5931\u8D25'));
+                    }
+                } catch (e) {
+                    reject(new Error('\u4E0A\u4F20\u54CD\u5E94\u89E3\u6790\u5931\u8D25'));
+                }
+            },
+            fail: function (err) {
+                reject(new Error(err.errMsg || '\u4E0A\u4F20\u5931\u8D25'));
+            }
+        });
+    });
+};
+exports.uploadPhoto = uploadPhoto;

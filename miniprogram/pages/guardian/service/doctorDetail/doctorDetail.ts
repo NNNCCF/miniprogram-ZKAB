@@ -221,7 +221,7 @@ Page({
       })
       wx.hideLoading()
       wx.showToast({ title: '预约成功', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1200)
+      setTimeout(() => wx.navigateTo({ url: '/pages/guardian/order/list/list' }), 1200)
     } catch (err: any) {
       wx.hideLoading()
       wx.showToast({ title: err.message || '预约失败', icon: 'none' })

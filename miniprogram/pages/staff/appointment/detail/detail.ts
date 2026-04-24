@@ -2,21 +2,18 @@ import { getAppointmentDetail, acceptAppointment } from '../../../../utils/api'
 
 const STATUS_LABEL: Record<string, string> = {
   pending: '待处理',
-  accepted: '已接受',
+  dispatched: '已派单',
+  accepted: '已接单',
+  in_progress: '服务中',
   completed: '已完成',
   cancelled: '已取消'
 }
 
-interface AppointmentDetail {
-  id: string
-  type: string
-  status: string
-  statusLabel: string
-  appointTime: string
-  requirement: string
-  memberName: string
-  guardianName: string
-  nurseName: string
+const DONE_STATUSES = ['completed', 'cancelled']
+const ACCEPTED_STATUSES = ['accepted', 'in_progress']
+
+function normalizeStatus(raw: string): string {
+  return (raw || '').toLowerCase().trim()
 }
 
 Page({
@@ -24,7 +21,9 @@ Page({
     loading: false,
     accepting: false,
     id: '',
-    appt: null as AppointmentDetail | null
+    appt: null as any,
+    rawStatus: '',
+    btnMode: '' as 'accept' | 'record' | 'done' | ''
   },
 
   onLoad(options: Record<string, string>) {
@@ -42,11 +41,15 @@ Page({
     this.setData({ loading: true })
     getAppointmentDetail(id)
       .then((res: any) => {
+        const rawStatus = res.status || ''
+        const status = normalizeStatus(rawStatus)
+        let btnMode: 'accept' | 'record' | 'done' = 'accept'
+        if (DONE_STATUSES.includes(status)) btnMode = 'done'
+        else if (ACCEPTED_STATUSES.includes(status)) btnMode = 'record'
         this.setData({
-          appt: {
-            ...res,
-            statusLabel: STATUS_LABEL[res.status] || res.status
-          },
+          appt: { ...res, status, statusLabel: STATUS_LABEL[status] || rawStatus || '未知' },
+          rawStatus,
+          btnMode,
           loading: false
         })
       })
@@ -60,15 +63,19 @@ Page({
     const { id, accepting } = this.data
     if (accepting || !id) return
     this.setData({ accepting: true })
-    wx.showLoading({ title: '接受中...' })
+    wx.showLoading({ title: '接单中...' })
     try {
       await acceptAppointment(id)
       wx.hideLoading()
-      wx.showToast({ title: '已接受预约', icon: 'success' })
+      wx.showToast({ title: '接单成功', icon: 'success' })
       setTimeout(() => this.loadDetail(id), 1500)
     } catch (err: any) {
       wx.hideLoading()
-      wx.showToast({ title: err.message || '操作失败', icon: 'none' })
+      if (err.message?.includes('已')) {
+        this.setData({ btnMode: 'record' })
+      } else {
+        wx.showToast({ title: err.message || '接单失败', icon: 'none' })
+      }
     } finally {
       this.setData({ accepting: false })
     }
@@ -76,7 +83,7 @@ Page({
 
   goToRecord() {
     wx.navigateTo({
-      url: `/pages/staff/appointment/record/record?id=${this.data.id}`
+      url: `/pages/staff/appointment/record/record?id=${this.data.id}&status=${this.data.rawStatus}`
     })
   },
 

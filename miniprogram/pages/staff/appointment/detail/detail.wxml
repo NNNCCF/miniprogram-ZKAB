@@ -7,6 +7,11 @@
     <text class="status-banner-text">{{appt.statusLabel}}</text>
   </view>
 
+  <!-- 调试行（确认正常后删除） -->
+  <view style="background:#FFF3CD;padding:14rpx 32rpx;font-size:22rpx;color:#856404;">
+    status=【{{rawStatus}}】  appt.status=【{{appt.status}}】
+  </view>
+
   <!-- Appointment Base Info -->
   <view class="section-title">预约信息</view>
   <view class="info-card">
@@ -67,14 +72,6 @@
         <text class="record-label">服务内容</text>
         <text class="record-value">{{appt.record.serviceContent || '—'}}</text>
       </view>
-      <view class="record-row">
-        <text class="record-label">健康观察</text>
-        <text class="record-value">{{appt.record.healthObservation || '—'}}</text>
-      </view>
-      <view class="record-row">
-        <text class="record-label">跟进计划</text>
-        <text class="record-value">{{appt.record.followUpPlan || '—'}}</text>
-      </view>
     </view>
   </view>
 
@@ -84,13 +81,24 @@
   <text class="hint-text">加载中...</text>
 </view>
 
-<!-- Bottom Action -->
+<!-- Bottom Action：直接用 appt.status 判断，不经过中间变量 -->
 <view class="bottom-bar" wx:if="{{!loading && appt}}">
-  <button class="btn-primary" wx:if="{{appt.status === 'pending'}}" bindtap="goToAccept">
-    接受预约
-  </button>
-  <button class="btn-primary" wx:elif="{{appt.status === 'accepted'}}" bindtap="goToRecord">
-    填写记录
-  </button>
-  <button class="btn-secondary btn-full" wx:else bindtap="goBack">返回列表</button>
+  <button
+    class="btn-primary"
+    wx:if="{{appt.status === 'pending'}}"
+    bindtap="goToAccept"
+    disabled="{{accepting}}"
+  >{{accepting ? '接单中...' : '接单'}}</button>
+
+  <button
+    class="btn-primary"
+    wx:elif="{{appt.status === 'accepted' || appt.status === 'dispatched' || appt.status === 'in_progress'}}"
+    bindtap="goToRecord"
+  >填写服务记录</button>
+
+  <button
+    class="btn-secondary btn-full"
+    wx:else
+    bindtap="goBack"
+  >返回列表</button>
 </view>

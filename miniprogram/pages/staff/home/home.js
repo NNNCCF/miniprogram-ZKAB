@@ -157,6 +157,9 @@ Page({
             });
         });
     },
+    goToNewsList: function () {
+        wx.navigateTo({ url: '/pages/staff/news/list/list' });
+    },
     goToNews: function (e) {
         var id = e.currentTarget.dataset.id;
         if (!id)

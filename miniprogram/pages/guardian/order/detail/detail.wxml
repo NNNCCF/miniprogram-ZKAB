@@ -1,0 +1,130 @@
+<view class="page">
+  <view class="header" style="padding-top:{{statusH}}px;">
+    <image class="header-bg" src="/images/nav_top_bg.png" mode="aspectFill" />
+    <view class="header-inner">
+      <view class="back-btn" bindtap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="header-title">订单详情</text>
+    </view>
+  </view>
+
+  <scroll-view class="body-area" scroll-y>
+    <view wx:if="{{loading}}" class="state-wrap">
+      <text class="state-text">加载中...</text>
+    </view>
+
+    <block wx:elif="{{appt}}">
+      <!-- Cancelled Banner -->
+      <view class="cancelled-banner" wx:if="{{cancelled}}">
+        <text class="cancelled-text">该订单已取消</text>
+      </view>
+
+      <!-- Progress Section -->
+      <view class="section progress-section" wx:if="{{!cancelled}}">
+        <text class="section-title">订单进度</text>
+
+        <view class="progress-track-wrap">
+          <!-- Dots Row -->
+          <view class="dots-row">
+            <view
+              wx:for="{{progressData}}"
+              wx:key="index"
+              class="dot-wrap"
+            >
+              <view class="p-dot {{item.active ? 'dot-active' : ''}} {{item.current ? 'dot-cur' : ''}}">
+                <text class="dot-check" wx:if="{{item.done}}">✓</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- Track Line -->
+          <view class="track-bg">
+            <view class="track-fill" style="width:{{trackWidth}};"></view>
+          </view>
+
+          <!-- Labels Row -->
+          <view class="labels-row">
+            <view wx:for="{{progressData}}" wx:key="index" class="label-wrap">
+              <text class="p-label {{item.current ? 'label-cur' : ''}} {{item.done ? 'label-done' : ''}}">{{item.label}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- Current step description -->
+        <view class="step-desc">
+          <text class="step-desc-text" wx:if="{{currentStep === 0}}">订单已提交，等待机构安排</text>
+          <text class="step-desc-text" wx:elif="{{currentStep === 1}}">机构已派单，等待护理人员接单</text>
+          <text class="step-desc-text" wx:elif="{{currentStep === 2}}">护理人员已接单，即将上门服务</text>
+          <text class="step-desc-text" wx:elif="{{currentStep === 3}}">服务进行中</text>
+          <text class="step-desc-text done" wx:elif="{{currentStep === 4}}">服务已完成</text>
+        </view>
+      </view>
+
+      <!-- Order Info -->
+      <view class="section">
+        <text class="section-title">订单信息</text>
+        <view class="info-card">
+          <view class="info-row">
+            <text class="info-label">服务类型</text>
+            <text class="info-value">{{appt.type}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">预约时间</text>
+            <text class="info-value">{{appt.appointTime || '-'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">服务成员</text>
+            <text class="info-value">{{appt.memberName || '-'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{appt.guardianName}}">
+            <text class="info-label">联系人</text>
+            <text class="info-value">{{appt.guardianName}}</text>
+          </view>
+          <view class="info-row req-row" wx:if="{{appt.requirement}}">
+            <text class="info-label">需求说明</text>
+            <text class="info-value req-value">{{appt.requirement}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Nurse Info (show when nurse is assigned) -->
+      <view class="section" wx:if="{{appt.nurseName}}">
+        <text class="section-title">护理人员信息</text>
+        <view class="nurse-card">
+          <view class="nurse-avatar">
+            <text class="nurse-avatar-text">{{appt.nurseName[0]}}</text>
+          </view>
+          <view class="nurse-info">
+            <text class="nurse-name">{{appt.nurseName}}</text>
+            <text class="nurse-phone" wx:if="{{appt.doctorPhone}}">{{appt.doctorPhone}}</text>
+            <text class="nurse-phone no-phone" wx:else>暂无联系电话</text>
+          </view>
+          <view class="call-btn" bindtap="callNurse" wx:if="{{appt.doctorPhone}}">
+            <text class="call-icon">📞</text>
+            <text class="call-text">拨打</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Service Record (completed orders) -->
+      <view class="section" wx:if="{{appt.status === 'completed' && appt.record}}">
+        <text class="section-title">服务记录</text>
+        <view class="info-card">
+          <view class="info-row" wx:if="{{appt.visitTime}}">
+            <text class="info-label">上门时间</text>
+            <text class="info-value">{{appt.visitTime}}</text>
+          </view>
+          <view class="info-row req-row" wx:if="{{appt.record.serviceContent}}">
+            <text class="info-label">服务备注</text>
+            <text class="info-value req-value">{{appt.record.serviceContent}}</text>
+          </view>
+          <view class="info-row" wx:if="{{appt.record.followUpPlan}}">
+            <text class="info-label">费用信息</text>
+            <text class="info-value">{{appt.record.followUpPlan}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

@@ -1,0 +1,22 @@
+<staff-navbar title="家庭地图" show-back="{{true}}" />
+
+<view class="map-container">
+  <map
+    id="map"
+    longitude="{{lng}}"
+    latitude="{{lat}}"
+    scale="13"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
+    show-location="{{true}}"
+    style="width:100%;height:100%;"
+  />
+</view>
+
+<view class="count-badge" wx:if="{{markers.length > 0}}">
+  <text class="count-text">共 {{markers.length}} 个家庭</text>
+</view>
+
+<view class="empty-tip" wx:if="{{markers.length === 0}}">
+  <text class="empty-text">暂无家庭位置数据</text>
+</view>

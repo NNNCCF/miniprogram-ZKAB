@@ -7,23 +7,15 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: '已取消'
 }
 
+function todayStr() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 interface NurseItem {
   id: string | number
   name: string
   phone?: string
-}
-
-interface AppointmentDetail {
-  id: string
-  type: string
-  status: string
-  statusLabel: string
-  appointmentTime: string
-  requirement: string
-  memberName: string
-  guardianName: string
-  nurseName: string
-  nurseId?: string | number
 }
 
 Page({
@@ -31,11 +23,13 @@ Page({
     loading: false,
     dispatching: false,
     id: '',
-    appt: null as AppointmentDetail | null,
+    appt: null as any,
     showDispatchModal: false,
     nurses: [] as NurseItem[],
     selectedNurseId: null as string | number | null,
-    selectedNurseName: ''
+    selectedNurseName: '',
+    visitDate: '',
+    minVisitDate: todayStr()
   },
 
   onLoad(options: Record<string, string>) {
@@ -54,10 +48,7 @@ Page({
     getAppointmentDetail(id)
       .then((res: any) => {
         this.setData({
-          appt: {
-            ...res,
-            statusLabel: STATUS_LABEL[res.status] || res.status
-          },
+          appt: { ...res, statusLabel: STATUS_LABEL[res.status] || res.status },
           loading: false
         })
       })
@@ -76,7 +67,8 @@ Page({
         nurses: nurses || [],
         showDispatchModal: true,
         selectedNurseId: null,
-        selectedNurseName: ''
+        selectedNurseName: '',
+        visitDate: todayStr()
       })
     } catch {
       wx.hideLoading()
@@ -94,10 +86,18 @@ Page({
     this.setData({ selectedNurseId: id, selectedNurseName: name })
   },
 
+  onVisitDateChange(e: WechatMiniprogram.PickerChange) {
+    this.setData({ visitDate: e.detail.value as string })
+  },
+
   async confirmDispatch() {
-    const { id, selectedNurseId, selectedNurseName, dispatching } = this.data
+    const { id, selectedNurseId, selectedNurseName, visitDate, dispatching } = this.data
     if (!selectedNurseId) {
       wx.showToast({ title: '请选择医护人员', icon: 'none' })
+      return
+    }
+    if (!visitDate) {
+      wx.showToast({ title: '请选择上门日期', icon: 'none' })
       return
     }
     if (dispatching) return
@@ -106,8 +106,9 @@ Page({
     try {
       await dispatchAppointment(id, {
         nurseId: Number(selectedNurseId),
-        nurseName: selectedNurseName
-      })
+        nurseName: selectedNurseName,
+        visitDate
+      } as any)
       wx.hideLoading()
       wx.showToast({ title: '派单成功', icon: 'success' })
       this.setData({ showDispatchModal: false })
@@ -119,6 +120,8 @@ Page({
       this.setData({ dispatching: false })
     }
   },
+
+  noop() {},
 
   goBack() {
     wx.navigateBack()

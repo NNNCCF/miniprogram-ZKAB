@@ -103,6 +103,12 @@ Page({
     goToFamilyList: function () {
         wx.navigateTo({ url: '/pages/institution/family/list/list' });
     },
+    goToMap: function () {
+        wx.navigateTo({ url: '/pages/institution/mapDetail/mapDetail' });
+    },
+    goToPublish: function () {
+        wx.navigateTo({ url: '/pages/institution/publish/publish' });
+    },
     onLogout: function () {
         wx.showModal({
             title: '退出登录',

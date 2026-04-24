@@ -52,6 +52,10 @@ Page({
     wx.navigateTo({ url: '/pages/guardian/profile/profileEdit/profileEdit' })
   },
 
+  goOrders() {
+    wx.navigateTo({ url: '/pages/guardian/order/list/list' })
+  },
+
   goSwitchMember() {
     wx.navigateTo({ url: '/pages/guardian/member/switch/switch' })
   },

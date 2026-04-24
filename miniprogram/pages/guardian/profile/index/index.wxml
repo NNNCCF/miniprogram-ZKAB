@@ -31,14 +31,20 @@
         <text class="stat-label">待处理报警</text>
       </view>
       <view class="stat-sep"></view>
-      <view class="stat-item">
-        <text class="stat-num">{{stats.serviceCount || 0}}</text>
+      <view class="stat-item stat-clickable" bindtap="goOrders">
+        <text class="stat-num stat-num-blue">{{stats.serviceCount || 0}}</text>
         <text class="stat-label">服务订单</text>
+        <text class="stat-goto">查看 ›</text>
       </view>
     </view>
 
     <view class="menu-section">
       <view class="menu-group">
+        <view class="menu-item" bindtap="goOrders">
+          <text class="menu-icon">📋</text>
+          <text class="menu-label">我的订单</text>
+          <text class="menu-arrow">></text>
+        </view>
         <view class="menu-item" bindtap="goSwitchMember">
           <text class="menu-icon">成员</text>
           <text class="menu-label">切换成员</text>

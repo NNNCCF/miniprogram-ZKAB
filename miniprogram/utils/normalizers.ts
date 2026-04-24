@@ -113,8 +113,10 @@ export function normalizeAppointment(raw: any) {
   const guardianName = raw?.guardian?.name || raw?.guardianName || ''
   const guardianPhone = raw?.guardian?.phone || raw?.guardianPhone || ''
   const memberName = raw?.member?.name || raw?.memberName || ''
+  // nurseName = 被派单的护理人员（王医生）
   const nurseName = raw?.acceptNurse || raw?.nurseName || ''
-  const creatorName = raw?.doctor || raw?.doctorName || ''
+  // familyDoctorName = 订单关联的家庭医生（张医生），不受派单影响
+  const familyDoctorName = raw?.doctor || raw?.doctorName || ''
   const visitRemark = raw?.visitRemark || raw?.record?.serviceContent || ''
 
   return {
@@ -131,9 +133,10 @@ export function normalizeAppointment(raw: any) {
     memberAddress: familyAddress,
     guardianName,
     guardianPhone,
-    doctorName: nurseName || creatorName,
+    nurseName,                       // 护理人员（派单护士）
+    nursePhone: raw?.nursePhone || '',
+    doctorName: familyDoctorName,    // 家庭医生（不被派单覆盖）
     doctorPhone: raw?.nursePhone || '',
-    nurseName,
     familyName: raw?.family?.community || familyAddress,
     familyAddress,
     visitTime: valueOf(raw?.visitTime),

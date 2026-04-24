@@ -45,11 +45,18 @@
   <view class="info-card">
     <view class="info-row" wx:if="{{appt.nurseName}}">
       <text class="info-label">医护姓名</text>
-      <text class="info-value">{{appt.nurseName}}</text>
+      <text class="info-value nurse-assigned">{{appt.nurseName}}</text>
     </view>
     <view class="info-row" wx:else>
       <text class="info-label">派单状态</text>
       <text class="info-value info-pending">尚未派单</text>
+    </view>
+    <view wx:if="{{appt.nurseName && appt.visitTime}}">
+      <view class="divider"></view>
+      <view class="info-row">
+        <text class="info-label">上门日期</text>
+        <text class="info-value">{{appt.visitTime}}</text>
+      </view>
     </view>
   </view>
 
@@ -70,8 +77,16 @@
 <!-- Dispatch Modal -->
 <view class="modal-mask" wx:if="{{showDispatchModal}}" bindtap="closeDispatchModal">
   <view class="modal-panel" catchtap="noop">
-    <view class="modal-title">选择医护人员</view>
 
+    <view class="modal-header">
+      <text class="modal-title">派单</text>
+      <view class="modal-close" bindtap="closeDispatchModal">
+        <text class="modal-close-icon">×</text>
+      </view>
+    </view>
+
+    <!-- Step 1: 选择医护 -->
+    <view class="modal-step-label">第一步：选择医护人员</view>
     <scroll-view class="nurse-list" scroll-y>
       <view
         wx:for="{{nurses}}"
@@ -97,11 +112,41 @@
       </view>
     </scroll-view>
 
+    <!-- Step 2: 选择上门日期（选了护士后才显示） -->
+    <view class="dispatch-confirm" wx:if="{{selectedNurseId}}">
+      <view class="modal-step-label step2-label">第二步：选择上门日期</view>
+      <view class="selected-nurse-tip">
+        <text class="selected-nurse-tip-text">已选：{{selectedNurseName}}</text>
+      </view>
+      <picker
+        mode="date"
+        value="{{visitDate}}"
+        start="{{minVisitDate}}"
+        bindchange="onVisitDateChange"
+      >
+        <view class="date-picker-row">
+          <text class="date-label">上门日期</text>
+          <view class="date-trigger">
+            <text class="date-val {{visitDate ? '' : 'date-placeholder'}}">
+              {{visitDate || '请选择日期'}}
+            </text>
+            <text class="date-arrow">›</text>
+          </view>
+        </view>
+      </picker>
+    </view>
+
+    <!-- Actions -->
     <view class="modal-actions">
       <button class="btn-cancel" bindtap="closeDispatchModal">取消</button>
-      <button class="btn-confirm" bindtap="confirmDispatch" disabled="{{dispatching}}">
-        确认派单
+      <button
+        class="btn-confirm {{(!selectedNurseId || !visitDate || dispatching) ? 'btn-confirm-disabled' : ''}}"
+        bindtap="confirmDispatch"
+        disabled="{{!selectedNurseId || !visitDate || dispatching}}"
+      >
+        {{dispatching ? '派单中...' : '确认派单'}}
       </button>
     </view>
+
   </view>
 </view>

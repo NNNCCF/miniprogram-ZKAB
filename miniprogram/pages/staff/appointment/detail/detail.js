@@ -48,18 +48,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("../../../../utils/api");
+
 var STATUS_LABEL = {
     pending: '待处理',
-    accepted: '已接受',
+    dispatched: '已派单',
+    accepted: '已接单',
     completed: '已完成',
     cancelled: '已取消'
 };
+
 Page({
     data: {
         loading: false,
         accepting: false,
         id: '',
-        appt: null
+        appt: null,
+        rawStatus: ''
     },
     onLoad: function (options) {
         var id = options.id || '';
@@ -67,18 +71,19 @@ Page({
         this.loadDetail(id);
     },
     onShow: function () {
-        if (this.data.id)
-            this.loadDetail(this.data.id);
+        if (this.data.id) this.loadDetail(this.data.id);
     },
     loadDetail: function (id) {
         var _this = this;
-        if (!id)
-            return;
+        if (!id) return;
         this.setData({ loading: true });
         (0, api_1.getAppointmentDetail)(id)
             .then(function (res) {
+            var rawStatus = String(res.status || '').toLowerCase().trim();
+            var label = STATUS_LABEL[rawStatus] || rawStatus || '未知状态';
             _this.setData({
-                appt: __assign(__assign({}, res), { statusLabel: STATUS_LABEL[res.status] || res.status }),
+                appt: __assign(__assign({}, res), { status: rawStatus, statusLabel: label }),
+                rawStatus: rawStatus,
                 loading: false
             });
         })
@@ -95,10 +100,9 @@ Page({
                 switch (_b.label) {
                     case 0:
                         _a = this.data, id = _a.id, accepting = _a.accepting;
-                        if (accepting || !id)
-                            return [2 /*return*/];
+                        if (accepting || !id) return [2 /*return*/];
                         this.setData({ accepting: true });
-                        wx.showLoading({ title: '接受中...' });
+                        wx.showLoading({ title: '接单中...' });
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, 4, 5]);
@@ -106,13 +110,13 @@ Page({
                     case 2:
                         _b.sent();
                         wx.hideLoading();
-                        wx.showToast({ title: '已接受预约', icon: 'success' });
+                        wx.showToast({ title: '接单成功', icon: 'success' });
                         setTimeout(function () { return _this.loadDetail(id); }, 1500);
                         return [3 /*break*/, 5];
                     case 3:
                         err_1 = _b.sent();
                         wx.hideLoading();
-                        wx.showToast({ title: err_1.message || '操作失败', icon: 'none' });
+                        wx.showToast({ title: err_1.message || '接单失败', icon: 'none' });
                         return [3 /*break*/, 5];
                     case 4:
                         this.setData({ accepting: false });
@@ -124,7 +128,7 @@ Page({
     },
     goToRecord: function () {
         wx.navigateTo({
-            url: "/pages/staff/appointment/record/record?id=".concat(this.data.id)
+            url: "/pages/staff/appointment/record/record?id=".concat(this.data.id, "&status=").concat(this.data.rawStatus)
         });
     },
     goBack: function () {

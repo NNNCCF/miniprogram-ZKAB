@@ -117,6 +117,9 @@ Page({
     goEdit: function () {
         wx.navigateTo({ url: '/pages/guardian/profile/profileEdit/profileEdit' });
     },
+    goOrders: function () {
+        wx.navigateTo({ url: '/pages/guardian/order/list/list' });
+    },
     goSwitchMember: function () {
         wx.navigateTo({ url: '/pages/guardian/member/switch/switch' });
     },

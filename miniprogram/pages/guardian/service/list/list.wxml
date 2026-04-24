@@ -16,7 +16,7 @@
         <view wx:if="{{doctor}}" class="card-doctor-info">
           <view class="bound-badge">已绑定</view>
           <text class="card-doctor-role">家庭医生</text>
-          <text class="card-doctor-name">{{doctor.name}}</text>
+          <text class="card-doctor-name">{{doctor.name || doctor.nurseName || doctor.staffName || '未知'}}</text>
           <text class="card-doctor-org">{{doctor.institution || doctor.hospital || ''}}</text>
           <text wx:if="{{doctor.title}}" class="card-doctor-title">{{doctor.title}}</text>
         </view>
@@ -37,6 +37,11 @@
           <text class="card-small-label">医疗机构</text>
         </view>
       </view>
+    </view>
+
+    <!-- 调试：显示getServiceDoctor原始返回，确认后删除 -->
+    <view wx:if="{{doctor}}" style="background:#FFF3CD;padding:12rpx 24rpx;font-size:20rpx;color:#856404;margin:0 0 8rpx;">
+      API返回：name={{doctor.name}} / nurseName={{doctor.nurseName}} / staffName={{doctor.staffName}} / id={{doctor.id}}
     </view>
 
     <!-- 快捷服务 -->

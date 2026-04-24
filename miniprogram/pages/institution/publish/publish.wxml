@@ -1,0 +1,126 @@
+<staff-navbar title="发布动态" show-back="{{true}}" />
+
+<scroll-view class="page-body" scroll-y>
+
+  <!-- 基本信息 -->
+  <view class="card">
+
+    <!-- 标题 -->
+    <view class="field-group">
+      <text class="field-label required">标题</text>
+      <input
+        class="field-input"
+        placeholder="请输入动态标题"
+        value="{{form.title}}"
+        data-field="title"
+        bindinput="onInput"
+        maxlength="50"
+      />
+    </view>
+    <view class="divider"></view>
+
+    <!-- 类型 -->
+    <view class="field-group">
+      <text class="field-label required">类型</text>
+      <view class="type-group">
+        <view
+          wx:for="{{types}}"
+          wx:key="value"
+          class="type-tag {{form.type === item.value ? 'type-active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onTypeChange"
+        >
+          <text class="type-text">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="divider"></view>
+
+    <!-- 内容 -->
+    <view class="field-group">
+      <view class="field-head">
+        <text class="field-label required">内容</text>
+        <text class="char-count {{form.content.length < 10 ? 'char-warn' : ''}}">{{form.content.length}}/1000</text>
+      </view>
+      <textarea
+        class="field-textarea"
+        placeholder="请输入动态内容（至少10字）"
+        value="{{form.content}}"
+        data-field="content"
+        bindinput="onInput"
+        auto-height
+        maxlength="1000"
+      />
+    </view>
+    <view class="divider"></view>
+
+    <!-- 目标范围 -->
+    <view class="field-group">
+      <text class="field-label required">发布范围</text>
+      <view class="target-group">
+        <view
+          class="target-item {{form.target === 'all' ? 'target-active' : ''}}"
+          data-value="all"
+          bindtap="onTargetChange"
+        >
+          <text class="target-icon">🌐</text>
+          <text class="target-text">全部家庭</text>
+        </view>
+        <view
+          class="target-item {{form.target === 'specific' ? 'target-active' : ''}}"
+          data-value="specific"
+          bindtap="onTargetChange"
+        >
+          <text class="target-icon">🏠</text>
+          <text class="target-text">指定家庭</text>
+        </view>
+      </view>
+      <view wx:if="{{form.target === 'specific'}}" class="family-input-wrap">
+        <input
+          class="field-input"
+          placeholder="输入家庭姓名"
+          value="{{form.familyName}}"
+          data-field="familyName"
+          bindinput="onInput"
+        />
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 图片上传 -->
+  <view class="card">
+    <view class="field-group">
+      <view class="field-head">
+        <text class="field-label">配图</text>
+        <text class="photo-count">{{photos.length}}/9</text>
+      </view>
+      <view class="photo-grid">
+        <view
+          wx:for="{{photos}}"
+          wx:key="index"
+          class="photo-item"
+          data-index="{{index}}"
+          bindtap="previewPhoto"
+        >
+          <image class="photo-img" src="{{item}}" mode="aspectFill" />
+          <view class="photo-del" catchtap="removePhoto" data-index="{{index}}">
+            <text class="del-icon">×</text>
+          </view>
+        </view>
+        <view class="photo-add" bindtap="selectPhoto" wx:if="{{photos.length < 9}}">
+          <text class="add-icon">+</text>
+          <text class="add-text">添加图片</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <button
+    class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
+    bindtap="onSubmit"
+    disabled="{{submitting}}"
+  >{{submitting ? '发布中...' : '发布动态'}}</button>
+
+</scroll-view>

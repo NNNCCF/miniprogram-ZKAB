@@ -54,6 +54,10 @@ var STATUS_LABEL = {
     completed: '已完成',
     cancelled: '已取消'
 };
+function todayStr() {
+    var d = new Date();
+    return "".concat(d.getFullYear(), "-").concat(String(d.getMonth() + 1).padStart(2, '0'), "-").concat(String(d.getDate()).padStart(2, '0'));
+}
 Page({
     data: {
         loading: false,
@@ -63,7 +67,9 @@ Page({
         showDispatchModal: false,
         nurses: [],
         selectedNurseId: null,
-        selectedNurseName: ''
+        selectedNurseName: '',
+        visitDate: '',
+        minVisitDate: todayStr()
     },
     onLoad: function (options) {
         var id = options.id || '';
@@ -76,8 +82,7 @@ Page({
     },
     loadDetail: function (id) {
         var _this = this;
-        if (!id)
-            return;
+        if (!id) return;
         this.setData({ loading: true });
         (0, api_1.getAppointmentDetail)(id)
             .then(function (res) {
@@ -106,10 +111,11 @@ Page({
                         nurses = _b.sent();
                         wx.hideLoading();
                         this.setData({
-                            nurses: nurses || [],
+                            nurses: (nurses || []).sort(function (a, b) { return (a.name || '').localeCompare(b.name || '', 'zh'); }),
                             showDispatchModal: true,
                             selectedNurseId: null,
-                            selectedNurseName: ''
+                            selectedNurseName: '',
+                            visitDate: todayStr()
                         });
                         return [3 /*break*/, 4];
                     case 3:
@@ -130,20 +136,26 @@ Page({
         var name = e.currentTarget.dataset.name;
         this.setData({ selectedNurseId: id, selectedNurseName: name });
     },
+    onVisitDateChange: function (e) {
+        this.setData({ visitDate: e.detail.value });
+    },
     confirmDispatch: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, id, selectedNurseId, selectedNurseName, dispatching, err_1;
+            var _a, id, selectedNurseId, selectedNurseName, visitDate, dispatching, err_1;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = this.data, id = _a.id, selectedNurseId = _a.selectedNurseId, selectedNurseName = _a.selectedNurseName, dispatching = _a.dispatching;
+                        _a = this.data, id = _a.id, selectedNurseId = _a.selectedNurseId, selectedNurseName = _a.selectedNurseName, visitDate = _a.visitDate, dispatching = _a.dispatching;
                         if (!selectedNurseId) {
                             wx.showToast({ title: '请选择医护人员', icon: 'none' });
                             return [2 /*return*/];
                         }
-                        if (dispatching)
+                        if (!visitDate) {
+                            wx.showToast({ title: '请选择上门日期', icon: 'none' });
                             return [2 /*return*/];
+                        }
+                        if (dispatching) return [2 /*return*/];
                         this.setData({ dispatching: true });
                         wx.showLoading({ title: '派单中...' });
                         _b.label = 1;
@@ -151,7 +163,8 @@ Page({
                         _b.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, (0, api_1.dispatchAppointment)(id, {
                                 nurseId: Number(selectedNurseId),
-                                nurseName: selectedNurseName
+                                nurseName: selectedNurseName,
+                                visitDate: visitDate
                             })];
                     case 2:
                         _b.sent();
@@ -173,6 +186,7 @@ Page({
             });
         });
     },
+    noop: function () {},
     goBack: function () {
         wx.navigateBack();
     }

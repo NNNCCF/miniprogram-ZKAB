@@ -119,6 +119,14 @@ page {
 }
 
 .menu-icon-orange { background: #FFF5E8; }
+.menu-icon-blue   { background: #EEF4FF; }
+.menu-icon-green  { background: #ECFDF5; }
+
+.menu-divider {
+  height: 1rpx;
+  background: #F3F4F6;
+  margin: 0 32rpx;
+}
 
 .menu-icon-char {
   font-size: 36rpx;

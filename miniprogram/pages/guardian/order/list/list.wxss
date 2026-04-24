@@ -1,0 +1,197 @@
+page {
+  background: #EEF2FF;
+  height: 100vh;
+  overflow: hidden;
+}
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #EEF2FF;
+}
+
+/* Header */
+.header {
+  flex-shrink: 0;
+  height: 100rpx;
+  position: relative;
+  overflow: hidden;
+}
+.header-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.header-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.back-btn {
+  position: absolute;
+  left: 24rpx;
+  padding: 12rpx 20rpx;
+}
+.back-icon {
+  font-size: 48rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+.header-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 2rpx;
+  transform: translateY(-30rpx);
+}
+
+/* Tabs */
+.tabs-wrap {
+  display: flex;
+  background: #fff;
+  margin-top: -32rpx;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 20rpx 32rpx 0;
+  position: relative;
+  z-index: 2;
+  gap: 0;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0 20rpx;
+  border-bottom: 4rpx solid transparent;
+}
+.tab-active {
+  border-bottom-color: #3B7EFF;
+}
+.tab-text {
+  font-size: 28rpx;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+.tab-active .tab-text {
+  color: #3B7EFF;
+  font-weight: 700;
+}
+
+/* List area */
+.list-area {
+  flex: 1;
+  background: #EEF2FF;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+
+/* State (loading/empty) */
+.state-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+  gap: 16rpx;
+}
+.empty-icon {
+  font-size: 80rpx;
+}
+.state-text {
+  font-size: 28rpx;
+  color: #9CA3AF;
+}
+.state-sub {
+  font-size: 24rpx;
+  color: #C4C9D4;
+}
+
+/* Order List */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  padding-bottom: 40rpx;
+}
+
+/* Order Card */
+.order-card {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx 16rpx;
+  border-bottom: 1rpx solid #F3F4F6;
+}
+.type-badge {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  border-radius: 30rpx;
+  padding: 8rpx 20rpx;
+}
+.type-icon {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+.type-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #374151;
+}
+.status-tag {
+  border-radius: 20rpx;
+  padding: 6rpx 18rpx;
+}
+.status-text {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+.card-body {
+  padding: 16rpx 28rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.info-icon {
+  font-size: 26rpx;
+  width: 32rpx;
+  text-align: center;
+}
+.info-label {
+  font-size: 26rpx;
+  color: #9CA3AF;
+  width: 120rpx;
+}
+.info-val {
+  flex: 1;
+  font-size: 26rpx;
+  color: #374151;
+}
+.nurse-text {
+  color: #3B7EFF;
+  font-weight: 600;
+}
+.card-foot {
+  padding: 16rpx 28rpx;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1rpx solid #F3F4F6;
+}
+.detail-link {
+  font-size: 26rpx;
+  color: #3B7EFF;
+  font-weight: 500;
+}

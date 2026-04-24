@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "staff-navbar": "/components/staff-navbar/staff-navbar"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F5F7FF"
+}

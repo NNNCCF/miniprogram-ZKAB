@@ -1,50 +1,129 @@
-<staff-navbar title="上门记录" show-back="{{true}}" />
+<staff-navbar title="填写服务记录" show-back="{{true}}" />
 
-<view class="page-body">
+<scroll-view class="page-body" scroll-y>
 
-  <!-- Visit Date Picker -->
-  <view class="field-group">
-    <text class="field-label required-label">实际上门日期</text>
+  <!-- 上门日期 -->
+  <view class="section">
+    <text class="section-label required-label">实际上门日期</text>
     <picker mode="date" value="{{form.visitDate}}" bindchange="onVisitDateChange">
-      <view class="picker-trigger">
-        <text class="picker-text {{form.visitDate ? '' : 'placeholder'}}">
-          {{form.visitDate || '请选择上门日期'}}
-        </text>
+      <view class="picker-row">
+        <text class="picker-val {{form.visitDate ? '' : 'placeholder'}}">{{form.visitDate || '请选择上门日期'}}</text>
         <text class="picker-arrow">›</text>
       </view>
     </picker>
   </view>
 
-  <!-- Remark -->
-  <view class="field-group">
-    <text class="field-label required-label">服务备注</text>
+  <!-- 服务结果 -->
+  <view class="section">
+    <text class="section-label required-label">服务结果</text>
+    <view class="pill-group">
+      <view
+        wx:for="{{serviceResults}}"
+        wx:key="index"
+        class="pill {{form.serviceResult === item ? 'pill-active' : ''}} pill-result-{{index}}"
+        data-value="{{item}}"
+        bindtap="selectServiceResult"
+      >
+        <text class="pill-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 长辈状态 -->
+  <view class="section">
+    <text class="section-label required-label">长辈状态</text>
+    <view class="pill-group">
+      <view
+        wx:for="{{elderStatuses}}"
+        wx:key="index"
+        class="pill {{form.elderStatus === item ? 'pill-active pill-status-active-{{index}}' : ''}} pill-status-{{index}}"
+        data-value="{{item}}"
+        bindtap="selectElderStatus"
+      >
+        <text class="pill-text">{{item}}</text>
+      </view>
+    </view>
     <textarea
-      class="field-textarea"
-      placeholder="请描述本次服务情况、健康观察及跟进计划..."
-      value="{{form.remark}}"
-      bindinput="onRemarkInput"
-      maxlength="500"
+      wx:if="{{form.elderStatus}}"
+      class="field-textarea mt16"
+      placeholder="补充说明长辈具体状态（选填）"
+      value="{{form.elderStatusNote}}"
+      data-field="form.elderStatusNote"
+      bindinput="onInput"
+      maxlength="200"
       auto-height
     />
-    <text class="char-count">{{form.remark.length}}/500</text>
   </view>
 
-  <!-- Pay Amount -->
-  <view class="field-group">
-    <text class="field-label">收费金额（元）</text>
-    <input
-      class="field-input"
-      type="digit"
-      placeholder="选填"
-      value="{{form.payAmount}}"
-      bindinput="onPayAmountInput"
+  <!-- 用药情况 -->
+  <view class="section">
+    <text class="section-label">用药情况</text>
+    <textarea
+      class="field-textarea"
+      placeholder="请描述用药情况，如按时服药、需调整剂量等…（选填）"
+      value="{{form.medication}}"
+      data-field="form.medication"
+      bindinput="onInput"
+      maxlength="300"
+      auto-height
     />
   </view>
 
-  <!-- Pay Status -->
-  <view class="field-group">
-    <text class="field-label">付款状态</text>
-    <view class="pay-options">
+  <!-- 后续建议 -->
+  <view class="section">
+    <text class="section-label">后续建议</text>
+    <textarea
+      class="field-textarea"
+      placeholder="请填写后续跟进计划或建议…（选填）"
+      value="{{form.suggestion}}"
+      data-field="form.suggestion"
+      bindinput="onInput"
+      maxlength="300"
+      auto-height
+    />
+  </view>
+
+  <!-- 现场照片 -->
+  <view class="section">
+    <view class="section-head">
+      <text class="section-label">现场照片</text>
+      <text class="photo-count">{{photos.length}}/9</text>
+    </view>
+    <view class="photo-grid">
+      <view
+        wx:for="{{photos}}"
+        wx:key="index"
+        class="photo-item"
+        data-index="{{index}}"
+        bindtap="previewPhoto"
+      >
+        <image class="photo-img" src="{{item}}" mode="aspectFill" />
+        <view class="photo-del" catchtap="removePhoto" data-index="{{index}}">
+          <text class="photo-del-icon">×</text>
+        </view>
+      </view>
+      <view class="photo-add" bindtap="selectPhoto" wx:if="{{photos.length < 9}}">
+        <text class="photo-add-icon">+</text>
+        <text class="photo-add-text">添加照片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收费信息 -->
+  <view class="section">
+    <text class="section-label">收费信息</text>
+    <view class="fee-row">
+      <text class="fee-label">金额（元）</text>
+      <input
+        class="fee-input"
+        type="digit"
+        placeholder="选填"
+        value="{{form.payAmount}}"
+        data-field="form.payAmount"
+        bindinput="onInput"
+      />
+    </view>
+    <view class="pay-options mt16">
       <view
         class="pay-opt {{form.payStatus === 'unpaid' ? 'opt-active' : ''}}"
         bindtap="onPayStatusChange"
@@ -58,13 +137,13 @@
     </view>
   </view>
 
-  <!-- Submit -->
-  <button
-    class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
-    bindtap="handleSubmit"
-    disabled="{{submitting}}"
-  >
-    {{submitting ? '提交中...' : '提交上门记录'}}
-  </button>
+  <!-- 提交按钮 -->
+  <view class="submit-wrap">
+    <button
+      class="submit-btn {{submitting ? 'btn-disabled' : ''}}"
+      bindtap="handleSubmit"
+      disabled="{{submitting}}"
+    >{{submitting ? '提交中...' : '提交服务记录'}}</button>
+  </view>
 
-</view>
+</scroll-view>

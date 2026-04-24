@@ -1,0 +1,35 @@
+<staff-navbar title="健康动态" show-back="{{true}}" />
+
+<view class="page-body">
+  <view wx:if="{{loading}}" class="state-wrap">
+    <text class="state-text">加载中...</text>
+  </view>
+
+  <view wx:elif="{{news.length === 0}}" class="state-wrap">
+    <text class="state-text">暂无动态</text>
+    <text class="state-sub">下拉可刷新</text>
+  </view>
+
+  <scroll-view wx:else scroll-y class="list-area">
+    <view
+      wx:for="{{news}}"
+      wx:key="id"
+      class="news-card"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
+      <view class="card-left">
+        <view class="type-dot type-{{item.category || 'health'}}"></view>
+      </view>
+      <view class="card-body">
+        <text class="news-title">{{item.title}}</text>
+        <view class="news-meta">
+          <text class="meta-tag" wx:if="{{item.category}}">{{item.category === 'health' ? '健康提示' : item.category === 'activity' ? '活动通知' : item.category === 'urgent' ? '紧急通知' : '机构公告'}}</text>
+          <text class="meta-author">{{item.publisherName || item.author || ''}}</text>
+          <text class="meta-time">{{item.createdAt || item.date || ''}}</text>
+        </view>
+      </view>
+      <text class="card-arrow">›</text>
+    </view>
+  </scroll-view>
+</view>

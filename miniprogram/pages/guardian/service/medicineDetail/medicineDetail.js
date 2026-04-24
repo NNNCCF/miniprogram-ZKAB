@@ -134,7 +134,7 @@ Page({
                         _a.sent();
                         wx.hideLoading();
                         wx.showToast({ title: '订单已提交', icon: 'success' });
-                        setTimeout(function () { return wx.navigateBack(); }, 1200);
+                        setTimeout(function () { return wx.navigateTo({ url: '/pages/guardian/order/list/list' }); }, 1200);
                         return [3 /*break*/, 5];
                     case 3:
                         err_1 = _a.sent();

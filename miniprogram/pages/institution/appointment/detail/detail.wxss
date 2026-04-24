@@ -73,6 +73,11 @@ page {
   color: #FF8C00;
 }
 
+.nurse-assigned {
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
 .divider {
   height: 1rpx;
   background: #F0F4FC;
@@ -95,6 +100,7 @@ page {
 .bottom-bar {
   position: fixed;
   left: 0; right: 0; bottom: 0;
+  z-index: 100;
   padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
   background: #fff;
   border-top: 1rpx solid #F0F0F0;
@@ -150,12 +156,108 @@ page {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Modal header with close button */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 32rpx 16rpx;
+  position: relative;
+}
+
 .modal-title {
   font-size: 32rpx;
   font-weight: 700;
   color: #0F1C38;
-  padding: 36rpx 32rpx 20rpx;
-  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  right: 28rpx;
+  top: 24rpx;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-icon {
+  font-size: 40rpx;
+  color: #9CA3AF;
+  line-height: 1;
+}
+
+/* Step labels */
+.modal-step-label {
+  font-size: 24rpx;
+  color: #9CA3AF;
+  padding: 0 28rpx 12rpx;
+  font-weight: 500;
+}
+
+.step2-label {
+  padding-top: 4rpx;
+}
+
+/* Dispatch confirm section (appears after nurse selected) */
+.dispatch-confirm {
+  border-top: 1rpx solid #F0F4FC;
+  margin-top: 4rpx;
+  padding-top: 4rpx;
+  background: #F8FAFF;
+}
+
+.selected-nurse-tip {
+  padding: 10rpx 28rpx;
+}
+
+.selected-nurse-tip-text {
+  font-size: 26rpx;
+  color: #3B7EFF;
+  font-weight: 600;
+}
+
+.date-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 28rpx;
+  background: #fff;
+  margin: 0 16rpx 16rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid #E5EDFF;
+}
+
+.date-label {
+  font-size: 26rpx;
+  color: #374151;
+  font-weight: 500;
+}
+
+.date-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.date-val {
+  font-size: 28rpx;
+  color: #1a1a1a;
+}
+
+.date-placeholder {
+  color: #bbb;
+}
+
+.date-arrow {
+  font-size: 36rpx;
+  color: #9CA3AF;
+}
+
+/* Confirm button disabled state */
+.btn-confirm-disabled {
+  background: #A0BEFF !important;
 }
 
 .nurse-list {
