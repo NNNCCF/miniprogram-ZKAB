@@ -74,6 +74,8 @@ Page({
             confirmColor: '#FF4D4F',
             success: function (res) {
                 if (res.confirm) {
+                    var app = getApp();
+                    app.resetGlobalAlarmState === null || app.resetGlobalAlarmState === void 0 ? void 0 : app.resetGlobalAlarmState();
                     wx.removeStorageSync('token');
                     wx.removeStorageSync('role');
                     wx.removeStorageSync('userInfo');

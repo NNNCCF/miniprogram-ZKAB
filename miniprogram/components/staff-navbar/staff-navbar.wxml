@@ -10,3 +10,4 @@
 </view>
 <!-- 占位块：防止 fixed 导航栏遮挡内容 -->
 <view style="height: {{totalH}}px; flex-shrink: 0;"></view>
+<global-alarm-overlay />

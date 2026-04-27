@@ -12,6 +12,8 @@
   </view>
 </view>
 
+<global-alarm-overlay />
+
 <!-- 一键呼救弹窗 -->
 <view class="sos-mask" wx:if="{{showSOS}}" bindtap="closeSOS">
   <view class="sos-panel" style="padding-bottom:calc({{safeBottom}}px + 32rpx)" catchtap="">

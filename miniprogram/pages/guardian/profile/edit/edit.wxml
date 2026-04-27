@@ -24,3 +24,6 @@
     <button class="save-btn" bindtap="onSave" loading="{{saving}}">保存</button>
   </view>
 </view>
+
+<global-alarm-overlay />
+

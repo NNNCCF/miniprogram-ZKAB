@@ -29,6 +29,7 @@ function request(url, method, data) {
             },
             success: function (res) {
                 if (res.statusCode === 401) {
+                    app.resetGlobalAlarmState === null || app.resetGlobalAlarmState === void 0 ? void 0 : app.resetGlobalAlarmState();
                     wx.removeStorageSync('token');
                     wx.reLaunch({ url: '/pages/login/login' });
                     reject(new Error('未授权'));

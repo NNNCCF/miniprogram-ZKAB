@@ -48,5 +48,6 @@ export function clearSession(preserveKeys: string[] = []) {
     app.globalData.token = preserved.token || ''
     app.globalData.role = preserved.role || ''
     app.globalData.userInfo = preserved.userInfo ? normalizeUserInfo(preserved.userInfo) : null
+    app.resetGlobalAlarmState?.()
   } catch {}
 }

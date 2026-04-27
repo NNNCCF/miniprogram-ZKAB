@@ -22,3 +22,6 @@
     <view class="btn-primary" bindtap="submit">提交</view>
   </scroll-view>
 </view>
+
+<global-alarm-overlay />
+

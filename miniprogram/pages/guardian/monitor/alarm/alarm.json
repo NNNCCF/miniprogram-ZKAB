@@ -1,4 +1,6 @@
 {
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "global-alarm-overlay": "/components/global-alarm-overlay/global-alarm-overlay"
+  }
 }

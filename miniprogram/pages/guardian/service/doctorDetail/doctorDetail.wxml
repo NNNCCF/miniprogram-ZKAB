@@ -140,3 +140,6 @@
     </view>
   </block>
 </view>
+
+<global-alarm-overlay />
+

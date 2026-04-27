@@ -27,3 +27,6 @@
     <view class="logout-btn" bindtap="logout">退出登录</view>
   </scroll-view>
 </view>
+
+<global-alarm-overlay />
+

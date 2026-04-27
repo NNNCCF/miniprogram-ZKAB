@@ -1,5 +1,8 @@
 {
-  "enablePullDownRefresh": true,
-  "backgroundColor": "#EEF2FF",
-  "backgroundTextStyle": "dark"
+    "enablePullDownRefresh":  true,
+    "backgroundColor":  "#EEF2FF",
+    "backgroundTextStyle":  "dark",
+    "usingComponents":  {
+                            "global-alarm-overlay":  "/components/global-alarm-overlay/global-alarm-overlay"
+                        }
 }

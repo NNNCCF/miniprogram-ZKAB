@@ -69,6 +69,7 @@ function clearSession(preserveKeys) {
         app.globalData.token = preserved.token || '';
         app.globalData.role = preserved.role || '';
         app.globalData.userInfo = preserved.userInfo ? normalizeUserInfo(preserved.userInfo) : null;
+        app.resetGlobalAlarmState === null || app.resetGlobalAlarmState === void 0 ? void 0 : app.resetGlobalAlarmState();
     }
     catch (_a) { }
 }

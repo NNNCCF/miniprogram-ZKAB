@@ -85,6 +85,8 @@ Page({
       confirmColor: '#FF4D4F',
       success: (res) => {
         if (res.confirm) {
+          const app = getApp<any>()
+          app.resetGlobalAlarmState?.()
           wx.removeStorageSync('token')
           wx.removeStorageSync('role')
           wx.removeStorageSync('userInfo')

@@ -8,7 +8,7 @@ export function request<T = any>(
   method: Method = 'GET',
   data?: any
 ): Promise<T> {
-  const app = getApp<{ globalData: { token: string } }>()
+  const app = getApp<any>()
   const token = app.globalData.token || wx.getStorageSync('token') || ''
   const baseUrl = getBaseUrl()
   const requestPath = `/api${url}`
@@ -28,6 +28,7 @@ export function request<T = any>(
       },
       success(res: any) {
         if (res.statusCode === 401) {
+          app.resetGlobalAlarmState?.()
           wx.removeStorageSync('token')
           wx.reLaunch({ url: '/pages/login/login' })
           reject(new Error('未授权'))

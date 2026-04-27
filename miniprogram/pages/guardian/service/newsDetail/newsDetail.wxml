@@ -33,3 +33,6 @@
 
   <view class="loading" wx:if="{{loading}}"><text>加载中...</text></view>
 </view>
+
+<global-alarm-overlay />
+

@@ -1,0 +1,53 @@
+<view wx:if="{{state.visible}}" class="global-alarm-overlay">
+  <view class="global-alarm-glow"></view>
+  <view class="global-alarm-panel" catchtap="">
+    <view class="global-alarm-badge">跌倒报警</view>
+    <view class="global-alarm-title">请确认当前报警处理结果</view>
+
+    <view class="global-alarm-card">
+      <view class="global-alarm-row">
+        <text class="global-alarm-key">成员姓名</text>
+        <text class="global-alarm-value">{{state.alarm.memberName || '未知成员'}}</text>
+      </view>
+      <view class="global-alarm-row">
+        <text class="global-alarm-key">发生位置</text>
+        <text class="global-alarm-value">{{state.alarm.location || state.alarm.familyAddress || '未知位置'}}</text>
+      </view>
+      <view class="global-alarm-row">
+        <text class="global-alarm-key">报警时间</text>
+        <text class="global-alarm-value">{{state.alarm.alarmTime || '--'}}</text>
+      </view>
+      <view class="global-alarm-row">
+        <text class="global-alarm-key">报警类型</text>
+        <text class="global-alarm-value">{{state.alarm.alarmType || '跌倒'}}</text>
+      </view>
+    </view>
+
+    <view class="global-alarm-desc">{{state.alarm.description || '请尽快确认当前跌倒报警。'}}</view>
+
+    <view class="global-alarm-result-label">处理结果</view>
+    <view class="global-alarm-result-group">
+      <view
+        class="global-alarm-result-item {{state.selectedResult === 'HANDLED' ? 'is-selected' : ''}}"
+        bindtap="selectResult"
+        data-value="HANDLED"
+      >
+        <text>已处理</text>
+      </view>
+      <view
+        class="global-alarm-result-item {{state.selectedResult === 'IGNORED' ? 'is-selected' : ''}}"
+        bindtap="selectResult"
+        data-value="IGNORED"
+      >
+        <text>已忽略</text>
+      </view>
+    </view>
+
+    <view
+      class="global-alarm-close {{!state.selectedResult || state.submitting ? 'is-disabled' : ''}}"
+      bindtap="closeAlarm"
+    >
+      <text>{{state.submitting ? '提交中...' : '关闭'}}</text>
+    </view>
+  </view>
+</view>

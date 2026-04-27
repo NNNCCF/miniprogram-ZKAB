@@ -62,3 +62,6 @@
     </view>
   </scroll-view>
 </view>
+
+<global-alarm-overlay />
+

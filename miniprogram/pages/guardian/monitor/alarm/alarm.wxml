@@ -44,3 +44,6 @@
     <view wx:elif="{{!loading}}" class="empty-wrap"><text class="empty-text">暂无报警信息</text></view>
   </scroll-view>
 </view>
+
+<global-alarm-overlay />
+

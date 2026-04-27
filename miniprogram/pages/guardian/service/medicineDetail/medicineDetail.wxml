@@ -92,3 +92,6 @@
     </view>
   </view>
 </view>
+
+<global-alarm-overlay />
+
