@@ -3,6 +3,9 @@ Component({
     data: {
         state: {
             visible: false,
+            viewerRole: '',
+            confirmOnly: false,
+            actionText: '关闭',
             selectedResult: '',
             submitting: false,
             alarm: null,
@@ -39,8 +42,9 @@ Component({
         },
         selectResult: function (e) {
             var _a;
-            if (this.data.state.submitting)
+            if (this.data.state.submitting || this.data.state.confirmOnly) {
                 return;
+            }
             var value = e.currentTarget.dataset.value;
             var app = getApp();
             (_a = app.setGlobalAlarmResult) === null || _a === void 0 ? void 0 : _a.call(app, value);
@@ -49,8 +53,13 @@ Component({
         closeAlarm: function () {
             var _a;
             var _this = this;
-            if (!this.data.state.selectedResult || this.data.state.submitting)
+            var _b = this.data.state, selectedResult = _b.selectedResult, submitting = _b.submitting, confirmOnly = _b.confirmOnly;
+            if (submitting) {
                 return;
+            }
+            if (!confirmOnly && !selectedResult) {
+                return;
+            }
             var app = getApp();
             Promise.resolve((_a = app.submitGlobalAlarmResult) === null || _a === void 0 ? void 0 : _a.call(app)).finally(function () {
                 setTimeout(function () { return _this.syncState(); }, 0);

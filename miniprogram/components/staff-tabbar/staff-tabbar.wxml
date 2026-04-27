@@ -14,3 +14,5 @@
     <text class="tab-label">{{item.label}}</text>
   </view>
 </view>
+
+<global-alarm-overlay />

@@ -1,53 +1,77 @@
 <view wx:if="{{state.visible}}" class="global-alarm-overlay">
-  <view class="global-alarm-glow"></view>
-  <view class="global-alarm-panel" catchtap="">
-    <view class="global-alarm-badge">跌倒报警</view>
-    <view class="global-alarm-title">请确认当前报警处理结果</view>
+  <view class="global-alarm-glow {{state.confirmOnly ? 'is-guardian' : 'is-staff'}}"></view>
+  <view class="global-alarm-panel {{state.confirmOnly ? 'is-guardian' : 'is-staff'}}" catchtap="">
+    <block wx:if="{{state.confirmOnly}}">
+      <view class="guardian-alarm-shell">
+        <view class="guardian-alarm-ring guardian-alarm-ring-outer"></view>
+        <view class="guardian-alarm-ring guardian-alarm-ring-middle"></view>
+        <view class="guardian-alarm-core">
+          <view class="guardian-alarm-badge">跌倒警报</view>
+          <view class="guardian-alarm-title">{{state.alarm.guardianPrompt || '成员跌倒，请确认'}}</view>
+          <view class="guardian-alarm-time">{{state.alarm.alarmTime || '--'}}</view>
+          <view class="guardian-alarm-location">{{state.alarm.location || state.alarm.familyAddress || '位置待确认'}}</view>
+        </view>
+      </view>
 
-    <view class="global-alarm-card">
-      <view class="global-alarm-row">
-        <text class="global-alarm-key">成员姓名</text>
-        <text class="global-alarm-value">{{state.alarm.memberName || '未知成员'}}</text>
-      </view>
-      <view class="global-alarm-row">
-        <text class="global-alarm-key">发生位置</text>
-        <text class="global-alarm-value">{{state.alarm.location || state.alarm.familyAddress || '未知位置'}}</text>
-      </view>
-      <view class="global-alarm-row">
-        <text class="global-alarm-key">报警时间</text>
-        <text class="global-alarm-value">{{state.alarm.alarmTime || '--'}}</text>
-      </view>
-      <view class="global-alarm-row">
-        <text class="global-alarm-key">报警类型</text>
-        <text class="global-alarm-value">{{state.alarm.alarmType || '跌倒'}}</text>
-      </view>
-    </view>
+      <view class="guardian-alarm-note">请尽快联系老人或医护人员确认情况</view>
 
-    <view class="global-alarm-desc">{{state.alarm.description || '请尽快确认当前跌倒报警。'}}</view>
-
-    <view class="global-alarm-result-label">处理结果</view>
-    <view class="global-alarm-result-group">
       <view
-        class="global-alarm-result-item {{state.selectedResult === 'HANDLED' ? 'is-selected' : ''}}"
-        bindtap="selectResult"
-        data-value="HANDLED"
+        class="guardian-alarm-button {{state.submitting ? 'is-disabled' : ''}}"
+        bindtap="closeAlarm"
       >
-        <text>已处理</text>
+        <text>{{state.submitting ? '确认中...' : (state.actionText || '确认')}}</text>
       </view>
-      <view
-        class="global-alarm-result-item {{state.selectedResult === 'IGNORED' ? 'is-selected' : ''}}"
-        bindtap="selectResult"
-        data-value="IGNORED"
-      >
-        <text>已忽略</text>
-      </view>
-    </view>
+    </block>
 
-    <view
-      class="global-alarm-close {{!state.selectedResult || state.submitting ? 'is-disabled' : ''}}"
-      bindtap="closeAlarm"
-    >
-      <text>{{state.submitting ? '提交中...' : '关闭'}}</text>
-    </view>
+    <block wx:else>
+      <view class="global-alarm-badge">跌倒报警</view>
+      <view class="global-alarm-title">请确认当前报警处理结果</view>
+
+      <view class="global-alarm-card">
+        <view class="global-alarm-row">
+          <text class="global-alarm-key">成员姓名</text>
+          <text class="global-alarm-value">{{state.alarm.memberName || '未知成员'}}</text>
+        </view>
+        <view class="global-alarm-row">
+          <text class="global-alarm-key">发生位置</text>
+          <text class="global-alarm-value">{{state.alarm.location || state.alarm.familyAddress || '未知位置'}}</text>
+        </view>
+        <view class="global-alarm-row">
+          <text class="global-alarm-key">报警时间</text>
+          <text class="global-alarm-value">{{state.alarm.alarmTime || '--'}}</text>
+        </view>
+        <view class="global-alarm-row">
+          <text class="global-alarm-key">报警类型</text>
+          <text class="global-alarm-value">{{state.alarm.alarmType || '跌倒'}}</text>
+        </view>
+      </view>
+
+      <view class="global-alarm-desc">{{state.alarm.description || '请尽快确认当前跌倒报警。'}}</view>
+
+      <view class="global-alarm-result-label">处理结果</view>
+      <view class="global-alarm-result-group">
+        <view
+          class="global-alarm-result-item {{state.selectedResult === 'HANDLED' ? 'is-selected' : ''}}"
+          bindtap="selectResult"
+          data-value="HANDLED"
+        >
+          <text>已处理</text>
+        </view>
+        <view
+          class="global-alarm-result-item {{state.selectedResult === 'IGNORED' ? 'is-selected' : ''}}"
+          bindtap="selectResult"
+          data-value="IGNORED"
+        >
+          <text>已忽略</text>
+        </view>
+      </view>
+
+      <view
+        class="global-alarm-close {{(!state.confirmOnly && !state.selectedResult) || state.submitting ? 'is-disabled' : ''}}"
+        bindtap="closeAlarm"
+      >
+        <text>{{state.submitting ? '提交中...' : (state.actionText || '关闭')}}</text>
+      </view>
+    </block>
   </view>
 </view>

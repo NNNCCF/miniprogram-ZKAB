@@ -2,6 +2,7 @@ import { getAlarms, handleAlarm, ignoreAlarm } from './api'
 import { getStoredUserInfo } from './session'
 
 type AlarmResult = 'HANDLED' | 'IGNORED' | ''
+type SupportedRole = 'guardian' | 'staff' | 'institution' | ''
 
 interface MiniAlarmLike {
   id: string | number
@@ -31,8 +32,12 @@ export function createGlobalAlarmManager(app: any) {
     return role === 'guardian' || role === 'staff'
   }
 
-  function currentRole() {
-    return app.globalData.role || wx.getStorageSync('role') || ''
+  function currentRole(): SupportedRole {
+    return (app.globalData.role || wx.getStorageSync('role') || '') as SupportedRole
+  }
+
+  function isGuardianRole() {
+    return currentRole() === 'guardian'
   }
 
   function currentAccountKey() {
@@ -103,6 +108,7 @@ export function createGlobalAlarmManager(app: any) {
       location,
       overlayTypeLabel: resolveAlarmTypeLabel(item),
       overlayDescription: item.description || `${memberName}发生跌倒报警`,
+      guardianPrompt: `${memberName}跌倒，请确认`,
     }
   }
 
@@ -126,8 +132,13 @@ export function createGlobalAlarmManager(app: any) {
   }
 
   function getOverlayState() {
+    const viewerRole = currentRole()
+    const confirmOnly = viewerRole === 'guardian'
     return {
       visible: !!state.activeAlarm,
+      viewerRole,
+      confirmOnly,
+      actionText: confirmOnly ? '确认' : '关闭',
       selectedResult: state.selectedResult,
       submitting: state.submitting,
       alarm: state.activeAlarm
@@ -139,6 +150,7 @@ export function createGlobalAlarmManager(app: any) {
             alarmTime: state.activeAlarm.alarmTime,
             alarmType: (state.activeAlarm as any).overlayTypeLabel,
             description: (state.activeAlarm as any).overlayDescription,
+            guardianPrompt: (state.activeAlarm as any).guardianPrompt,
           }
         : null,
     }
@@ -185,12 +197,14 @@ export function createGlobalAlarmManager(app: any) {
   }
 
   function selectResult(result: AlarmResult) {
+    if (isGuardianRole()) return
     state.selectedResult = result === 'HANDLED' || result === 'IGNORED' ? result : ''
   }
 
   async function submit() {
     if (!state.activeAlarm) return
-    if (!state.selectedResult) {
+    const confirmOnly = isGuardianRole()
+    if (!confirmOnly && !state.selectedResult) {
       wx.showToast({ title: '请选择处理结果', icon: 'none' })
       return
     }
@@ -199,7 +213,9 @@ export function createGlobalAlarmManager(app: any) {
     state.submitting = true
     const currentAlarm = state.activeAlarm
     try {
-      if (state.selectedResult === 'HANDLED') {
+      if (confirmOnly) {
+        wx.showToast({ title: '已确认', icon: 'none' })
+      } else if (state.selectedResult === 'HANDLED') {
         await handleAlarm(currentAlarm.id, {
           calledGuardian: true,
           memberDanger: true,
@@ -209,16 +225,20 @@ export function createGlobalAlarmManager(app: any) {
       } else {
         await ignoreAlarm(currentAlarm.id)
       }
-      wx.showToast({
-        title: state.selectedResult === 'HANDLED' ? '报警已处理' : '报警已忽略',
-        icon: 'none',
-      })
+
+      if (!confirmOnly) {
+        wx.showToast({
+          title: state.selectedResult === 'HANDLED' ? '报警已处理' : '报警已忽略',
+          icon: 'none',
+        })
+      }
+
       state.activeAlarm = null
       state.selectedResult = ''
       openNextAlarm()
       void poll()
     } catch {
-      wx.showToast({ title: '处理失败，请重试', icon: 'none' })
+      wx.showToast({ title: confirmOnly ? '确认失败，请重试' : '处理失败，请重试', icon: 'none' })
     }
     state.submitting = false
   }

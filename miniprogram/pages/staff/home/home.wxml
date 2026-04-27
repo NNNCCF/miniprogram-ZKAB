@@ -95,5 +95,4 @@
 
 </view>
 
-<global-alarm-overlay />
 <staff-tabbar active="home" alarm-count="{{stats.todayAlarms}}" appt-count="{{stats.pendingAppts}}" />

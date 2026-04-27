@@ -299,12 +299,16 @@ def build_status_payload(device_id: str, online: bool) -> str:
 
 
 def build_heartbeat_payload(device_id: str) -> str:
+    if not hasattr(build_heartbeat_payload, "_counter"):
+        build_heartbeat_payload._counter = 0
+    build_heartbeat_payload._counter += 1
+    is_fall = (build_heartbeat_payload._counter % 10 == 0)
     return json.dumps(
         {
             "device_id": device_id,
             "heart_rate_per_min": random.randint(60, 100),
             "breath_rate_per_min": random.randint(12, 20),
-            "is_fall": True,
+            "is_fall": is_fall,
             "is_person_present": True,
             "collectTime": int(time.time() * 1000),
         },
@@ -389,7 +393,7 @@ def main() -> None:
 
     parser.add_argument("--keepalive", type=int, default=60, help="MQTT keepalive seconds")
     parser.add_argument("--connect-timeout", type=int, default=10, help="MQTT connect timeout seconds")
-    parser.add_argument("--heartbeat", type=int, default=1, help="Heartbeat interval seconds, 0 disables")
+    parser.add_argument("--heartbeat", type=int, default=5, help="Heartbeat interval seconds, 0 disables")
     parser.add_argument("--qos", type=int, choices=[0, 1, 2], default=1, help="MQTT QoS")
 
     args = parser.parse_args()

@@ -1,7 +1,6 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "staff-tabbar": "/components/staff-tabbar/staff-tabbar",
-    "global-alarm-overlay": "/components/global-alarm-overlay/global-alarm-overlay"
+    "staff-tabbar": "/components/staff-tabbar/staff-tabbar"
   }
 }
